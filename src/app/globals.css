@@ -1,29 +1,18 @@
 @import "tailwindcss";
 
 :root {
-  --sanctuary-paper: #fbf7ee;
-  --sanctuary-surface: #ffffff;
-  --sanctuary-surface-alt: #f3ede0;
-  --sanctuary-ink: #19211e;
-  --sanctuary-muted: #5a6b63;
-  --sanctuary-emerald: #1b5e4f;
-  --sanctuary-emerald-deep: #0f2620;
-  --sanctuary-gold: #c5a059;
-  --sanctuary-gold-soft: #e0b866;
-  --sanctuary-border: rgba(27, 94, 79, 0.14);
-}
-
-.dark {
-  --sanctuary-paper: #0b1310;
-  --sanctuary-surface: #121f1a;
-  --sanctuary-surface-alt: #182923;
-  --sanctuary-ink: #f0f4f2;
+  color-scheme: dark;
+  --sanctuary-paper: #07100d;
+  --sanctuary-surface: #0d1915;
+  --sanctuary-surface-alt: #12231d;
+  --sanctuary-ink: #f2efe9;
   --sanctuary-muted: #92a49b;
-  --sanctuary-emerald: #2a8772;
+  --sanctuary-emerald: #1b5e4f;
+  --sanctuary-emerald-bright: #2a8772;
   --sanctuary-emerald-deep: #091713;
   --sanctuary-gold: #d8b467;
   --sanctuary-gold-soft: #e0b866;
-  --sanctuary-border: rgba(216, 180, 103, 0.18);
+  --sanctuary-border: rgba(216, 180, 103, 0.16);
 }
 
 html {
@@ -34,11 +23,10 @@ body {
   background-color: var(--sanctuary-paper);
   color: var(--sanctuary-ink);
   font-family: var(--font-cairo), var(--font-inter), system-ui, sans-serif;
-  transition: background-color 220ms ease, color 220ms ease;
 }
 
 ::selection {
-  background-color: rgba(197, 160, 89, 0.28);
+  background-color: rgba(216, 180, 103, 0.28);
   color: var(--sanctuary-ink);
 }
 

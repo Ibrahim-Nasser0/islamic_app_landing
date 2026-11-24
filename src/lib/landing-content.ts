@@ -36,6 +36,70 @@ export const MUEZZIN_PREVIEWS: MuezzinPreview[] = [
   },
 ];
 
+export interface CityPrayerPreview {
+  id: "cairo" | "makkah" | "riyadh" | "london";
+  nameAr: string;
+  nameEn: string;
+  qiblaAr: string;
+  qiblaEn: string;
+  fajr: string;
+  dhuhr: string;
+  asr: string;
+  maghrib: string;
+  isha: string;
+}
+
+export const QUICK_CITIES: CityPrayerPreview[] = [
+  {
+    id: "cairo",
+    nameAr: "القاهرة",
+    nameEn: "Cairo",
+    qiblaAr: "136° جنوب شرق",
+    qiblaEn: "136° SE",
+    fajr: "05:04",
+    dhuhr: "11:51",
+    asr: "03:18",
+    maghrib: "05:42",
+    isha: "07:03",
+  },
+  {
+    id: "makkah",
+    nameAr: "مكة المكرمة",
+    nameEn: "Makkah",
+    qiblaAr: "القبلة الشريفة",
+    qiblaEn: "Al-Kaaba",
+    fajr: "05:22",
+    dhuhr: "12:14",
+    asr: "03:34",
+    maghrib: "05:56",
+    isha: "07:26",
+  },
+  {
+    id: "riyadh",
+    nameAr: "الرياض",
+    nameEn: "Riyadh",
+    qiblaAr: "244° غرب جنوب",
+    qiblaEn: "244° WSW",
+    fajr: "04:58",
+    dhuhr: "11:46",
+    asr: "03:02",
+    maghrib: "05:24",
+    isha: "06:54",
+  },
+  {
+    id: "london",
+    nameAr: "لندن",
+    nameEn: "London",
+    qiblaAr: "119° شرق جنوب",
+    qiblaEn: "119° ESE",
+    fajr: "05:49",
+    dhuhr: "11:54",
+    asr: "01:47",
+    maghrib: "04:01",
+    isha: "05:38",
+  },
+];
+
 export interface SampleDhikr {
   id: string;
   arabicText: string;
@@ -89,23 +153,34 @@ export const landingCopy = {
       tour: "جولة بالتطبيق",
       features: "المميزات",
       lockscreen: "شاشة القفل",
-      architecture: "الموثوقية",
-      faq: "الأسئلة",
+      reliability: "الموثوقية",
+      feedback: "الشكاوى والاقتراحات",
       download: "التحميل",
     },
     hero: {
       waqfBadge: "صدقة جارية • مجاني 100% بلا إعلانات",
       verse: "﴿ وَتَزَوَّدُوا فَإِنَّ خَيْرَ الزَّادِ التَّقْوَىٰ ﴾",
       verseSource: "سورة البقرة: 197",
-      title: "عبادتك اليومية في ملاذٍ رقمي هادئ، دقيق، وموثوق",
+      title: "عبادتك اليومية في ملاذٍ ليلي هادئ، دقيق، وموثوق",
       subtitle:
         "مواقيت صلاة فلكية دقيقة دون إنترنت، أذان أصلي يصدح حتى والهاتف مقفول، أذكار الصباح والمساء التفاعلية على شاشة القفل، والمصحف الشريف بالرسم العثماني.",
       downloadApk: "تحميل للأندرويد (APK)",
       releaseFallback: "تحميل عبر GitHub Releases",
+      whatsNew: "ما الجديد في الإصدار؟",
       scanQr: "مسح QR للتحميل",
       storesSoon: "قريباً على Google Play و App Store",
       floatingNextPrayer: "صلاة الفجر بعد 04:12 س",
       floatingLockOk: "الأذان يعمل والهاتف مقفول ✓",
+    },
+    releaseModal: {
+      title: "سجل تحديثات الإصدار",
+      versionLabel: "الإصدار الحالي",
+      publishedLabel: "تاريخ النشر",
+      emptyNotes:
+        "يتضمن هذا الإصدار المنظومة الأصلية للأذان والأذكار فوق شاشة القفل، الحساب الفلكي لمواقيت الصلاة، المصحف العثماني، بوصلة القبلة، وخريطة المساجد القريبة.",
+      downloadNow: "تحميل هذا الإصدار (APK)",
+      viewOnGithub: "عرض التفاصيل على GitHub",
+      close: "إغلاق",
     },
     trust: [
       { metric: "100%", label: "صدقة جارية مجانية", detail: "لوجه الله تعالى" },
@@ -117,13 +192,14 @@ export const landingCopy = {
       eyebrow: "جولة بصرية داخل العوالم الأربعة",
       title: "تجربة مترابطة صُمّمت للسكينة لا للإبهار الفارغ",
       subtitle:
-        "كل قسم داخل زاد المسلم بُني ليختصر عليك الخطوات: من تلاوة الصفحة اليومية حتى الوصول لأقرب مسجد.",
+        "تعرّف على شاشات التطبيق في الوضع الليلي الهادئ، وجرّب معاين المواقيت الفورية حسب مدينتك.",
+      citySwitcherLabel: "جرّب مواقيت المدن:",
       tabs: [
         {
           id: "quran",
           title: "المصحف العثماني",
-          badge: "قراءة ليلية ونهارية",
-          headline: "صفحات هادئة بالرسم العثماني مع حفظ لحظي للموضع",
+          badge: "تلاوة ليلية مريحة",
+          headline: "صفحات داكنة مريحة للعين بالرسم العثماني مع حفظ لحظي للموضع",
           points: [
             "فهرس متكامل لـ 114 سورة و30 جزءاً مع بحث فوري.",
             "علامات مرجعية (Bookmarks) للعودة إلى آخر آية بلمسة.",
@@ -133,10 +209,10 @@ export const landingCopy = {
         {
           id: "prayers",
           title: "المواقيت والقبلة",
-          badge: "حساب فلكي محلي",
-          headline: "توقيت دقيق بالثانية مع بوصلة قبلة باستجابة لمسية",
+          badge: "مُعاين المدن المباشر",
+          headline: "توقيت فلكي بالثانية مع بوصلة قبلة باستجابة لمسية",
           points: [
-            "يدعم التحديد التلقائي عبر GPS أو اختيار المدينة يدوياً.",
+            "تحديد تلقائي عبر GPS أو اختيار يدوي لأكثر المدن شهرة.",
             "تنبيه هادئ قبل كل صلاة بـ 5 دقائق للاستعداد والوضوء.",
             "بوصلة قبلة تمنحك اهتزازاً لطيفاً بمجرد المحاذاة مع مكة.",
           ],
@@ -183,7 +259,7 @@ export const landingCopy = {
           featured: false,
           badge: "114 سورة كاملة",
           title: "المصحف الشريف بالرسم العثماني",
-          desc: "خط Amiri العثماني المريح مع تدرجات ليلية ونهارية مدروسة.",
+          desc: "خط Amiri العثماني المريح مع تدرجات ليلية مصممة للقراءة المطولة.",
         },
         {
           id: "azkar",
@@ -202,7 +278,7 @@ export const landingCopy = {
         {
           id: "qibla",
           featured: false,
-          badge: "214° جنوب شرق",
+          badge: "مستشعرات دقيقة",
           title: "بوصلة القبلة والمحاذاة اللمسية",
           desc: "معايرة فورية لاتجاه القبلة مع اهتزاز تكتيكي عند التطابق.",
         },
@@ -304,6 +380,50 @@ export const landingCopy = {
           ],
         },
       ],
+      privacyTitle: "دفتر الشفافية والخصوصية (Permissions & Privacy Ledger)",
+      privacyItems: [
+        {
+          perm: "الموقع الجغرافي (GPS)",
+          why: "يُستخدم محلياً لحساب مواقيت الصلاة والقبلة والبحث عن المساجد القريبة — ولا يتم إرسال موقعك لأي خادم تتبع.",
+        },
+        {
+          perm: "المنبهات الدقيقة (Exact Alarms)",
+          why: "مطلوب فقط لكي يصدح الأذان في الثانية الدقيقة لدخول الوقت دون تأخير من نظام توفير البطارية.",
+        },
+        {
+          perm: "بدون حسابات أو إعلانات",
+          why: "جميع إعداداتك وحفظ القراءة والأذكار مخزّنة محلياً على جهازك فقط بلا ملفات تعريف إعلانية.",
+        },
+      ],
+    },
+    feedbackSection: {
+      eyebrow: "نستمع لك باهتمام",
+      title: "هل لديك شكوى تقنية أو اقتراح لميزة جديدة؟",
+      subtitle:
+        "رسالتك تساعدنا في تحسين التطبيق باستمرار لكل مسلم. لا يتطلب الأمر إنشاء حساب؛ اختر التصنيف واكتب ملاحظتك مباشرة.",
+      categories: [
+        { id: "bug", label: "شكوى أو مشكلة تقنية" },
+        { id: "suggestion", label: "اقتراح ميزة جديدة" },
+        { id: "adhan_times", label: "ملاحظة حول الأذان أو المواقيت" },
+        { id: "other", label: "استفسار عام" },
+      ],
+      messageLabel: "تفاصيل الشكوى أو الاقتراح",
+      messagePlaceholder: "اكتب وصف المشكلة أو الفكرة التي تود إضافتها بوضوح...",
+      deviceLabel: "نوع الهاتف (اختياري — مفيد في الأعطال)",
+      devicePlaceholder: "مثال: Honor X9b / Samsung A54",
+      contactLabel: "وسيلة تواصل للرد (اختياري)",
+      contactPlaceholder: "البريد الإلكتروني أو معرف تيليجرام",
+      submitBtn: "إرسال الملاحظة",
+      submittingBtn: "جاري الإرسال...",
+      minCharError: "يرجى كتابة 8 أحرف على الأقل حتى نفهم ملاحظتك بوضوح.",
+      networkError: "تعذر الاتصال بالخادم حالياً. يمكنك إرسال رسالتك مباشرة عبر GitHub.",
+      successSupabaseTitle: "جزاك الله خيراً! وصلت رسالتك بنجاح",
+      successSupabaseDesc: "تم تسجيل ملاحظتك وسنراجعها في لوحة المتابعة للعمل عليها في التحديث القادم.",
+      successFallbackTitle: "رسالتك جاهزة للإرسال الفوري",
+      successFallbackDesc:
+        "بوابة الاستقبال المباشر قيد التوصيل حالياً — يمكنك إرسال هذه الرسالة بضغطة واحدة عبر GitHub Issues حتى تصلنا فوراً.",
+      openGithubIssue: "إرسال عبر GitHub Issues",
+      sendAnother: "إرسال رسالة أخرى",
     },
     faqSection: {
       eyebrow: "الأسئلة الشائعة",
@@ -342,6 +462,10 @@ export const landingCopy = {
       shareCopied: "تم نسخ الرابط ✓",
       qrLabel: "امسح الرمز بهاتفك للتحميل الفوري",
     },
+    stickyCta: {
+      download: "تحميل APK",
+      feedback: "شكوى / اقتراح",
+    },
     footer: {
       waqf: "«إِذَا مَاتَ الإنْسَانُ انْقَطَعَ عنْه عَمَلُهُ إِلَّا مِن ثَلَاثَةٍ: إِلَّا مِن صَدَقَةٍ جَارِيَةٍ، أَوْ عِلْمٍ يُنْتَفَعُ بِهِ، أَوْ وَلَدٍ صَالِحٍ يَدْعُو له» — صحيح مسلم",
       builtWith: "زاد المسلم • Flutter + Native Kotlin/Swift + Next.js • صدقة جارية مفتوحة المصدر",
@@ -354,23 +478,34 @@ export const landingCopy = {
       tour: "App Tour",
       features: "Features",
       lockscreen: "Lockscreen",
-      architecture: "Reliability",
-      faq: "FAQ",
+      reliability: "Reliability",
+      feedback: "Feedback",
       download: "Download",
     },
     hero: {
       waqfBadge: "Sadaqah Jariyah • 100% Free & Ad-Free",
       verse: "﴿ وَتَزَوَّدُوا فَإِنَّ خَيْرَ الزَّادِ التَّقْوَىٰ ﴾",
       verseSource: "Al-Baqarah: 197",
-      title: "Your daily worship in a calm, exact, trustworthy sanctuary",
+      title: "Your daily worship in a calm, nocturnal, trustworthy sanctuary",
       subtitle:
         "Offline astronomical prayer times, native Adhan playback that completes over the lockscreen, interactive morning & evening Azkar, and the complete Uthmani Quran — zero ads.",
       downloadApk: "Download Android APK",
       releaseFallback: "Download via GitHub Releases",
+      whatsNew: "What's New?",
       scanQr: "Scan QR to Download",
       storesSoon: "Google Play & App Store — Coming Soon",
       floatingNextPrayer: "Fajr in 04h 12m",
       floatingLockOk: "Plays over Lockscreen ✓",
+    },
+    releaseModal: {
+      title: "Release Changelog",
+      versionLabel: "Current Release",
+      publishedLabel: "Published",
+      emptyNotes:
+        "Includes the native Lockscreen Adhan & Azkar Engine, offline astronomical prayer times, complete Uthmani Quran, live Qibla compass, and nearby mosques map.",
+      downloadNow: "Download This Release (APK)",
+      viewOnGithub: "View on GitHub",
+      close: "Close",
     },
     trust: [
       { metric: "100%", label: "Free Waqf Edition", detail: "Purely non-commercial" },
@@ -382,13 +517,14 @@ export const landingCopy = {
       eyebrow: "Inside The App Worlds",
       title: "A cohesive worship flow crafted for focus, not noise",
       subtitle:
-        "Every surface inside Zad Al-Muslim removes friction—whether reciting your daily page or finding a mosque nearby.",
+        "Explore the nocturnal Sanctuary screens and test live prayer previews across major cities.",
+      citySwitcherLabel: "Preview city times:",
       tabs: [
         {
           id: "quran",
           title: "Uthmani Mushaf",
-          badge: "Day & Night Modes",
-          headline: "Serene Uthmani pages with instant ayah bookmarking",
+          badge: "Night Reading Comfort",
+          headline: "Eye-friendly nocturnal Uthmani pages with instant bookmarking",
           points: [
             "Complete 114 Surahs and 30 Juz index with fast search.",
             "Saved reading bookmarks so you resume right where you paused.",
@@ -398,7 +534,7 @@ export const landingCopy = {
         {
           id: "prayers",
           title: "Prayers & Qibla",
-          badge: "Offline Astronomy",
+          badge: "Live City Switcher",
           headline: "Second-accurate times with tactile Qibla compass alignment",
           points: [
             "Automatic GPS or manual city selection with Hijri calendar sync.",
@@ -448,7 +584,7 @@ export const landingCopy = {
           featured: false,
           badge: "114 Surahs Offline",
           title: "Holy Quran in Uthmani Script",
-          desc: "Readable Amiri typography tailored for sustained daily recitation.",
+          desc: "Readable Amiri typography tailored for sustained nocturnal recitation.",
         },
         {
           id: "azkar",
@@ -569,6 +705,50 @@ export const landingCopy = {
           ],
         },
       ],
+      privacyTitle: "Permissions & Privacy Ledger",
+      privacyItems: [
+        {
+          perm: "Location Access (GPS)",
+          why: "Used purely on-device for astronomical prayer calculations, Qibla bearing, and nearby mosque search — never transmitted to tracking servers.",
+        },
+        {
+          perm: "Exact Alarms Permission",
+          why: "Required solely so the Adhan triggers at the exact second without OEM battery-saver delays.",
+        },
+        {
+          perm: "Zero Accounts or Ads",
+          why: "All settings, Quran bookmarks, and Azkar progress live privately on your device.",
+        },
+      ],
+    },
+    feedbackSection: {
+      eyebrow: "We Listen Carefully",
+      title: "Have a complaint, bug report, or feature idea?",
+      subtitle:
+        "Your feedback directly shapes the next update of Zad Al-Muslim. No account required—pick a category and write directly.",
+      categories: [
+        { id: "bug", label: "Bug / Complaint" },
+        { id: "suggestion", label: "Feature Idea" },
+        { id: "adhan_times", label: "Adhan / Times" },
+        { id: "other", label: "General Inquiry" },
+      ],
+      messageLabel: "Your message",
+      messagePlaceholder: "Describe the issue or feature idea you would like to share...",
+      deviceLabel: "Phone Model (Optional — helps reproduce bugs)",
+      devicePlaceholder: "e.g., Honor X9b / Samsung A54",
+      contactLabel: "Contact for reply (Optional)",
+      contactPlaceholder: "Email or Telegram handle",
+      submitBtn: "Send Feedback",
+      submittingBtn: "Sending...",
+      minCharError: "Please enter at least 8 characters so we can clearly understand your note.",
+      networkError: "Unable to reach the server right now. You can send it directly via GitHub.",
+      successSupabaseTitle: "JazakAllahu Khayran! Feedback received",
+      successSupabaseDesc: "Your note has been logged and will be reviewed for upcoming releases.",
+      successFallbackTitle: "Your feedback is formatted and ready",
+      successFallbackDesc:
+        "Direct database storage is pending connection—you can submit this exact note in one click via GitHub Issues so it reaches us immediately.",
+      openGithubIssue: "Submit via GitHub Issues",
+      sendAnother: "Send another message",
     },
     faqSection: {
       eyebrow: "Questions & Answers",
@@ -606,6 +786,10 @@ export const landingCopy = {
       shareBtn: "Copy Share Link",
       shareCopied: "Link Copied ✓",
       qrLabel: "Scan with your phone camera",
+    },
+    stickyCta: {
+      download: "Download APK",
+      feedback: "Feedback",
     },
     footer: {
       waqf: "«When a person dies, their deeds end except for three: ongoing charity, beneficial knowledge, or a righteous child who prays for them» — Sahih Muslim",

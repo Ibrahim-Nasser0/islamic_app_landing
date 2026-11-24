@@ -48,10 +48,10 @@ export default function RootLayout({
     <html
       lang="ar"
       dir="rtl"
-      suppressHydrationWarning
-      className={`${cairo.variable} ${amiri.variable} ${inter.variable}`}
+      className={`dark ${cairo.variable} ${amiri.variable} ${inter.variable}`}
+      style={{ colorScheme: "dark" }}
     >
-      <body className="antialiased">{children}</body>
+      <body className="antialiased bg-[#07100D] text-[#F2EFE9]">{children}</body>
     </html>
   );
 }

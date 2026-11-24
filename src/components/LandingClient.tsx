@@ -10,43 +10,54 @@ import { AppTourSection } from "./AppTourSection";
 import { FeaturesBento } from "./FeaturesBento";
 import { InteractiveLockscreenShowcase } from "./InteractiveLockscreenShowcase";
 import { NativeReliabilitySection } from "./NativeReliabilitySection";
+import { FeedbackSection } from "./FeedbackSection";
 import { FaqSection } from "./FaqSection";
 import { DownloadSection } from "./DownloadSection";
+import { ReleaseNotesModal } from "./ReleaseNotesModal";
+import { StickyMobileCta } from "./StickyMobileCta";
 import { GoldHairlineDivider } from "./GeometricMotifs";
 
 export function LandingClient({ release }: { release: ReleaseDownloadInfo }) {
   const [locale, setLocale] = useState<Locale>("ar");
-  const [isDark, setIsDark] = useState(false);
+  const [notesOpen, setNotesOpen] = useState(false);
 
   useEffect(() => {
     document.documentElement.lang = locale;
     document.documentElement.dir = locale === "ar" ? "rtl" : "ltr";
   }, [locale]);
 
-  useEffect(() => {
-    document.documentElement.classList.toggle("dark", isDark);
-  }, [isDark]);
-
   return (
-    <div dir={locale === "ar" ? "rtl" : "ltr"} className="min-h-screen">
+    <div dir={locale === "ar" ? "rtl" : "ltr"} className="min-h-screen pb-16 sm:pb-0">
       <Navbar
         locale={locale}
-        isDark={isDark}
         downloadUrl={release.downloadUrl}
         onToggleLocale={() => setLocale((l) => (l === "ar" ? "en" : "ar"))}
-        onToggleTheme={() => setIsDark((d) => !d)}
       />
       <main>
-        <HeroSection locale={locale} release={release} />
+        <HeroSection
+          locale={locale}
+          release={release}
+          onOpenReleaseNotes={() => setNotesOpen(true)}
+        />
         <TrustStrip locale={locale} />
         <AppTourSection locale={locale} />
         <GoldHairlineDivider />
         <FeaturesBento locale={locale} />
         <InteractiveLockscreenShowcase locale={locale} />
         <NativeReliabilitySection locale={locale} />
+        <GoldHairlineDivider />
+        <FeedbackSection locale={locale} />
         <FaqSection locale={locale} />
         <DownloadSection locale={locale} release={release} />
       </main>
+
+      <StickyMobileCta locale={locale} downloadUrl={release.downloadUrl} />
+      <ReleaseNotesModal
+        open={notesOpen}
+        locale={locale}
+        release={release}
+        onClose={() => setNotesOpen(false)}
+      />
     </div>
   );
 }
