@@ -1,0 +1,615 @@
+export type Locale = "ar" | "en";
+
+export interface MuezzinPreview {
+  id: string;
+  nameAr: string;
+  nameEn: string;
+  locationAr: string;
+  locationEn: string;
+  audioSrc: string;
+}
+
+export const MUEZZIN_PREVIEWS: MuezzinPreview[] = [
+  {
+    id: "makkah",
+    nameAr: "الحرم المكي • الشيخ أحمد علي ملا",
+    nameEn: "Makkah Sanctuary • Sheikh Ahmed Mulla",
+    locationAr: "مكة المكرمة",
+    locationEn: "Makkah",
+    audioSrc: "/audio/al-harram-regular.mp3",
+  },
+  {
+    id: "abdulbaset",
+    nameAr: "الشيخ عبد الباسط عبد الصمد",
+    nameEn: "Sheikh Abdulbasit Abdulsamad",
+    locationAr: "مصر",
+    locationEn: "Egypt",
+    audioSrc: "/audio/abd-elbaset-regular.mp3",
+  },
+  {
+    id: "alafasy",
+    nameAr: "الشيخ مشاري راشد العفاسي",
+    nameEn: "Sheikh Mishary Al-Afasy",
+    locationAr: "الكويت",
+    locationEn: "Kuwait",
+    audioSrc: "/audio/alafasy-regular.mp3",
+  },
+];
+
+export interface SampleDhikr {
+  id: string;
+  arabicText: string;
+  target: number;
+  fadlAr: string;
+  fadlEn: string;
+  referenceAr: string;
+  referenceEn: string;
+}
+
+export const SAMPLE_AZKAR: SampleDhikr[] = [
+  {
+    id: "m_1",
+    arabicText:
+      "أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ ، وَالْحَمْدُ لِلَّهِ ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",
+    target: 1,
+    fadlAr: "من أذكار الصباح الثابتة في افتتاح اليوم بالتوحيد",
+    fadlEn: "Authentic morning remembrance dedicating the day to Allah",
+    referenceAr: "رواه مسلم",
+    referenceEn: "Sahih Muslim",
+  },
+  {
+    id: "m_2",
+    arabicText:
+      "بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ",
+    target: 3,
+    fadlAr: "من قالها ثلاثاً صباحاً لم يضره شيء حتى يمسي",
+    fadlEn: "Whoever recites it three times is protected until evening",
+    referenceAr: "رواه أبو داود والترمذي",
+    referenceEn: "Abu Dawud & Al-Tirmidhi",
+  },
+  {
+    id: "m_3",
+    arabicText: "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ ، سُبْحَانَ اللَّهِ الْعَظِيمِ",
+    target: 3,
+    fadlAr: "كلمتان خفيفتان على اللسان ثقيلتان في الميزان",
+    fadlEn: "Light on the tongue, heavy on the Scale of deeds",
+    referenceAr: "متفق عليه",
+    referenceEn: "Agreed Upon",
+  },
+];
+
+export const POST_ADHAN_DUAA =
+  "اللَّهُمَّ رَبَّ هَذِهِ الدَّعْوَةِ التَّامَّةِ، وَالصَّلَاةِ القَائِمَةِ، آتِ مُحَمَّدًا الوَسِيلَةَ وَالفَضِيلَةَ، وَابْعَثْهُ مَقَامًا مَحْمُودًا الَّذِي وَعَدْتَهُ";
+
+export const landingCopy = {
+  ar: {
+    brand: "زاد المسلم",
+    tagline: "رفيقك اليومي في الذكر والصلاة والقرآن",
+    nav: {
+      tour: "جولة بالتطبيق",
+      features: "المميزات",
+      lockscreen: "شاشة القفل",
+      architecture: "الموثوقية",
+      faq: "الأسئلة",
+      download: "التحميل",
+    },
+    hero: {
+      waqfBadge: "صدقة جارية • مجاني 100% بلا إعلانات",
+      verse: "﴿ وَتَزَوَّدُوا فَإِنَّ خَيْرَ الزَّادِ التَّقْوَىٰ ﴾",
+      verseSource: "سورة البقرة: 197",
+      title: "عبادتك اليومية في ملاذٍ رقمي هادئ، دقيق، وموثوق",
+      subtitle:
+        "مواقيت صلاة فلكية دقيقة دون إنترنت، أذان أصلي يصدح حتى والهاتف مقفول، أذكار الصباح والمساء التفاعلية على شاشة القفل، والمصحف الشريف بالرسم العثماني.",
+      downloadApk: "تحميل للأندرويد (APK)",
+      releaseFallback: "تحميل عبر GitHub Releases",
+      scanQr: "مسح QR للتحميل",
+      storesSoon: "قريباً على Google Play و App Store",
+      floatingNextPrayer: "صلاة الفجر بعد 04:12 س",
+      floatingLockOk: "الأذان يعمل والهاتف مقفول ✓",
+    },
+    trust: [
+      { metric: "100%", label: "صدقة جارية مجانية", detail: "لوجه الله تعالى" },
+      { metric: "0", label: "إعلانات أو تتبع", detail: "خصوصية تامة 100%" },
+      { metric: "114", label: "سورة دون إنترنت", detail: "مع مواقيت وأذكار محلية" },
+      { metric: "7 أيام", label: "جدولة أصلية مسبقة", detail: "Android & iOS Native" },
+    ],
+    appTour: {
+      eyebrow: "جولة بصرية داخل العوالم الأربعة",
+      title: "تجربة مترابطة صُمّمت للسكينة لا للإبهار الفارغ",
+      subtitle:
+        "كل قسم داخل زاد المسلم بُني ليختصر عليك الخطوات: من تلاوة الصفحة اليومية حتى الوصول لأقرب مسجد.",
+      tabs: [
+        {
+          id: "quran",
+          title: "المصحف العثماني",
+          badge: "قراءة ليلية ونهارية",
+          headline: "صفحات هادئة بالرسم العثماني مع حفظ لحظي للموضع",
+          points: [
+            "فهرس متكامل لـ 114 سورة و30 جزءاً مع بحث فوري.",
+            "علامات مرجعية (Bookmarks) للعودة إلى آخر آية بلمسة.",
+            "بقاء النص القرآني بالعربية الأصيلة في كل لغات التطبيق.",
+          ],
+        },
+        {
+          id: "prayers",
+          title: "المواقيت والقبلة",
+          badge: "حساب فلكي محلي",
+          headline: "توقيت دقيق بالثانية مع بوصلة قبلة باستجابة لمسية",
+          points: [
+            "يدعم التحديد التلقائي عبر GPS أو اختيار المدينة يدوياً.",
+            "تنبيه هادئ قبل كل صلاة بـ 5 دقائق للاستعداد والوضوء.",
+            "بوصلة قبلة تمنحك اهتزازاً لطيفاً بمجرد المحاذاة مع مكة.",
+          ],
+        },
+        {
+          id: "mosques",
+          title: "بيوت الله القريبة",
+          badge: "خرائط OpenStreetMap",
+          headline: "اعثر على أقرب مسجد في محيطك حتى في السفر",
+          points: [
+            "نطاق بحث مرن (500 م، 1 كم، 3 كم، 5 كم).",
+            "حساب المسافة ووقت الوصول التقريبي سيراً أو بالسيارة.",
+            "فتح مسار الملاحة مباشرة عبر خرائط هاتفك بضغطة واحدة.",
+          ],
+        },
+        {
+          id: "hadith",
+          title: "الحديث وحصن المسلم",
+          badge: "مصادر موثّقة",
+          headline: "مكتبة أحاديث وأذكار متكاملة مع سبحة إلكترونية ذكية",
+          points: [
+            "كتب موثوقة: البخاري، مسلم، الأربعون النووية، رياض الصالحين.",
+            "سبحة إلكترونية بتسبيح تلقائي واهتزازات عند إتمام الأوراد.",
+            "تخريج واضح وفضل كل ذكر بتصميم مريح للعين.",
+          ],
+        },
+      ],
+    },
+    featuresSection: {
+      eyebrow: "الهندسة والقدرات",
+      title: "تفاصيل صغيرة تصنع فرقاً يومياً في التزامك",
+      subtitle:
+        "تم بناء المكونات بتناغم كامل بين سرعة الأداء وهدوء المظهر دون زحام أو تشتيت.",
+      cards: [
+        {
+          id: "native",
+          featured: true,
+          badge: "أعلى موثوقية والهاتف مقفول",
+          title: "أذان أصلي مستقل يصدح كاملاً فوق شاشة القفل",
+          desc: "لا ينقطع الأذان بعد ثانيتين! يعتمد التطبيق على منبهات AlarmClock الأصلية وخدمة MediaPlayback أمامية تعزل الصوت عن محرك Flutter وتعرض شاشة الدعاء فوق القفل.",
+        },
+        {
+          id: "quran",
+          featured: false,
+          badge: "114 سورة كاملة",
+          title: "المصحف الشريف بالرسم العثماني",
+          desc: "خط Amiri العثماني المريح مع تدرجات ليلية ونهارية مدروسة.",
+        },
+        {
+          id: "azkar",
+          featured: false,
+          badge: "مزامنة ثنائية",
+          title: "رفيق الأذكار فوق شاشة القفل",
+          desc: "أنجز أذكار الصباح والمساء من القفل وسيرى التطبيق تقدمك فوراً.",
+        },
+        {
+          id: "prayers",
+          featured: false,
+          badge: "حساب فلكي محلي",
+          title: "المواقيت والتاريخ الهجري",
+          desc: "دقة عالية دون استهلاك باقة الإنترنت أو خدمات خلفية ثقيلة.",
+        },
+        {
+          id: "qibla",
+          featured: false,
+          badge: "214° جنوب شرق",
+          title: "بوصلة القبلة والمحاذاة اللمسية",
+          desc: "معايرة فورية لاتجاه القبلة مع اهتزاز تكتيكي عند التطابق.",
+        },
+        {
+          id: "mosques",
+          featured: false,
+          badge: "مجاني وبلا إعلانات",
+          title: "المساجد والأحاديث الصحيحة",
+          desc: "استكشاف المساجد القريبة وتصفح شروح الأحاديث بسهولة تامة.",
+        },
+      ],
+    },
+    spotlight: {
+      eyebrow: "معاينة حية تفاعلية من المتصفح",
+      title: "اختبر شاشة الأذان ورفيق الأذكار قبل التحميل",
+      subtitle:
+        "بدّل أوقات السماء، اسمع صوت المؤذن الحقيقي، واضغط على عداد الأذكار كما سيظهر على شاشة القفل.",
+      modeAdhan: "وضع الأذان",
+      modeAzkar: "رفيق الأذكار",
+      skyLabels: {
+        fajr: "سماء الفجر",
+        dhuhr: "سماء الظهر",
+        maghrib: "شفق المغرب",
+        isha: "سماء العشاء",
+      },
+      nowPrayerMap: {
+        fajr: "الآن موعد صلاة الفجر • 05:04 ص",
+        dhuhr: "الآن موعد صلاة الظهر • 11:51 ص",
+        maghrib: "الآن موعد صلاة المغرب • 05:42 م",
+        isha: "الآن موعد صلاة العشاء • 07:03 م",
+      },
+      prayerTitleMap: {
+        fajr: "صلاة الفجر",
+        dhuhr: "صلاة الظهر",
+        maghrib: "صلاة المغرب",
+        isha: "صلاة العشاء",
+      },
+      selectMuezzin: "اختر صوت المؤذن للاستماع:",
+      playAdhan: "تشغيل صوت الأذان",
+      stopAdhan: "إيقاف الأذان",
+      duaaHeader: "دعاء ما بعد الأذان",
+      copy: "نسخ",
+      copied: "تم النسخ",
+      hadithRef: "صحيح البخاري • حديث 614",
+      azkarPill: "أذكار الصباح ☀️",
+      tapCounter: "اضغط للتسبيح",
+      azkarDone: "أتممت بفضل الله ✓",
+      resetAzkar: "إعادة التجربة",
+    },
+    reliability: {
+      eyebrow: "الهندسة خلف الكواليس",
+      title: "لماذا يعمل الأذان بثبات حتى لو أُغلق التطبيق تماماً؟",
+      subtitle:
+        "عالجنا أشهر مشكلة في تطبيقات الأذان (انقطاع الصوت أو حظر المنبه من نظام الهاتف) ببنية Native متدرجة:",
+      steps: [
+        {
+          step: "01",
+          title: "جدولة AlarmClock الأصلية",
+          desc: "تتجاوز وضع السكون العميق (Doze Mode) وتُعيد جدولة 7 أيام تلقائياً بعد إعادة تشغيل الهاتف أو تغيير الساعة.",
+        },
+        {
+          step: "02",
+          title: "خدمة صوت معزولة (Foreground Service)",
+          desc: "تمسك WakeLock مؤقتاً لـ 4 دقائق مع طلب AudioFocus مخصص للمنبه (USAGE_ALARM) فلا ينقطع الصوت أبداً.",
+        },
+        {
+          step: "03",
+          title: "واجهة قفل خفيفة (~12MB)",
+          desc: "تُقلع خلال أقل من 50ms مستقلةً عن محرك Flutter، وفي iOS تُجهَّز عبر Time-Sensitive و SwiftUI Content Extension.",
+        },
+      ],
+      oemTitle: "إعداد سريع حسب نوع هاتفك (مرة واحدة فقط):",
+      oems: [
+        {
+          id: "honor",
+          name: "Honor / Huawei (MagicOS)",
+          steps: [
+            "افتح الإعدادات ← التطبيقات ← إدارة بدء التشغيل (App Launch).",
+            "عطّل «الإدارة التلقائية» لتطبيق زاد المسلم وفعّل: التشغيل التلقائي + التشغيل الثانوي + العمل في الخلفية.",
+            "من داخل التطبيق: الإعدادات ← ضبط الصلاحيات ← اسمح بالظهور على شاشة القفل.",
+          ],
+        },
+        {
+          id: "xiaomi",
+          name: "Xiaomi / Redmi (HyperOS / MIUI)",
+          steps: [
+            "اضغط مطولاً على أيقونة التطبيق ← معلومات التطبيق (App Info).",
+            "فعّل «التشغيل التلقائي» (Autostart) واضبط موفر البطارية على «بلا قيود» (No Restrictions).",
+            "في الأذونات الأخرى، فعّل «الظهور على شاشة القفل» و«عرض النوافذ المنبثقة».",
+          ],
+        },
+        {
+          id: "samsung",
+          name: "Samsung (OneUI)",
+          steps: [
+            "افتح معلومات التطبيق ← البطارية ← اختر «غير مقيد» (Unrestricted).",
+            "تأكد من عدم إدراج التطبيق ضمن «التطبيقات الخاملة» (Sleeping Apps).",
+            "اسمح بصلاحية الإشعارات والمنبهات والتذكيرات (Alarms & Reminders).",
+          ],
+        },
+      ],
+    },
+    faqSection: {
+      eyebrow: "الأسئلة الشائعة",
+      title: "إجابات واضحة وشفافة",
+      items: [
+        {
+          q: "هل التطبيق مجاني بالكامل وهل يحتوي على أي إعلانات أو اشتراكات؟",
+          a: "التطبيق مجاني 100% وخالٍ تماماً من الإعلانات أو التتبع أو أي خصائص مدفوعة، وموقوف كصدقة جارية.",
+        },
+        {
+          q: "هل يعمل الأذان والهاتف مقفول أو عند إزالة التطبيق من الخلفية؟",
+          a: "نعم؛ المحرك الأصلي في أندرويد يستخدم AlarmManager.setAlarmClock وخدمة mediaPlayback مستقلة تضمن تشغيل الأذان كاملاً وإظهار الشاشة فوق القفل.",
+        },
+        {
+          q: "هل يحتاج التطبيق إلى الإنترنت لقراءة القرآن والأذكار وحساب المواقيت؟",
+          a: "المصحف الكامل، الأذكار، الأحاديث المضمنة، وحساب المواقيت الفلكية وبوصلة القبلة كلها تعمل دون إنترنت تماماً. الإنترنت مطلوب فقط عند تحميل خرائط المساجد القريبة.",
+        },
+        {
+          q: "ما حال نسخة الآيفون (iOS) الآن؟",
+          a: "إصدار GitHub Releases الحالي يوفر ملف APK للأندرويد، كما أن البنية الأصلية للـ iOS (تنبيهات Time-Sensitive وواجهة SwiftUI) مجهزة في المستودع تمهيداً للنشر على App Store.",
+        },
+        {
+          q: "هل تتغير لغة الآيات والأذكار إذا حولت التطبيق إلى الإنجليزية؟",
+          a: "تُترجم أزرار الواجهة والتوجيهات إلى الإنجليزية، بينما تظل آيات القرآن الكريم والأذكار والأدعية النبوية دائماً بنصها العربي الأصيل.",
+        },
+      ],
+    },
+    downloadSection: {
+      badge: "الإصدار الحالي متاح عبر GitHub Releases",
+      title: "حمّل تطبيق زاد المسلم الآن",
+      subtitle:
+        "تثبيت مباشر بصيغة APK لأجهزة Android 8.0 فأعلى، وشارك الصفحة لغيرك لتنال أجر الدلالة على الخير.",
+      primaryBtn: "تحميل ملف APK مباشرة",
+      allReleases: "تصفح جميع الإصدارات",
+      shareBtn: "نسخ رابط المشاركة",
+      shareCopied: "تم نسخ الرابط ✓",
+      qrLabel: "امسح الرمز بهاتفك للتحميل الفوري",
+    },
+    footer: {
+      waqf: "«إِذَا مَاتَ الإنْسَانُ انْقَطَعَ عنْه عَمَلُهُ إِلَّا مِن ثَلَاثَةٍ: إِلَّا مِن صَدَقَةٍ جَارِيَةٍ، أَوْ عِلْمٍ يُنْتَفَعُ بِهِ، أَوْ وَلَدٍ صَالِحٍ يَدْعُو له» — صحيح مسلم",
+      builtWith: "زاد المسلم • Flutter + Native Kotlin/Swift + Next.js • صدقة جارية مفتوحة المصدر",
+    },
+  },
+  en: {
+    brand: "Zad Al-Muslim",
+    tagline: "Your Daily Sanctuary for Prayer, Dhikr & Quran",
+    nav: {
+      tour: "App Tour",
+      features: "Features",
+      lockscreen: "Lockscreen",
+      architecture: "Reliability",
+      faq: "FAQ",
+      download: "Download",
+    },
+    hero: {
+      waqfBadge: "Sadaqah Jariyah • 100% Free & Ad-Free",
+      verse: "﴿ وَتَزَوَّدُوا فَإِنَّ خَيْرَ الزَّادِ التَّقْوَىٰ ﴾",
+      verseSource: "Al-Baqarah: 197",
+      title: "Your daily worship in a calm, exact, trustworthy sanctuary",
+      subtitle:
+        "Offline astronomical prayer times, native Adhan playback that completes over the lockscreen, interactive morning & evening Azkar, and the complete Uthmani Quran — zero ads.",
+      downloadApk: "Download Android APK",
+      releaseFallback: "Download via GitHub Releases",
+      scanQr: "Scan QR to Download",
+      storesSoon: "Google Play & App Store — Coming Soon",
+      floatingNextPrayer: "Fajr in 04h 12m",
+      floatingLockOk: "Plays over Lockscreen ✓",
+    },
+    trust: [
+      { metric: "100%", label: "Free Waqf Edition", detail: "Purely non-commercial" },
+      { metric: "0", label: "Ads or Trackers", detail: "Privacy-first architecture" },
+      { metric: "114", label: "Surahs Offline", detail: "Plus local prayer math" },
+      { metric: "7 Days", label: "Native Pre-Scheduled", detail: "Android & iOS Native" },
+    ],
+    appTour: {
+      eyebrow: "Inside The App Worlds",
+      title: "A cohesive worship flow crafted for focus, not noise",
+      subtitle:
+        "Every surface inside Zad Al-Muslim removes friction—whether reciting your daily page or finding a mosque nearby.",
+      tabs: [
+        {
+          id: "quran",
+          title: "Uthmani Mushaf",
+          badge: "Day & Night Modes",
+          headline: "Serene Uthmani pages with instant ayah bookmarking",
+          points: [
+            "Complete 114 Surahs and 30 Juz index with fast search.",
+            "Saved reading bookmarks so you resume right where you paused.",
+            "Authentic Arabic Quranic script preserved across every language.",
+          ],
+        },
+        {
+          id: "prayers",
+          title: "Prayers & Qibla",
+          badge: "Offline Astronomy",
+          headline: "Second-accurate times with tactile Qibla compass alignment",
+          points: [
+            "Automatic GPS or manual city selection with Hijri calendar sync.",
+            "Gentle 5-minute pre-prayer alert to prepare for wudu.",
+            "Real-time compass dial with subtle haptic snap toward Makkah.",
+          ],
+        },
+        {
+          id: "mosques",
+          title: "Nearby Mosques",
+          badge: "OpenStreetMap Live",
+          headline: "Locate the nearest mosque around you even while traveling",
+          points: [
+            "Flexible search radius: 500m, 1km, 3km, or 5km.",
+            "Estimated walking and driving times to each mosque.",
+            "One-tap handoff to turn-by-turn maps navigation.",
+          ],
+        },
+        {
+          id: "hadith",
+          title: "Hadith & Azkar",
+          badge: "Verified Sources",
+          headline: "Authentic Hadith collections and smart tactile Tasbeeh",
+          points: [
+            "Built-in Bukhari, Muslim, Nawawi 40, and Riyad Al-Salihin.",
+            "Smart Tasbeeh counter with milestone haptics at 33 and 100.",
+            "Clear scholarly citations and virtues on every dhikr card.",
+          ],
+        },
+      ],
+    },
+    featuresSection: {
+      eyebrow: "Craft & Architecture",
+      title: "Thoughtful engineering behind every daily moment",
+      subtitle:
+        "Designed under strict zero-clutter standards combining fast native response with quiet typographic clarity.",
+      cards: [
+        {
+          id: "native",
+          featured: true,
+          badge: "Full Lockscreen Reliability",
+          title: "Independent Native Adhan Sanctuary that never cuts off mid-call",
+          desc: "Audio never stops after 2 seconds. Android uses AlarmClock scheduling and a dedicated mediaPlayback Foreground Service decoupled from Flutter to play Makkah, Abdulbasit, or Al-Afasy cleanly.",
+        },
+        {
+          id: "quran",
+          featured: false,
+          badge: "114 Surahs Offline",
+          title: "Holy Quran in Uthmani Script",
+          desc: "Readable Amiri typography tailored for sustained daily recitation.",
+        },
+        {
+          id: "azkar",
+          featured: false,
+          badge: "Two-Way Sync",
+          title: "Lockscreen Azkar Companion",
+          desc: "Complete Morning/Evening Azkar on lockscreen and sync straight into the app.",
+        },
+        {
+          id: "prayers",
+          featured: false,
+          badge: "Local Calculations",
+          title: "Prayer Times & Hijri Calendar",
+          desc: "High astronomical precision with zero background data drain.",
+        },
+        {
+          id: "qibla",
+          featured: false,
+          badge: "Live Sensors",
+          title: "Qibla Compass Alignment",
+          desc: "Smooth magnetometer dial with physical haptic feedback at alignment.",
+        },
+        {
+          id: "mosques",
+          featured: false,
+          badge: "Ad-Free Waqf",
+          title: "Mosques Map & Hadith Library",
+          desc: "Clean OSM nearby mosque finder alongside authentic Prophetic books.",
+        },
+      ],
+    },
+    spotlight: {
+      eyebrow: "Interactive Browser Preview",
+      title: "Experience the Lockscreen Adhan & Azkar UI live",
+      subtitle:
+        "Switch prayer sky atmospheres, play real Muezzin previews, and tap the Azkar counter ring right in your browser.",
+      modeAdhan: "Adhan Mode",
+      modeAzkar: "Azkar Companion",
+      skyLabels: {
+        fajr: "Fajr Dawn",
+        dhuhr: "Dhuhr Emerald",
+        maghrib: "Maghrib Dusk",
+        isha: "Isha Night",
+      },
+      nowPrayerMap: {
+        fajr: "Now Time for Fajr Prayer • 05:04 AM",
+        dhuhr: "Now Time for Dhuhr Prayer • 11:51 AM",
+        maghrib: "Now Time for Maghrib Prayer • 05:42 PM",
+        isha: "Now Time for Isha Prayer • 07:03 PM",
+      },
+      prayerTitleMap: {
+        fajr: "Fajr Prayer",
+        dhuhr: "Dhuhr Prayer",
+        maghrib: "Maghrib Prayer",
+        isha: "Isha Prayer",
+      },
+      selectMuezzin: "Choose Muezzin to preview:",
+      playAdhan: "Play Adhan Preview",
+      stopAdhan: "Stop Adhan",
+      duaaHeader: "Supplication After Adhan",
+      copy: "Copy",
+      copied: "Copied",
+      hadithRef: "Sahih Al-Bukhari • Hadith 614",
+      azkarPill: "Morning Azkar ☀️",
+      tapCounter: "Tap Dhikr",
+      azkarDone: "Completed Alhamdulillah ✓",
+      resetAzkar: "Reset Preview",
+    },
+    reliability: {
+      eyebrow: "Under The Hood",
+      title: "Why Adhan sounds reliably even when killed or locked",
+      subtitle:
+        "We eliminated the classic Flutter audio-focus conflict using a three-stage native pipeline:",
+      steps: [
+        {
+          step: "01",
+          title: "Native AlarmClock Scheduling",
+          desc: "Bypasses Android Doze restrictions and auto-restores 7 days of alarms after device reboots or timezone shifts.",
+        },
+        {
+          step: "02",
+          title: "Isolated MediaPlayback Service",
+          desc: "Holds a bounded 4-minute WakeLock with USAGE_ALARM audio focus so nothing cuts off the Adhan midway.",
+        },
+        {
+          step: "03",
+          title: "Lightweight Lockscreen UI (~12MB)",
+          desc: "Boots in under 50ms independently from Flutter; prepared on iOS via Time-Sensitive Alerts & SwiftUI Extension.",
+        },
+      ],
+      oemTitle: "One-time device checklist by manufacturer:",
+      oems: [
+        {
+          id: "honor",
+          name: "Honor / Huawei (MagicOS)",
+          steps: [
+            "Open Settings → Apps → App Launch.",
+            "Disable automatic management for Zad Al-Muslim and enable Auto-launch, Secondary launch & Run in background.",
+            "In App Settings → Fix Settings, enable Lockscreen display permission.",
+          ],
+        },
+        {
+          id: "xiaomi",
+          name: "Xiaomi / Redmi (HyperOS)",
+          steps: [
+            "Long-press the app icon → App Info.",
+            "Enable Autostart and set Battery Saver to No Restrictions.",
+            "In Other Permissions, enable Show on Lock screen and Display pop-up windows.",
+          ],
+        },
+        {
+          id: "samsung",
+          name: "Samsung (OneUI)",
+          steps: [
+            "Open App Info → Battery → select Unrestricted.",
+            "Ensure Zad Al-Muslim is excluded from Sleeping or Deep Sleeping apps.",
+            "Verify Notifications and Alarms & Reminders permissions remain allowed.",
+          ],
+        },
+      ],
+    },
+    faqSection: {
+      eyebrow: "Questions & Answers",
+      title: "Clear answers before you install",
+      items: [
+        {
+          q: "Is Zad Al-Muslim completely free with zero ads or tracking?",
+          a: "Yes. It is 100% free, ad-free, and tracker-free, built as an open-source ongoing charity (Sadaqah Jariyah).",
+        },
+        {
+          q: "Does the Adhan ring when the phone is locked or app closed?",
+          a: "Yes. On Android it schedules AlarmClock triggers and plays audio from an isolated native mediaPlayback service with full lockscreen support.",
+        },
+        {
+          q: "Can I use Quran, Azkar, Qibla, and Prayer Times offline?",
+          a: "Yes. Every core worship feature works offline. Internet is only required for loading live nearby mosque map tiles.",
+        },
+        {
+          q: "What about the iOS / App Store version?",
+          a: "Current GitHub Releases distribute the Android APK directly, while native SwiftUI Lockscreen extensions and Time-Sensitive notifications are implemented for upcoming macOS/iOS builds.",
+        },
+        {
+          q: "Do Quran verses and Azkar stay in Arabic in English mode?",
+          a: "Always. All UI labels adapt to English while sacred Quranic and Prophetic texts remain in their authentic Arabic script.",
+        },
+      ],
+    },
+    downloadSection: {
+      badge: "Latest Build Hosted on GitHub Releases",
+      title: "Download Zad Al-Muslim Now",
+      subtitle:
+        "Install the direct APK on Android 8.0+, and share this page as an ongoing charity with friends and family.",
+      primaryBtn: "Download Latest APK",
+      allReleases: "All Releases",
+      shareBtn: "Copy Share Link",
+      shareCopied: "Link Copied ✓",
+      qrLabel: "Scan with your phone camera",
+    },
+    footer: {
+      waqf: "«When a person dies, their deeds end except for three: ongoing charity, beneficial knowledge, or a righteous child who prays for them» — Sahih Muslim",
+      builtWith: "Zad Al-Muslim • Flutter + Native Kotlin/Swift + Next.js • Open-Source Waqf",
+    },
+  },
+} as const;
