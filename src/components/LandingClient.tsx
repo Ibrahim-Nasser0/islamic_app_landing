@@ -6,9 +6,13 @@ import { ReleaseDownloadInfo } from "@/lib/github-release";
 import { Navbar } from "./Navbar";
 import { HeroSection } from "./HeroSection";
 import { TrustStrip } from "./TrustStrip";
+import { AppTourSection } from "./AppTourSection";
 import { FeaturesBento } from "./FeaturesBento";
 import { InteractiveLockscreenShowcase } from "./InteractiveLockscreenShowcase";
+import { NativeReliabilitySection } from "./NativeReliabilitySection";
+import { FaqSection } from "./FaqSection";
 import { DownloadSection } from "./DownloadSection";
+import { GoldHairlineDivider } from "./GeometricMotifs";
 
 export function LandingClient({ release }: { release: ReleaseDownloadInfo }) {
   const [locale, setLocale] = useState<Locale>("ar");
@@ -35,8 +39,12 @@ export function LandingClient({ release }: { release: ReleaseDownloadInfo }) {
       <main>
         <HeroSection locale={locale} release={release} />
         <TrustStrip locale={locale} />
+        <AppTourSection locale={locale} />
+        <GoldHairlineDivider />
         <FeaturesBento locale={locale} />
         <InteractiveLockscreenShowcase locale={locale} />
+        <NativeReliabilitySection locale={locale} />
+        <FaqSection locale={locale} />
         <DownloadSection locale={locale} release={release} />
       </main>
     </div>

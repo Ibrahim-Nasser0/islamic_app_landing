@@ -7,6 +7,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { Locale, landingCopy } from "@/lib/landing-content";
+import { EqualizerBars } from "./GeometricMotifs";
 
 const CARD_ICONS = {
   native: BellRing,
@@ -43,9 +44,12 @@ export function FeaturesBento({ locale }: { locale: Locale }) {
                 key={card.id}
                 className="relative overflow-hidden rounded-3xl border border-[var(--sanctuary-gold)]/40 bg-gradient-to-br from-[#0F2620] via-[#133B31] to-[#1B5E4F] p-7 text-white shadow-sm md:col-span-2"
               >
-                <div className="inline-flex items-center gap-2 rounded-full border border-[#E0B866]/40 bg-white/10 px-3.5 py-1 text-xs font-semibold text-[#E0B866]">
-                  <Icon className="h-3.5 w-3.5" />
-                  <span>{card.badge}</span>
+                <div className="flex items-center justify-between gap-4">
+                  <div className="inline-flex items-center gap-2 rounded-full border border-[#E0B866]/40 bg-white/10 px-3.5 py-1 text-xs font-semibold text-[#E0B866]">
+                    <Icon className="h-3.5 w-3.5" />
+                    <span>{card.badge}</span>
+                  </div>
+                  <EqualizerBars active />
                 </div>
                 <h3 className="mt-4 text-xl font-bold leading-snug sm:text-2xl">
                   {card.title}
@@ -54,14 +58,14 @@ export function FeaturesBento({ locale }: { locale: Locale }) {
                   {card.desc}
                 </p>
                 <div className="mt-5 flex flex-wrap gap-2 text-xs text-[#E0B866]">
-                  <span className="rounded-lg border border-white/15 bg-white/5 px-3 py-1">
+                  <span className="rounded-lg border border-white/15 bg-white/5 px-3 py-1 font-latin">
                     AlarmManager.setAlarmClock
                   </span>
-                  <span className="rounded-lg border border-white/15 bg-white/5 px-3 py-1">
+                  <span className="rounded-lg border border-white/15 bg-white/5 px-3 py-1 font-latin">
                     AudioAttributes.USAGE_ALARM
                   </span>
-                  <span className="rounded-lg border border-white/15 bg-white/5 px-3 py-1">
-                    Time Sensitive + SwiftUI
+                  <span className="rounded-lg border border-white/15 bg-white/5 px-3 py-1 font-latin">
+                    SwiftUI Content Extension
                   </span>
                 </div>
               </div>

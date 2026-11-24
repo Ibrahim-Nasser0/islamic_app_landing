@@ -1,32 +1,24 @@
-import { CheckCircle2, HeartHandshake, Radio, WifiOff } from "lucide-react";
 import { Locale, landingCopy } from "@/lib/landing-content";
-
-const ICONS = [HeartHandshake, CheckCircle2, WifiOff, Radio];
 
 export function TrustStrip({ locale }: { locale: Locale }) {
   const items = landingCopy[locale].trust;
 
   return (
-    <section className="border-b border-[var(--sanctuary-border)] bg-[var(--sanctuary-surface)]/70">
-      <div className="mx-auto grid max-w-6xl grid-cols-2 gap-4 px-5 py-6 sm:px-8 lg:grid-cols-4">
-        {items.map((item, idx) => {
-          const Icon = ICONS[idx % ICONS.length];
-          return (
-            <div key={item.label} className="flex items-center gap-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[var(--sanctuary-border)] bg-[var(--sanctuary-paper)] text-[var(--sanctuary-emerald)]">
-                <Icon className="h-5 w-5 text-[var(--sanctuary-gold)]" />
-              </div>
-              <div>
-                <p className="text-sm font-bold text-[var(--sanctuary-ink)]">
-                  {item.label}
-                </p>
-                <p className="text-xs text-[var(--sanctuary-muted)]">
-                  {item.detail}
-                </p>
-              </div>
-            </div>
-          );
-        })}
+    <section className="border-b border-[var(--sanctuary-border)] bg-[var(--sanctuary-surface)]/80">
+      <div className="mx-auto grid max-w-6xl grid-cols-2 divide-y divide-[var(--sanctuary-border)] sm:divide-y-0 lg:grid-cols-4 lg:divide-x lg:rtl:divide-x-reverse">
+        {items.map((item) => (
+          <div key={item.label} className="px-6 py-7 text-center sm:text-start">
+            <span className="font-sacred block text-3xl font-bold text-[var(--sanctuary-emerald)] sm:text-4xl">
+              {item.metric}
+            </span>
+            <p className="mt-1 text-sm font-bold text-[var(--sanctuary-ink)]">
+              {item.label}
+            </p>
+            <p className="mt-0.5 text-xs text-[var(--sanctuary-muted)]">
+              {item.detail}
+            </p>
+          </div>
+        ))}
       </div>
     </section>
   );

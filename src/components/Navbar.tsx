@@ -22,8 +22,8 @@ export function Navbar({
   const t = landingCopy[locale];
 
   return (
-    <header className="sticky top-0 z-40 border-b border-[var(--sanctuary-border)] bg-[var(--sanctuary-paper)]/85 backdrop-blur-md">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-3.5 sm:px-8">
+    <header className="sticky top-0 z-40 border-b border-[var(--sanctuary-border)] bg-[var(--sanctuary-paper)]/88 backdrop-blur-md">
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-3 sm:px-8">
         <a href="#top" className="flex items-center gap-3">
           <Image
             src="/images/app_logo.png"
@@ -31,36 +31,33 @@ export function Navbar({
             width={40}
             height={40}
             priority
-            className="h-10 w-10 rounded-xl border border-[var(--sanctuary-border)] object-cover shadow-sm"
+            className="h-10 w-10 rounded-xl border border-[var(--sanctuary-gold)]/35 object-cover shadow-xs"
           />
           <div>
             <span className="block text-base font-bold tracking-tight text-[var(--sanctuary-ink)]">
               {t.brand}
             </span>
-            <span className="hidden text-xs text-[var(--sanctuary-muted)] sm:block">
+            <span className="hidden text-[11px] text-[var(--sanctuary-muted)] sm:block">
               {t.tagline}
             </span>
           </div>
         </a>
 
-        <nav className="hidden items-center gap-7 text-sm font-medium text-[var(--sanctuary-muted)] md:flex">
-          <a
-            href="#features"
-            className="transition-colors hover:text-[var(--sanctuary-emerald)]"
-          >
+        <nav className="hidden items-center gap-6 text-xs font-semibold text-[var(--sanctuary-muted)] lg:flex">
+          <a href="#tour" className="transition-colors hover:text-[var(--sanctuary-emerald)]">
+            {t.nav.tour}
+          </a>
+          <a href="#features" className="transition-colors hover:text-[var(--sanctuary-emerald)]">
             {t.nav.features}
           </a>
-          <a
-            href="#lockscreen"
-            className="transition-colors hover:text-[var(--sanctuary-emerald)]"
-          >
+          <a href="#lockscreen" className="transition-colors hover:text-[var(--sanctuary-emerald)]">
             {t.nav.lockscreen}
           </a>
-          <a
-            href="#download"
-            className="transition-colors hover:text-[var(--sanctuary-emerald)]"
-          >
-            {t.nav.download}
+          <a href="#reliability" className="transition-colors hover:text-[var(--sanctuary-emerald)]">
+            {t.nav.architecture}
+          </a>
+          <a href="#faq" className="transition-colors hover:text-[var(--sanctuary-emerald)]">
+            {t.nav.faq}
           </a>
         </nav>
 
@@ -87,9 +84,9 @@ export function Navbar({
             href={downloadUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden h-10 items-center gap-2 rounded-xl bg-[var(--sanctuary-emerald)] px-4 text-xs font-bold text-white transition-transform hover:opacity-95 active:scale-[0.98] sm:inline-flex"
+            className="hidden h-10 items-center gap-2 rounded-xl bg-[var(--sanctuary-emerald)] px-4 text-xs font-bold text-white transition-transform hover:brightness-110 active:scale-[0.98] sm:inline-flex"
           >
-            <Download className="h-3.5 w-3.5" />
+            <Download className="h-3.5 w-3.5 text-[#E0B866]" />
             <span>{t.nav.download}</span>
           </a>
         </div>

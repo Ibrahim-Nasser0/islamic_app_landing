@@ -9,13 +9,27 @@ import {
   SAMPLE_AZKAR,
   landingCopy,
 } from "@/lib/landing-content";
-import { BreathingRosette, OctagramPatternOverlay } from "./GeometricMotifs";
+import {
+  BreathingRosette,
+  EqualizerBars,
+  OctagramPatternOverlay,
+} from "./GeometricMotifs";
+
+type SkyKey = "fajr" | "dhuhr" | "maghrib" | "isha";
+
+const SKY_GRADIENTS: Record<SkyKey, string> = {
+  fajr: "from-[#07141A] via-[#0D2530] to-[#1F5466]",
+  dhuhr: "from-[#07201B] via-[#0E3830] to-[#1B6C5C]",
+  maghrib: "from-[#1F1009] via-[#331B10] to-[#6B3822]",
+  isha: "from-[#050B14] via-[#0B172A] to-[#193257]",
+};
 
 export function InteractiveLockscreenShowcase({ locale }: { locale: Locale }) {
   const t = landingCopy[locale].spotlight;
   const isAr = locale === "ar";
 
   const [mode, setMode] = useState<"adhan" | "azkar">("adhan");
+  const [sky, setSky] = useState<SkyKey>("fajr");
   const [selectedMuezzinId, setSelectedMuezzinId] = useState(MUEZZIN_PREVIEWS[0].id);
   const [isPlaying, setIsPlaying] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -108,7 +122,7 @@ export function InteractiveLockscreenShowcase({ locale }: { locale: Locale }) {
   return (
     <section
       id="lockscreen"
-      className="relative overflow-hidden bg-gradient-to-b from-[#07141A] via-[#0D2530] to-[#143B4A] py-16 text-white sm:py-24"
+      className={`relative overflow-hidden bg-gradient-to-b ${SKY_GRADIENTS[sky]} py-16 text-white transition-colors duration-500 sm:py-24`}
     >
       <OctagramPatternOverlay />
 
@@ -122,32 +136,53 @@ export function InteractiveLockscreenShowcase({ locale }: { locale: Locale }) {
             {t.subtitle}
           </p>
 
-          <div className="mt-7 inline-flex rounded-2xl border border-[#E0B866]/35 bg-white/10 p-1">
-            <button
-              type="button"
-              onClick={() => setMode("adhan")}
-              className={`rounded-xl px-5 py-2.5 text-xs font-bold transition-colors ${
-                mode === "adhan"
-                  ? "bg-[#E0B866] text-[#07141A]"
-                  : "text-white/85 hover:text-white"
-              }`}
-            >
-              {t.modeAdhan}
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                stopAudio();
-                setMode("azkar");
-              }}
-              className={`rounded-xl px-5 py-2.5 text-xs font-bold transition-colors ${
-                mode === "azkar"
-                  ? "bg-[#E0B866] text-[#07141A]"
-                  : "text-white/85 hover:text-white"
-              }`}
-            >
-              {t.modeAzkar}
-            </button>
+          <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
+            <div className="inline-flex rounded-2xl border border-[#E0B866]/35 bg-white/10 p-1">
+              <button
+                type="button"
+                onClick={() => setMode("adhan")}
+                className={`rounded-xl px-5 py-2 text-xs font-bold transition-colors ${
+                  mode === "adhan"
+                    ? "bg-[#E0B866] text-[#07141A]"
+                    : "text-white/85 hover:text-white"
+                }`}
+              >
+                {t.modeAdhan}
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  stopAudio();
+                  setMode("azkar");
+                }}
+                className={`rounded-xl px-5 py-2 text-xs font-bold transition-colors ${
+                  mode === "azkar"
+                    ? "bg-[#E0B866] text-[#07141A]"
+                    : "text-white/85 hover:text-white"
+                }`}
+              >
+                {t.modeAzkar}
+              </button>
+            </div>
+
+            {mode === "adhan" && (
+              <div className="inline-flex rounded-2xl border border-white/15 bg-black/20 p-1">
+                {(["fajr", "dhuhr", "maghrib", "isha"] as const).map((k) => (
+                  <button
+                    key={k}
+                    type="button"
+                    onClick={() => setSky(k)}
+                    className={`rounded-xl px-3 py-2 text-[11px] font-semibold transition-colors ${
+                      sky === k
+                        ? "bg-white/20 text-[#E0B866]"
+                        : "text-white/70 hover:text-white"
+                    }`}
+                  >
+                    {t.skyLabels[k]}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
@@ -155,7 +190,7 @@ export function InteractiveLockscreenShowcase({ locale }: { locale: Locale }) {
           {mode === "adhan" ? (
             <div className="flex flex-col items-center text-center">
               <span className="rounded-full border border-[#E0B866]/35 bg-white/10 px-4 py-1.5 text-xs font-semibold text-[#FBF7EE]">
-                ★ {t.nowPrayer}
+                ★ {t.nowPrayerMap[sky]}
               </span>
 
               <div className="my-3">
@@ -163,11 +198,12 @@ export function InteractiveLockscreenShowcase({ locale }: { locale: Locale }) {
               </div>
 
               <h3 className="font-sacred text-3xl font-bold text-[#FBF7EE]">
-                {t.prayerTitle}
+                {t.prayerTitleMap[sky]}
               </h3>
-              <p className="mt-1 text-xs font-medium text-[#E0B866]">
-                {isAr ? activeMuezzin.nameAr : activeMuezzin.nameEn}
-              </p>
+              <div className="mt-1.5 flex items-center gap-2 text-xs font-medium text-[#E0B866]">
+                <EqualizerBars active={isPlaying} />
+                <span>{isAr ? activeMuezzin.nameAr : activeMuezzin.nameEn}</span>
+              </div>
 
               <p className="mt-5 text-xs font-medium text-white/75">
                 {t.selectMuezzin}
@@ -241,6 +277,19 @@ export function InteractiveLockscreenShowcase({ locale }: { locale: Locale }) {
                 {t.azkarPill} • {azkarIndex + 1} / {SAMPLE_AZKAR.length}
               </span>
 
+              <div className="mt-4 h-1.5 w-48 overflow-hidden rounded-full bg-white/15">
+                <div
+                  className="h-full rounded-full bg-[#E0B866] transition-all duration-300"
+                  style={{
+                    width: `${
+                      azkarFinished
+                        ? 100
+                        : Math.round(((azkarIndex + 0.5) / SAMPLE_AZKAR.length) * 100)
+                    }%`,
+                  }}
+                />
+              </div>
+
               <div className="mt-5 w-full rounded-2xl border border-[#E0B866]/30 bg-white/5 p-5">
                 <p
                   dir="rtl"
@@ -248,7 +297,10 @@ export function InteractiveLockscreenShowcase({ locale }: { locale: Locale }) {
                 >
                   {currentDhikr.arabicText}
                 </p>
-                <p className="mt-3 text-xs text-[#E0B866]">
+                <p className="mt-3 text-xs text-white/75">
+                  {isAr ? currentDhikr.fadlAr : currentDhikr.fadlEn}
+                </p>
+                <p className="mt-1.5 text-[11px] text-[#E0B866]">
                   [ {isAr ? currentDhikr.referenceAr : currentDhikr.referenceEn} ]
                 </p>
               </div>

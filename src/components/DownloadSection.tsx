@@ -1,9 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import { QRCodeSVG } from "qrcode.react";
-import { Download, ExternalLink, ShieldAlert } from "lucide-react";
+import { Check, Download, ExternalLink, Share2 } from "lucide-react";
 import { Locale, landingCopy } from "@/lib/landing-content";
 import { ReleaseDownloadInfo } from "@/lib/github-release";
+import { ManuscriptCorners } from "./GeometricMotifs";
 
 interface DownloadSectionProps {
   locale: Locale;
@@ -13,11 +15,24 @@ interface DownloadSectionProps {
 export function DownloadSection({ locale, release }: DownloadSectionProps) {
   const t = landingCopy[locale].downloadSection;
   const footer = landingCopy[locale].footer;
+  const [sharedCopied, setSharedCopied] = useState(false);
+
+  const handleShareCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setSharedCopied(true);
+      setTimeout(() => setSharedCopied(false), 2000);
+    } catch {
+      // Clipboard ignored if unsupported
+    }
+  };
 
   return (
     <>
       <section id="download" className="mx-auto max-w-6xl px-5 py-16 sm:px-8 sm:py-24">
-        <div className="grid items-center gap-8 rounded-[32px] border border-[var(--sanctuary-gold)]/35 bg-[var(--sanctuary-surface)] p-7 shadow-sm sm:p-10 lg:grid-cols-12">
+        <div className="relative grid items-center gap-8 overflow-hidden rounded-[32px] border border-[var(--sanctuary-gold)]/40 bg-[var(--sanctuary-surface)] p-7 shadow-sm sm:p-10 lg:grid-cols-12">
+          <ManuscriptCorners />
+
           <div className="lg:col-span-8">
             <span className="inline-block rounded-full border border-[var(--sanctuary-border)] bg-[var(--sanctuary-paper)] px-3.5 py-1 text-xs font-semibold text-[var(--sanctuary-emerald)]">
               {t.badge} • {release.version}
@@ -54,16 +69,19 @@ export function DownloadSection({ locale, release }: DownloadSectionProps) {
                 <ExternalLink className="h-4 w-4 text-[var(--sanctuary-gold)]" />
                 <span>{t.allReleases}</span>
               </a>
-            </div>
 
-            <div className="mt-7 flex items-start gap-3 rounded-2xl border border-[var(--sanctuary-border)] bg-[var(--sanctuary-paper)] p-4">
-              <ShieldAlert className="mt-0.5 h-5 w-5 shrink-0 text-[var(--sanctuary-gold)]" />
-              <div className="text-xs leading-relaxed text-[var(--sanctuary-muted)]">
-                <p className="font-bold text-[var(--sanctuary-ink)]">
-                  {t.batteryTipTitle}
-                </p>
-                <p className="mt-1">{t.batteryTipBody}</p>
-              </div>
+              <button
+                type="button"
+                onClick={() => void handleShareCopy()}
+                className="inline-flex min-h-13 items-center gap-2 rounded-2xl border border-[var(--sanctuary-gold)]/45 bg-[var(--sanctuary-paper)] px-5 py-3 text-sm font-semibold text-[var(--sanctuary-ink)] transition-colors hover:border-[var(--sanctuary-emerald)]"
+              >
+                {sharedCopied ? (
+                  <Check className="h-4 w-4 text-[#10B981]" />
+                ) : (
+                  <Share2 className="h-4 w-4 text-[var(--sanctuary-gold)]" />
+                )}
+                <span>{sharedCopied ? t.shareCopied : t.shareBtn}</span>
+              </button>
             </div>
           </div>
 
@@ -81,7 +99,7 @@ export function DownloadSection({ locale, release }: DownloadSectionProps) {
         </div>
       </section>
 
-      <footer className="border-t border-[var(--sanctuary-border)] bg-[var(--sanctuary-surface)]/70 py-10 text-center">
+      <footer className="border-t border-[var(--sanctuary-border)] bg-[var(--sanctuary-surface)]/75 py-10 text-center">
         <div className="mx-auto max-w-4xl px-5">
           <p className="font-sacred text-base text-[var(--sanctuary-ink)] sm:text-lg">
             {footer.waqf}
