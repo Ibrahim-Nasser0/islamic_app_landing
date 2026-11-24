@@ -50,12 +50,16 @@ export async function getLatestReleaseInfo(): Promise<ReleaseDownloadInfo> {
 
     if (!res.ok) return fallback;
     const data = (await res.json()) as GitHubReleaseResponse;
-    const apkAsset = data.assets?.find(
-      (a) =>
+    const apkAssets = (data.assets ?? []).filter(
+      (a): a is GitHubAsset & { name: string; browser_download_url: string } =>
         typeof a.name === "string" &&
         a.name.toLowerCase().endsWith(".apk") &&
         typeof a.browser_download_url === "string"
     );
+    const apkAsset =
+      apkAssets.find((a) => a.name.toLowerCase().includes("universal")) ??
+      apkAssets.find((a) => a.name.toLowerCase().includes("arm64")) ??
+      apkAssets[0];
 
     const sizeMb =
       apkAsset?.size && apkAsset.size > 0
