@@ -18,6 +18,7 @@ import { StickyMobileCta } from "./StickyMobileCta";
 import { GoldHairlineDivider } from "./GeometricMotifs";
 
 export function LandingClient({ release }: { release: ReleaseDownloadInfo }) {
+  // Arabic is always the strict initial default unless toggled explicitly by the visitor
   const [locale, setLocale] = useState<Locale>("ar");
   const [notesOpen, setNotesOpen] = useState(false);
 
@@ -27,7 +28,7 @@ export function LandingClient({ release }: { release: ReleaseDownloadInfo }) {
   }, [locale]);
 
   return (
-    <div dir={locale === "ar" ? "rtl" : "ltr"} className="min-h-screen pb-16 sm:pb-0">
+    <div dir={locale === "ar" ? "rtl" : "ltr"} className="min-h-screen">
       <Navbar
         locale={locale}
         downloadUrl={release.downloadUrl}
@@ -40,6 +41,7 @@ export function LandingClient({ release }: { release: ReleaseDownloadInfo }) {
           onOpenReleaseNotes={() => setNotesOpen(true)}
         />
         <TrustStrip locale={locale} />
+        <GoldHairlineDivider />
         <AppTourSection locale={locale} />
         <GoldHairlineDivider />
         <FeaturesBento locale={locale} />

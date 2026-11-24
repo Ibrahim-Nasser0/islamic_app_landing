@@ -145,3 +145,119 @@ export function EqualizerBars({ active }: { active: boolean }) {
     </span>
   );
 }
+
+export function RubElHizbMark({
+  className = "h-3.5 w-3.5 text-[#D8B467]",
+}: {
+  className?: string;
+}) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      fill="none"
+      className={className}
+    >
+      <rect
+        x="5"
+        y="5"
+        width="14"
+        height="14"
+        rx="1.5"
+        stroke="currentColor"
+        strokeWidth="1.5"
+      />
+      <rect
+        x="5"
+        y="5"
+        width="14"
+        height="14"
+        rx="1.5"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        transform="rotate(45 12 12)"
+      />
+      <circle cx="12" cy="12" r="2.1" fill="currentColor" />
+    </svg>
+  );
+}
+
+export const SANCTUARY_PRIMARY_CTA =
+  "border border-[#D8B467]/45 bg-gradient-to-b from-[#216E5C] to-[#13473B] text-[#FBF7ED] shadow-[inset_0_1px_0_rgba(245,223,164,0.22)] transition-all hover:brightness-110 active:scale-[0.98]";
+
+export const SANCTUARY_SECONDARY_BTN =
+  "border border-[#D8B467]/25 bg-[#0B1813] text-[#F2EFE9] transition-colors hover:border-[#D8B467]/55 hover:bg-[#10221C]";
+
+export function SectionSanctuaryHeader({
+  eyebrow,
+  title,
+  subtitle,
+  centered = false,
+  onSky = false,
+}: {
+  eyebrow: string;
+  title: string;
+  subtitle?: string;
+  centered?: boolean;
+  onSky?: boolean;
+}) {
+  return (
+    <div className={centered ? "mx-auto max-w-2xl text-center" : "max-w-2xl"}>
+      <div
+        className={`inline-flex items-center gap-2 text-xs font-bold tracking-wider ${
+          onSky ? "text-[#E0B866]" : "text-[#D8B467]"
+        }`}
+      >
+        <RubElHizbMark className="h-3.5 w-3.5 shrink-0" />
+        <span>{eyebrow}</span>
+        {centered && <RubElHizbMark className="h-3.5 w-3.5 shrink-0" />}
+      </div>
+      <h2
+        className={`font-sacred mt-2.5 text-2xl leading-[1.35] font-bold sm:text-4xl sm:leading-[1.3] ${
+          onSky ? "text-[#FBF7EE]" : "text-[#F4EFE4]"
+        }`}
+      >
+        {title}
+      </h2>
+      {subtitle && (
+        <p
+          className={`mt-3 text-sm leading-relaxed sm:text-base ${
+            onSky ? "text-white/80" : "text-[#92A49B]"
+          }`}
+        >
+          {subtitle}
+        </p>
+      )}
+    </div>
+  );
+}
+
+export function OctagonalIconFrame({
+  children,
+  active = false,
+}: {
+  children: React.ReactNode;
+  active?: boolean;
+}) {
+  return (
+    <div className="relative flex h-11 w-11 shrink-0 items-center justify-center">
+      <span
+        aria-hidden="true"
+        className={`absolute inset-0.5 rotate-45 rounded-lg border transition-colors ${
+          active
+            ? "border-[#D8B467]/55 bg-[#1B5E4F]/25"
+            : "border-[#D8B467]/25 bg-[#0A1713]"
+        }`}
+      />
+      <div
+        className={`relative flex h-9 w-9 items-center justify-center rounded-xl border transition-colors ${
+          active
+            ? "border-[#D8B467]/60 bg-gradient-to-b from-[#1F6A59] to-[#134539] text-[#F5DFA4]"
+            : "border-[#D8B467]/25 bg-[#091410] text-[#D8B467]"
+        }`}
+      >
+        {children}
+      </div>
+    </div>
+  );
+}

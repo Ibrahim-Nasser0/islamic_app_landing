@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { Download, ExternalLink, Sparkles, X } from "lucide-react";
 import { Locale, landingCopy } from "@/lib/landing-content";
 import { ReleaseDownloadInfo } from "@/lib/github-release";
-import { ManuscriptCorners } from "./GeometricMotifs";
+import { ManuscriptCorners, SANCTUARY_PRIMARY_CTA, SANCTUARY_SECONDARY_BTN } from "./GeometricMotifs";
 
 interface ReleaseNotesModalProps {
   open: boolean;
@@ -93,16 +93,16 @@ export function ReleaseNotesModal({
             href={release.downloadUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex flex-1 items-center justify-center gap-2 rounded-2xl bg-[#1B5E4F] px-5 py-3 text-sm font-bold text-white transition-all hover:brightness-110"
+            className={`inline-flex flex-1 items-center justify-center gap-2 rounded-2xl px-5 py-3 text-sm font-bold ${SANCTUARY_PRIMARY_CTA}`}
           >
-            <Download className="h-4 w-4 text-[#E0B866]" />
+            <Download className="h-4 w-4 text-[#F2D184]" />
             <span>{t.downloadNow}</span>
           </a>
           <a
             href={release.releasesPageUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 rounded-2xl border border-[#D8B467]/25 bg-[#12231D] px-4 py-3 text-xs font-semibold text-[#F2EFE9] hover:border-[#D8B467]"
+            className={`inline-flex items-center justify-center gap-2 rounded-2xl px-4 py-3 text-xs font-semibold ${SANCTUARY_SECONDARY_BTN}`}
           >
             <ExternalLink className="h-3.5 w-3.5 text-[#D8B467]" />
             <span>{t.viewOnGithub}</span>

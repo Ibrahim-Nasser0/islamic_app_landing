@@ -3,6 +3,12 @@
 import { useState } from "react";
 import { CheckCircle2, Cpu, ShieldCheck } from "lucide-react";
 import { Locale, landingCopy } from "@/lib/landing-content";
+import {
+  ManuscriptCorners,
+  OctagonalIconFrame,
+  RubElHizbMark,
+  SectionSanctuaryHeader,
+} from "./GeometricMotifs";
 
 export function NativeReliabilitySection({ locale }: { locale: Locale }) {
   const rel = landingCopy[locale].reliability;
@@ -11,17 +17,11 @@ export function NativeReliabilitySection({ locale }: { locale: Locale }) {
 
   return (
     <section id="reliability" className="mx-auto max-w-6xl px-5 py-16 sm:px-8 sm:py-24">
-      <div className="max-w-2xl">
-        <p className="text-xs font-bold uppercase tracking-wider text-[#D8B467]">
-          {rel.eyebrow}
-        </p>
-        <h2 className="mt-2 text-2xl font-extrabold text-[#F2EFE9] sm:text-4xl">
-          {rel.title}
-        </h2>
-        <p className="mt-3 text-base leading-relaxed text-[#92A49B]">
-          {rel.subtitle}
-        </p>
-      </div>
+      <SectionSanctuaryHeader
+        eyebrow={rel.eyebrow}
+        title={rel.title}
+        subtitle={rel.subtitle}
+      />
 
       <div className="mt-10 grid gap-5 md:grid-cols-3">
         {rel.steps.map((s) => (
@@ -30,9 +30,11 @@ export function NativeReliabilitySection({ locale }: { locale: Locale }) {
             className="rounded-3xl border border-[var(--sanctuary-border)] bg-[#0D1915] p-6"
           >
             <div className="flex items-center justify-between">
-              <span className="font-sacred text-3xl font-bold text-[#E0B866]">
-                {s.step}
-              </span>
+              <OctagonalIconFrame active>
+                <span className="font-sacred text-sm font-bold text-[#F5DFA4]">
+                  {s.step}
+                </span>
+              </OctagonalIconFrame>
               <Cpu className="h-5 w-5 text-[#2A8772]" />
             </div>
             <h3 className="mt-4 text-lg font-bold text-[#F2EFE9]">{s.title}</h3>
@@ -44,10 +46,10 @@ export function NativeReliabilitySection({ locale }: { locale: Locale }) {
       {/* OEM Device Guide */}
       <div className="mt-8 rounded-3xl border border-[var(--sanctuary-border)] bg-[#0D1915] p-6 sm:p-8">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <h3 className="text-base font-bold text-[#F2EFE9] sm:text-lg">
+          <h3 className="font-sacred text-lg font-bold text-[#F2EFE9] sm:text-xl">
             {rel.oemTitle}
           </h3>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-1.5 rounded-2xl border border-[#D8B467]/20 bg-[#08130F] p-1">
             {rel.oems.map((oem) => (
               <button
                 key={oem.id}
@@ -55,8 +57,8 @@ export function NativeReliabilitySection({ locale }: { locale: Locale }) {
                 onClick={() => setSelectedOem(oem.id)}
                 className={`rounded-xl border px-3.5 py-2 text-xs font-semibold transition-colors ${
                   oem.id === currentOem.id
-                    ? "border-[#D8B467] bg-[#1B5E4F] text-white"
-                    : "border-[var(--sanctuary-border)] bg-[#07100D] text-[#92A49B] hover:text-[#F2EFE9]"
+                    ? "border-[#D8B467]/45 bg-gradient-to-b from-[#216E5C] to-[#13473B] text-[#F6E2A8]"
+                    : "border-transparent text-[#92A49B] hover:text-[#E5C67E]"
                 }`}
               >
                 {oem.name}
@@ -73,9 +75,10 @@ export function NativeReliabilitySection({ locale }: { locale: Locale }) {
             >
               <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[#2A8772]" />
               <div>
-                <span className="font-latin font-bold text-[#F2EFE9]">
-                  #{idx + 1}{" "}
-                </span>
+                <span className="inline-flex items-center gap-1 font-latin font-bold text-[#E0B866]">
+                  <RubElHizbMark className="h-2.5 w-2.5" />
+                  {idx + 1}
+                </span>{" "}
                 <span>{stepText}</span>
               </div>
             </li>
@@ -84,10 +87,11 @@ export function NativeReliabilitySection({ locale }: { locale: Locale }) {
       </div>
 
       {/* Permissions & Privacy Ledger */}
-      <div className="mt-8 rounded-3xl border border-[#D8B467]/25 bg-[#12231D]/70 p-6 sm:p-8">
+      <div className="relative mt-8 overflow-hidden rounded-3xl border border-[#D8B467]/30 bg-[#12231D]/70 p-6 sm:p-8">
+        <ManuscriptCorners color="rgba(216, 180, 103, 0.38)" />
         <div className="flex items-center gap-2.5">
           <ShieldCheck className="h-5 w-5 text-[#E0B866]" />
-          <h3 className="text-base font-bold text-[#F2EFE9] sm:text-lg">
+          <h3 className="font-sacred text-lg font-bold text-[#F2EFE9] sm:text-xl">
             {rel.privacyTitle}
           </h3>
         </div>

@@ -17,7 +17,12 @@ import {
   landingCopy,
 } from "@/lib/landing-content";
 import { appScreenshots } from "@/config/screenshots";
-import { ManuscriptCorners } from "./GeometricMotifs";
+import {
+  ManuscriptCorners,
+  OctagonalIconFrame,
+  RubElHizbMark,
+  SectionSanctuaryHeader,
+} from "./GeometricMotifs";
 
 const TAB_ICONS = {
   quran: BookOpen,
@@ -47,17 +52,11 @@ export function AppTourSection({ locale }: { locale: Locale }) {
 
   return (
     <section id="tour" className="mx-auto max-w-6xl px-5 py-16 sm:px-8 sm:py-24">
-      <div className="max-w-2xl">
-        <p className="text-xs font-bold uppercase tracking-wider text-[#D8B467]">
-          {tour.eyebrow}
-        </p>
-        <h2 className="mt-2 text-2xl font-extrabold text-[#F2EFE9] sm:text-4xl">
-          {tour.title}
-        </h2>
-        <p className="mt-3 text-base leading-relaxed text-[#92A49B]">
-          {tour.subtitle}
-        </p>
-      </div>
+      <SectionSanctuaryHeader
+        eyebrow={tour.eyebrow}
+        title={tour.title}
+        subtitle={tour.subtitle}
+      />
 
       <div className="mt-10 grid items-center gap-8 lg:grid-cols-12">
         <div className="space-y-3 lg:col-span-5">
@@ -71,26 +70,21 @@ export function AppTourSection({ locale }: { locale: Locale }) {
                 onClick={() => setActiveId(tab.id)}
                 className={`flex w-full items-start gap-4 rounded-2xl border p-4 text-start transition-all ${
                   selected
-                    ? "border-[#D8B467] bg-[#12231D] shadow-sm"
+                    ? "border-[#D8B467]/60 bg-[#11211B] shadow-sm"
                     : "border-[var(--sanctuary-border)] bg-[#0D1915]/60 hover:bg-[#0D1915]"
                 }`}
               >
-                <div
-                  className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border ${
-                    selected
-                      ? "border-[#D8B467] bg-[#1B5E4F] text-[#E0B866]"
-                      : "border-[var(--sanctuary-border)] bg-[#07100D] text-[#92A49B]"
-                  }`}
-                >
-                  <Icon className="h-5 w-5" />
-                </div>
+                <OctagonalIconFrame active={selected}>
+                  <Icon className="h-4 w-4" />
+                </OctagonalIconFrame>
                 <div className="flex-1">
                   <div className="flex items-center justify-between gap-2">
                     <span className="text-base font-bold text-[#F2EFE9]">
                       {tab.title}
                     </span>
-                    <span className="rounded-full bg-[#07100D] px-2.5 py-0.5 text-[10px] font-semibold text-[#D8B467]">
-                      {tab.badge}
+                    <span className="inline-flex items-center gap-1 rounded-full border border-[#D8B467]/20 bg-[#07100D] px-2.5 py-0.5 text-[10px] font-semibold text-[#D8B467]">
+                      {selected && <RubElHizbMark className="h-2.5 w-2.5" />}
+                      <span>{tab.badge}</span>
                     </span>
                   </div>
                   {selected && (
@@ -124,8 +118,10 @@ export function AppTourSection({ locale }: { locale: Locale }) {
                 <>
                   {activeTab.id === "quran" && (
                     <div className="rounded-3xl border border-[#D8B467]/30 bg-[#0B1411] p-5 text-[#EDEFEA] shadow-inner">
-                      <div className="mb-3 rounded-xl border border-[#D8B467]/40 bg-[#1B5E4F] py-2 text-center text-xs font-bold text-[#FBF7EE]">
-                        سورة الفاتحة • مكية
+                      <div className="mb-3 flex items-center justify-center gap-2 rounded-xl border border-[#D8B467]/45 bg-gradient-to-b from-[#216E5C] to-[#13473B] py-2 text-center text-xs font-bold text-[#FBF7EE]">
+                        <RubElHizbMark className="h-3 w-3 text-[#F2D184]" />
+                        <span>سورة الفاتحة • مكية</span>
+                        <RubElHizbMark className="h-3 w-3 text-[#F2D184]" />
                       </div>
                       <p dir="rtl" className="font-sacred text-center text-base leading-[2.1]">
                         بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ ﴿١﴾ الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ ﴿٢﴾ الرَّحْمَٰنِ الرَّحِيمِ ﴿٣﴾ مَالِكِ يَوْمِ الدِّينِ ﴿٤﴾
@@ -154,7 +150,7 @@ export function AppTourSection({ locale }: { locale: Locale }) {
                       </div>
 
                       {/* Quick City Switcher */}
-                      <div className="mt-3 flex flex-wrap gap-1.5">
+                      <div className="mt-3 flex flex-wrap gap-1 rounded-xl border border-[#D8B467]/25 bg-[#07130F]/75 p-1">
                         {QUICK_CITIES.map((city) => (
                           <button
                             key={city.id}
@@ -162,8 +158,8 @@ export function AppTourSection({ locale }: { locale: Locale }) {
                             onClick={() => setSelectedCityId(city.id)}
                             className={`rounded-lg px-2.5 py-1 text-[10px] font-semibold transition-colors ${
                               city.id === activeCity.id
-                                ? "bg-[#E0B866] text-[#07141A]"
-                                : "bg-black/25 text-white/80 hover:bg-black/40"
+                                ? "bg-gradient-to-b from-[#E5C67E] to-[#C8A151] text-[#07141A]"
+                                : "text-white/80 hover:bg-white/5 hover:text-[#E5C67E]"
                             }`}
                           >
                             {isAr ? city.nameAr : city.nameEn}
@@ -250,8 +246,11 @@ export function AppTourSection({ locale }: { locale: Locale }) {
             </div>
 
             <div className="sm:col-span-6">
-              <span className="text-xs font-bold text-[#D8B467]">{activeTab.badge}</span>
-              <h3 className="mt-1 text-xl font-extrabold text-[#F2EFE9]">
+              <span className="inline-flex items-center gap-1.5 text-xs font-bold text-[#D8B467]">
+                <RubElHizbMark className="h-3 w-3" />
+                <span>{activeTab.badge}</span>
+              </span>
+              <h3 className="font-sacred mt-1.5 text-xl leading-snug font-bold text-[#F4EFE4] sm:text-2xl">
                 {activeTab.headline}
               </h3>
               <ul className="mt-5 space-y-3">

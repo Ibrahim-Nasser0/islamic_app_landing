@@ -6,11 +6,16 @@ import {
   CheckCircle2,
   ExternalLink,
   Loader2,
-  MessageSquarePlus,
   Send,
 } from "lucide-react";
 import { Locale, landingCopy } from "@/lib/landing-content";
-import { ManuscriptCorners } from "./GeometricMotifs";
+import {
+  ManuscriptCorners,
+  RubElHizbMark,
+  SANCTUARY_PRIMARY_CTA,
+  SANCTUARY_SECONDARY_BTN,
+  SectionSanctuaryHeader,
+} from "./GeometricMotifs";
 
 type SubmitState =
   | { status: "idle" }
@@ -93,18 +98,12 @@ export function FeedbackSection({ locale }: { locale: Locale }) {
 
   return (
     <section id="feedback" className="mx-auto max-w-4xl px-5 py-16 sm:px-8 sm:py-24">
-      <div className="text-center">
-        <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-[#D8B467]/30 bg-[#0D1915] px-4 py-1 text-xs font-semibold text-[#E0B866]">
-          <MessageSquarePlus className="h-3.5 w-3.5" />
-          <span>{t.eyebrow}</span>
-        </div>
-        <h2 className="text-2xl font-extrabold text-[#F2EFE9] sm:text-4xl">
-          {t.title}
-        </h2>
-        <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-[#92A49B] sm:text-base">
-          {t.subtitle}
-        </p>
-      </div>
+      <SectionSanctuaryHeader
+        centered
+        eyebrow={t.eyebrow}
+        title={t.title}
+        subtitle={t.subtitle}
+      />
 
       <div className="relative mt-10 overflow-hidden rounded-[32px] border border-[#D8B467]/30 bg-[#0D1915] p-6 shadow-lg sm:p-9">
         <ManuscriptCorners />
@@ -130,16 +129,16 @@ export function FeedbackSection({ locale }: { locale: Locale }) {
                   href={submitState.fallbackUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex h-12 items-center gap-2 rounded-2xl bg-[#1B5E4F] px-6 text-sm font-bold text-white transition-all hover:brightness-110"
+                  className={`inline-flex h-12 items-center gap-2 rounded-2xl px-6 text-sm font-bold ${SANCTUARY_PRIMARY_CTA}`}
                 >
-                  <ExternalLink className="h-4 w-4 text-[#E0B866]" />
+                  <ExternalLink className="h-4 w-4 text-[#F2D184]" />
                   <span>{t.openGithubIssue}</span>
                 </a>
               )}
               <button
                 type="button"
                 onClick={resetForm}
-                className="inline-flex h-12 items-center rounded-2xl border border-[var(--sanctuary-border)] bg-[#12231D] px-5 text-sm font-semibold text-[#F2EFE9] hover:border-[#D8B467]"
+                className={`inline-flex h-12 items-center rounded-2xl px-5 text-sm font-semibold ${SANCTUARY_SECONDARY_BTN}`}
               >
                 {t.sendAnother}
               </button>
@@ -164,13 +163,16 @@ export function FeedbackSection({ locale }: { locale: Locale }) {
                   key={cat.id}
                   type="button"
                   onClick={() => setCategory(cat.id)}
-                  className={`min-h-11 rounded-xl border px-4 py-2 text-xs font-semibold transition-colors ${
+                  className={`inline-flex min-h-11 items-center gap-1.5 rounded-xl border px-4 py-2 text-xs font-semibold transition-colors ${
                     category === cat.id
-                      ? "border-[#D8B467] bg-[#1B5E4F] text-white"
-                      : "border-[var(--sanctuary-border)] bg-[#07100D] text-[#92A49B] hover:text-[#F2EFE9]"
+                      ? "border-[#D8B467]/50 bg-gradient-to-b from-[#216E5C] to-[#13473B] text-[#F6E2A8]"
+                      : "border-[var(--sanctuary-border)] bg-[#07100D] text-[#92A49B] hover:border-[#D8B467]/40 hover:text-[#F2EFE9]"
                   }`}
                 >
-                  {cat.label}
+                  {category === cat.id && (
+                    <RubElHizbMark className="h-3 w-3 text-[#E5C67E]" />
+                  )}
+                  <span>{cat.label}</span>
                 </button>
               ))}
             </div>
@@ -253,7 +255,7 @@ export function FeedbackSection({ locale }: { locale: Locale }) {
             <button
               type="submit"
               disabled={submitState.status === "submitting"}
-              className="inline-flex h-13 w-full items-center justify-center gap-2 rounded-2xl bg-[#1B5E4F] text-sm font-bold text-white transition-all hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-60"
+              className={`inline-flex h-13 w-full items-center justify-center gap-2 rounded-2xl text-sm font-bold disabled:cursor-not-allowed disabled:opacity-60 ${SANCTUARY_PRIMARY_CTA}`}
             >
               {submitState.status === "submitting" ? (
                 <>

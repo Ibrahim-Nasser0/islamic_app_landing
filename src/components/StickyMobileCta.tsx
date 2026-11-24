@@ -1,8 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Download, MessageSquarePlus } from "lucide-react";
 import { Locale, landingCopy } from "@/lib/landing-content";
+import {
+  RubElHizbMark,
+  SANCTUARY_PRIMARY_CTA,
+  SANCTUARY_SECONDARY_BTN,
+} from "./GeometricMotifs";
 
 interface StickyMobileCtaProps {
   locale: Locale;
@@ -12,33 +17,105 @@ interface StickyMobileCtaProps {
 export function StickyMobileCta({ locale, downloadUrl }: StickyMobileCtaProps) {
   const t = landingCopy[locale].stickyCta;
   const [visible, setVisible] = useState(false);
+  const lastScrollY = useRef(0);
+  const downloadVisibleRef = useRef(false);
+  const idleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    const onScroll = () => {
-      setVisible(window.scrollY > 420);
+    const clearIdle = () => {
+      if (idleTimerRef.current) {
+        clearTimeout(idleTimerRef.current);
+        idleTimerRef.current = null;
+      }
     };
-    onScroll();
+
+    const downloadEl = document.getElementById("download");
+    const observer =
+      downloadEl && typeof IntersectionObserver !== "undefined"
+        ? new IntersectionObserver(
+            (entries) => {
+              const isInView = entries[0]?.isIntersecting ?? false;
+              downloadVisibleRef.current = isInView;
+              if (isInView) {
+                clearIdle();
+                setVisible(false);
+              }
+            },
+            { threshold: 0.15 }
+          )
+        : null;
+
+    if (downloadEl && observer) {
+      observer.observe(downloadEl);
+    }
+
+    const onScroll = () => {
+      const currentY = window.scrollY;
+      const delta = currentY - lastScrollY.current;
+      lastScrollY.current = currentY;
+
+      clearIdle();
+
+      // Always keep hidden at top Hero and bottom Download QR section
+      if (currentY <= 380 || downloadVisibleRef.current) {
+        setVisible(false);
+        return;
+      }
+
+      if (delta > 6) {
+        // Hide while actively scrolling downward; reveal again when reader pauses
+        setVisible(false);
+        idleTimerRef.current = setTimeout(() => {
+          if (window.scrollY > 380 && !downloadVisibleRef.current) {
+            setVisible(true);
+          }
+        }, 550);
+      } else if (delta < -6) {
+        // Reveal immediately on upward scroll
+        setVisible(true);
+      } else {
+        idleTimerRef.current = setTimeout(() => {
+          if (window.scrollY > 380 && !downloadVisibleRef.current) {
+            setVisible(true);
+          }
+        }, 550);
+      }
+    };
+
+    lastScrollY.current = window.scrollY;
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      clearIdle();
+      observer?.disconnect();
+      window.removeEventListener("scroll", onScroll);
+    };
   }, []);
 
-  if (!visible) return null;
-
   return (
-    <div className="fixed inset-x-4 bottom-4 z-40 sm:hidden">
-      <div className="flex items-center gap-2 rounded-2xl border border-[#D8B467]/40 bg-[#0D1915]/95 p-2 shadow-2xl backdrop-blur-md">
+    <div
+      aria-hidden={!visible}
+      className={`fixed inset-x-4 bottom-4 z-40 transition-all duration-300 ease-out motion-reduce:transition-none sm:hidden ${
+        visible
+          ? "translate-y-0 opacity-100"
+          : "pointer-events-none translate-y-24 opacity-0"
+      }`}
+    >
+      <div className="flex items-center gap-2 rounded-2xl border border-[#D8B467]/40 bg-[#08130F]/95 p-2 shadow-2xl backdrop-blur-md">
         <a
           href={downloadUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-[#1B5E4F] text-xs font-bold text-white active:scale-[0.98]"
+          tabIndex={visible ? 0 : -1}
+          className={`inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-xl text-xs font-bold ${SANCTUARY_PRIMARY_CTA}`}
         >
-          <Download className="h-4 w-4 text-[#E0B866]" />
+          <RubElHizbMark className="h-3 w-3 text-[#F2D184]" />
+          <Download className="h-3.5 w-3.5 text-[#F2D184]" />
           <span>{t.download}</span>
         </a>
         <a
           href="#feedback"
-          className="inline-flex h-11 items-center justify-center gap-1.5 rounded-xl border border-[var(--sanctuary-border)] bg-[#12231D] px-3.5 text-xs font-semibold text-[#F2EFE9]"
+          tabIndex={visible ? 0 : -1}
+          className={`inline-flex h-11 items-center justify-center gap-1.5 rounded-xl px-3.5 text-xs font-semibold ${SANCTUARY_SECONDARY_BTN}`}
         >
           <MessageSquarePlus className="h-3.5 w-3.5 text-[#D8B467]" />
           <span>{t.feedback}</span>

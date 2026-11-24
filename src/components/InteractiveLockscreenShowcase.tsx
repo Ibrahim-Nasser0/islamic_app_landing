@@ -12,7 +12,11 @@ import {
 import {
   BreathingRosette,
   EqualizerBars,
+  ManuscriptCorners,
   OctagramPatternOverlay,
+  RubElHizbMark,
+  SANCTUARY_PRIMARY_CTA,
+  SectionSanctuaryHeader,
 } from "./GeometricMotifs";
 
 type SkyKey = "fajr" | "dhuhr" | "maghrib" | "isha";
@@ -127,27 +131,28 @@ export function InteractiveLockscreenShowcase({ locale }: { locale: Locale }) {
       <OctagramPatternOverlay />
 
       <div className="relative mx-auto max-w-6xl px-5 sm:px-8">
-        <div className="mx-auto max-w-2xl text-center">
-          <p className="text-xs font-bold uppercase tracking-wider text-[#E0B866]">
-            {t.eyebrow}
-          </p>
-          <h2 className="mt-2 text-2xl font-extrabold sm:text-4xl">{t.title}</h2>
-          <p className="mt-3 text-sm leading-relaxed text-white/80 sm:text-base">
-            {t.subtitle}
-          </p>
+        <SectionSanctuaryHeader
+          centered
+          onSky
+          eyebrow={t.eyebrow}
+          title={t.title}
+          subtitle={t.subtitle}
+        />
 
+        <div className="mx-auto max-w-2xl text-center">
           <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
-            <div className="inline-flex rounded-2xl border border-[#E0B866]/35 bg-white/10 p-1">
+            <div className="inline-flex rounded-2xl border border-[#E0B866]/35 bg-[#07130F]/65 p-1">
               <button
                 type="button"
                 onClick={() => setMode("adhan")}
-                className={`rounded-xl px-5 py-2 text-xs font-bold transition-colors ${
+                className={`inline-flex items-center gap-1.5 rounded-xl px-5 py-2 text-xs font-bold transition-colors ${
                   mode === "adhan"
-                    ? "bg-[#E0B866] text-[#07141A]"
-                    : "text-white/85 hover:text-white"
+                    ? "bg-gradient-to-b from-[#E5C67E] to-[#C8A151] text-[#07141A]"
+                    : "text-white/85 hover:text-[#E5C67E]"
                 }`}
               >
-                {t.modeAdhan}
+                {mode === "adhan" && <RubElHizbMark className="h-3 w-3" />}
+                <span>{t.modeAdhan}</span>
               </button>
               <button
                 type="button"
@@ -155,18 +160,19 @@ export function InteractiveLockscreenShowcase({ locale }: { locale: Locale }) {
                   stopAudio();
                   setMode("azkar");
                 }}
-                className={`rounded-xl px-5 py-2 text-xs font-bold transition-colors ${
+                className={`inline-flex items-center gap-1.5 rounded-xl px-5 py-2 text-xs font-bold transition-colors ${
                   mode === "azkar"
-                    ? "bg-[#E0B866] text-[#07141A]"
-                    : "text-white/85 hover:text-white"
+                    ? "bg-gradient-to-b from-[#E5C67E] to-[#C8A151] text-[#07141A]"
+                    : "text-white/85 hover:text-[#E5C67E]"
                 }`}
               >
-                {t.modeAzkar}
+                {mode === "azkar" && <RubElHizbMark className="h-3 w-3" />}
+                <span>{t.modeAzkar}</span>
               </button>
             </div>
 
             {mode === "adhan" && (
-              <div className="inline-flex rounded-2xl border border-white/15 bg-black/20 p-1">
+              <div className="inline-flex rounded-2xl border border-[#E0B866]/20 bg-[#07130F]/55 p-1">
                 {(["fajr", "dhuhr", "maghrib", "isha"] as const).map((k) => (
                   <button
                     key={k}
@@ -174,8 +180,8 @@ export function InteractiveLockscreenShowcase({ locale }: { locale: Locale }) {
                     onClick={() => setSky(k)}
                     className={`rounded-xl px-3 py-2 text-[11px] font-semibold transition-colors ${
                       sky === k
-                        ? "bg-white/20 text-[#E0B866]"
-                        : "text-white/70 hover:text-white"
+                        ? "bg-white/15 text-[#E0B866]"
+                        : "text-white/75 hover:text-white"
                     }`}
                   >
                     {t.skyLabels[k]}
@@ -186,11 +192,13 @@ export function InteractiveLockscreenShowcase({ locale }: { locale: Locale }) {
           </div>
         </div>
 
-        <div className="mx-auto mt-10 max-w-xl rounded-[32px] border border-[#E0B866]/35 bg-black/25 p-6 backdrop-blur-md sm:p-8">
+        <div className="relative mx-auto mt-10 max-w-xl overflow-hidden rounded-[32px] border border-[#E0B866]/35 bg-black/25 p-6 backdrop-blur-md sm:p-8">
+          <ManuscriptCorners color="rgba(224, 184, 102, 0.4)" />
           {mode === "adhan" ? (
             <div className="flex flex-col items-center text-center">
-              <span className="rounded-full border border-[#E0B866]/35 bg-white/10 px-4 py-1.5 text-xs font-semibold text-[#FBF7EE]">
-                ★ {t.nowPrayerMap[sky]}
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-[#E0B866]/35 bg-white/10 px-4 py-1.5 text-xs font-semibold text-[#FBF7EE]">
+                <RubElHizbMark className="h-3 w-3 text-[#E0B866]" />
+                <span>{t.nowPrayerMap[sky]}</span>
               </span>
 
               <div className="my-3">
@@ -255,7 +263,9 @@ export function InteractiveLockscreenShowcase({ locale }: { locale: Locale }) {
                 type="button"
                 onClick={() => void togglePlay()}
                 className={`mt-6 inline-flex h-13 w-full items-center justify-center gap-2 rounded-full text-sm font-bold text-white transition-all active:scale-[0.98] ${
-                  isPlaying ? "bg-[#B91C1C]" : "bg-[#1B5E4F] hover:bg-[#237462]"
+                  isPlaying
+                    ? "border border-[#EF4444]/60 bg-[#B91C1C]"
+                    : SANCTUARY_PRIMARY_CTA
                 }`}
               >
                 {isPlaying ? (

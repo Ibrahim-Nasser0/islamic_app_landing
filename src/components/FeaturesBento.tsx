@@ -7,7 +7,12 @@ import {
   Sparkles,
 } from "lucide-react";
 import { Locale, landingCopy } from "@/lib/landing-content";
-import { EqualizerBars } from "./GeometricMotifs";
+import {
+  EqualizerBars,
+  ManuscriptCorners,
+  OctagonalIconFrame,
+  SectionSanctuaryHeader,
+} from "./GeometricMotifs";
 
 const CARD_ICONS = {
   native: BellRing,
@@ -23,17 +28,11 @@ export function FeaturesBento({ locale }: { locale: Locale }) {
 
   return (
     <section id="features" className="mx-auto max-w-6xl px-5 py-16 sm:px-8 sm:py-24">
-      <div className="max-w-2xl">
-        <p className="text-xs font-bold uppercase tracking-wider text-[var(--sanctuary-gold)]">
-          {section.eyebrow}
-        </p>
-        <h2 className="mt-2 text-2xl font-extrabold text-[var(--sanctuary-ink)] sm:text-4xl">
-          {section.title}
-        </h2>
-        <p className="mt-3 text-base leading-relaxed text-[var(--sanctuary-muted)]">
-          {section.subtitle}
-        </p>
-      </div>
+      <SectionSanctuaryHeader
+        eyebrow={section.eyebrow}
+        title={section.title}
+        subtitle={section.subtitle}
+      />
 
       <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
         {section.cards.map((card) => {
@@ -44,6 +43,7 @@ export function FeaturesBento({ locale }: { locale: Locale }) {
                 key={card.id}
                 className="relative overflow-hidden rounded-3xl border border-[var(--sanctuary-gold)]/40 bg-gradient-to-br from-[#0F2620] via-[#133B31] to-[#1B5E4F] p-7 text-white shadow-sm md:col-span-2"
               >
+                <ManuscriptCorners color="rgba(224, 184, 102, 0.45)" />
                 <div className="flex items-center justify-between gap-4">
                   <div className="inline-flex items-center gap-2 rounded-full border border-[#E0B866]/40 bg-white/10 px-3.5 py-1 text-xs font-semibold text-[#E0B866]">
                     <Icon className="h-3.5 w-3.5" />
@@ -51,7 +51,7 @@ export function FeaturesBento({ locale }: { locale: Locale }) {
                   </div>
                   <EqualizerBars active />
                 </div>
-                <h3 className="mt-4 text-xl font-bold leading-snug sm:text-2xl">
+                <h3 className="font-sacred mt-4 text-2xl font-bold leading-snug text-[#FBF7EE] sm:text-3xl">
                   {card.title}
                 </h3>
                 <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/85 sm:text-base">
@@ -75,14 +75,14 @@ export function FeaturesBento({ locale }: { locale: Locale }) {
           return (
             <div
               key={card.id}
-              className="flex flex-col justify-between rounded-3xl border border-[var(--sanctuary-border)] bg-[var(--sanctuary-surface)] p-6 transition-colors hover:border-[var(--sanctuary-gold)]/60"
+              className="flex flex-col justify-between rounded-3xl border border-[var(--sanctuary-border)] bg-[var(--sanctuary-surface)] p-6 transition-colors hover:border-[var(--sanctuary-gold)]/55"
             >
               <div>
                 <div className="flex items-center justify-between">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-[var(--sanctuary-border)] bg-[var(--sanctuary-paper)] text-[var(--sanctuary-emerald)]">
-                    <Icon className="h-5 w-5 text-[var(--sanctuary-gold)]" />
-                  </div>
-                  <span className="rounded-full bg-[var(--sanctuary-surface-alt)] px-3 py-1 text-[11px] font-semibold text-[var(--sanctuary-muted)]">
+                  <OctagonalIconFrame>
+                    <Icon className="h-4 w-4 text-[#E0B866]" />
+                  </OctagonalIconFrame>
+                  <span className="rounded-full border border-[#D8B467]/15 bg-[var(--sanctuary-surface-alt)] px-3 py-1 text-[11px] font-semibold text-[var(--sanctuary-muted)]">
                     {card.badge}
                   </span>
                 </div>

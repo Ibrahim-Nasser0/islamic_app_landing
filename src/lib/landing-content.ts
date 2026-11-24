@@ -156,6 +156,8 @@ export const landingCopy = {
       reliability: "الموثوقية",
       feedback: "الشكاوى والاقتراحات",
       download: "التحميل",
+      menuLabel: "فتح القائمة",
+      closeMenuLabel: "إغلاق القائمة",
     },
     hero: {
       waqfBadge: "صدقة جارية • مجاني 100% بلا إعلانات",
@@ -481,6 +483,8 @@ export const landingCopy = {
       reliability: "Reliability",
       feedback: "Feedback",
       download: "Download",
+      menuLabel: "Open menu",
+      closeMenuLabel: "Close menu",
     },
     hero: {
       waqfBadge: "Sadaqah Jariyah • 100% Free & Ad-Free",

@@ -11,7 +11,6 @@ import {
   QrCode,
   ShieldCheck,
   Smartphone,
-  Sparkles,
 } from "lucide-react";
 import { Locale, landingCopy } from "@/lib/landing-content";
 import { ReleaseDownloadInfo } from "@/lib/github-release";
@@ -20,6 +19,9 @@ import {
   BreathingRosette,
   ManuscriptCorners,
   OctagramPatternOverlay,
+  RubElHizbMark,
+  SANCTUARY_PRIMARY_CTA,
+  SANCTUARY_SECONDARY_BTN,
 } from "./GeometricMotifs";
 
 interface HeroSectionProps {
@@ -55,7 +57,7 @@ export function HeroSection({
       <div className="relative mx-auto grid max-w-6xl items-center gap-12 px-5 sm:px-8 lg:grid-cols-12 lg:gap-10">
         <div className="lg:col-span-7">
           <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#D8B467]/35 bg-[#0D1915] px-4 py-1.5 text-xs font-semibold text-[#E0B866]">
-            <Sparkles className="h-3.5 w-3.5 text-[#E0B866]" />
+            <RubElHizbMark className="h-3.5 w-3.5 text-[#E0B866]" />
             <span>{t.waqfBadge}</span>
           </div>
 
@@ -72,7 +74,7 @@ export function HeroSection({
             </p>
           </div>
 
-          <h1 className="text-3xl font-extrabold leading-tight tracking-tight text-[#F2EFE9] sm:text-5xl sm:leading-[1.18]">
+          <h1 className="font-sacred text-3xl leading-[1.34] font-bold tracking-normal text-[#F4EFE4] sm:text-5xl sm:leading-[1.26]">
             {t.title}
           </h1>
 
@@ -85,16 +87,19 @@ export function HeroSection({
               href={release.downloadUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex min-h-14 items-center gap-3 rounded-2xl bg-[#1B5E4F] px-6 py-3.5 text-sm font-bold text-white shadow-sm transition-all hover:bg-[#237462] active:scale-[0.98]"
+              className={`inline-flex min-h-14 items-center gap-3 rounded-2xl px-6 py-3.5 text-sm font-bold ${SANCTUARY_PRIMARY_CTA}`}
             >
-              <Download className="h-5 w-5 text-[#E0B866]" />
+              <Download className="h-5 w-5 text-[#F2D184]" />
               <div className="text-start">
                 <span className="block">
                   {release.hasDirectApk ? t.downloadApk : t.releaseFallback}
                 </span>
-                <span className="font-latin block text-[11px] font-medium text-white/80">
-                  {release.version}
-                  {release.fileSizeMb ? ` • ${release.fileSizeMb} MB` : ""} • Android 8.0+
+                <span className="block text-[11px] font-medium text-[#FBF7ED]/80">
+                  <span className="font-latin">
+                    {release.version}
+                    {release.fileSizeMb ? ` • ${release.fileSizeMb} MB` : ""}
+                  </span>{" "}
+                  • {isAr ? "أندرويد 8.0 فأحدث" : "Android 8.0+"}
                 </span>
               </div>
             </a>
@@ -102,7 +107,7 @@ export function HeroSection({
             <button
               type="button"
               onClick={onOpenReleaseNotes}
-              className="inline-flex min-h-14 items-center gap-2 rounded-2xl border border-[var(--sanctuary-border)] bg-[#0D1915] px-4 py-3.5 text-xs font-semibold text-[#F2EFE9] transition-colors hover:border-[#D8B467]"
+              className={`inline-flex min-h-14 items-center gap-2 rounded-2xl px-4 py-3.5 text-xs font-semibold ${SANCTUARY_SECONDARY_BTN}`}
             >
               <FileText className="h-4 w-4 text-[#D8B467]" />
               <span>{t.whatsNew}</span>
@@ -111,7 +116,7 @@ export function HeroSection({
             <button
               type="button"
               onClick={() => setShowQr((prev) => !prev)}
-              className="inline-flex min-h-14 items-center gap-2 rounded-2xl border border-[var(--sanctuary-border)] bg-[#0D1915] px-4 py-3.5 text-xs font-semibold text-[#F2EFE9] transition-colors hover:border-[#D8B467]"
+              className={`inline-flex min-h-14 items-center gap-2 rounded-2xl px-4 py-3.5 text-xs font-semibold ${SANCTUARY_SECONDARY_BTN}`}
             >
               <QrCode className="h-4 w-4 text-[#D8B467]" />
               <span>{t.scanQr}</span>
@@ -206,7 +211,7 @@ export function HeroSection({
 
             <div className="absolute -bottom-3 start-6 hidden items-center gap-1.5 rounded-full border border-[#D8B467]/30 bg-[#0D1915] px-3 py-1 text-[11px] font-semibold text-[#E0B866] shadow-md sm:inline-flex">
               <ShieldCheck className="h-3.5 w-3.5 text-[#D8B467]" />
-              <span>AlarmClock Native</span>
+              <span>{isAr ? "محرك المنبه الأصلي" : "AlarmClock Native"}</span>
             </div>
           </div>
         </div>

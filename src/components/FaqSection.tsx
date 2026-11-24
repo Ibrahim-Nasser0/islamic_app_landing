@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { Locale, landingCopy } from "@/lib/landing-content";
+import { RubElHizbMark, SectionSanctuaryHeader } from "./GeometricMotifs";
 
 export function FaqSection({ locale }: { locale: Locale }) {
   const faq = landingCopy[locale].faqSection;
@@ -14,16 +15,13 @@ export function FaqSection({ locale }: { locale: Locale }) {
       className="border-y border-[var(--sanctuary-border)] bg-[var(--sanctuary-surface)]/55 py-16 sm:py-24"
     >
       <div className="mx-auto max-w-4xl px-5 sm:px-8">
-        <div className="text-center">
-          <p className="text-xs font-bold uppercase tracking-wider text-[var(--sanctuary-gold)]">
-            {faq.eyebrow}
-          </p>
-          <h2 className="mt-2 text-2xl font-extrabold text-[var(--sanctuary-ink)] sm:text-4xl">
-            {faq.title}
-          </h2>
-        </div>
+        <SectionSanctuaryHeader
+          centered
+          eyebrow={faq.eyebrow}
+          title={faq.title}
+        />
 
-        <div className="mt-10 divide-y divide-[var(--sanctuary-border)] rounded-3xl border border-[var(--sanctuary-border)] bg-[var(--sanctuary-surface)] px-5 sm:px-8">
+        <div className="mt-10 divide-y divide-[var(--sanctuary-border)] rounded-3xl border border-[#D8B467]/25 bg-[var(--sanctuary-surface)] px-5 sm:px-8">
           {faq.items.map((item, idx) => {
             const isOpen = openIndex === idx;
             return (
@@ -34,8 +32,13 @@ export function FaqSection({ locale }: { locale: Locale }) {
                   onClick={() => setOpenIndex(isOpen ? null : idx)}
                   className="flex w-full items-center justify-between gap-4 text-start"
                 >
-                  <span className="text-sm font-bold text-[var(--sanctuary-ink)] sm:text-base">
-                    {item.q}
+                  <span className="inline-flex items-center gap-2.5 text-sm font-bold text-[var(--sanctuary-ink)] sm:text-base">
+                    <RubElHizbMark
+                      className={`h-3 w-3 shrink-0 transition-colors ${
+                        isOpen ? "text-[#E0B866]" : "text-[#D8B467]/40"
+                      }`}
+                    />
+                    <span>{item.q}</span>
                   </span>
                   <ChevronDown
                     className={`h-5 w-5 shrink-0 text-[var(--sanctuary-gold)] transition-transform duration-200 ${
@@ -44,7 +47,7 @@ export function FaqSection({ locale }: { locale: Locale }) {
                   />
                 </button>
                 {isOpen && (
-                  <p className="mt-3 text-sm leading-relaxed text-[var(--sanctuary-muted)]">
+                  <p className="mt-3 ps-5.5 text-sm leading-relaxed text-[var(--sanctuary-muted)]">
                     {item.a}
                   </p>
                 )}
