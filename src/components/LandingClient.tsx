@@ -1,6 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import {
+  DeviceDetectionResult,
+  detectDeviceApkArchClient,
+  resolveApkVariant,
+} from "@/lib/device-apk";
 import { buildTrackedDownloadPath } from "@/lib/download-url";
 import { ReleaseDownloadInfo } from "@/lib/github-release";
 import { LandingDynamicData } from "@/lib/landing-data";
@@ -31,11 +36,29 @@ export function LandingClient({ release, dynamicData }: LandingClientProps) {
   const [locale, setLocale] = useState<Locale>("ar");
   const [notesOpen, setNotesOpen] = useState(false);
   const [localDownloadDelta, setLocalDownloadDelta] = useState(0);
+  const [detection, setDetection] = useState<DeviceDetectionResult | null>(null);
 
   useEffect(() => {
     document.documentElement.lang = locale;
     document.documentElement.dir = locale === "ar" ? "rtl" : "ltr";
   }, [locale]);
+
+  useEffect(() => {
+    let cancelled = false;
+    void detectDeviceApkArchClient().then((result) => {
+      if (!cancelled) {
+        setDetection(result);
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const detectedArch = detection?.arch ?? null;
+  const matchedVariant = detectedArch
+    ? resolveApkVariant(release.variants, detectedArch)
+    : null;
 
   const displayedDownloadCount = dynamicData.downloadCount + localDownloadDelta;
   const handleDownloadClick = () => {
@@ -46,12 +69,14 @@ export function LandingClient({ release, dynamicData }: LandingClientProps) {
     source: "hero",
     locale,
     version: release.version,
+    arch: detectedArch,
   });
 
   const stickyDownloadUrl = buildTrackedDownloadPath({
     source: "sticky_cta",
     locale,
     version: release.version,
+    arch: detectedArch,
   });
 
   return (
@@ -67,6 +92,8 @@ export function LandingClient({ release, dynamicData }: LandingClientProps) {
         <HeroSection
           locale={locale}
           release={release}
+          detection={detection}
+          matchedVariant={matchedVariant}
           downloadCount={displayedDownloadCount}
           onDownloadClick={handleDownloadClick}
           onOpenReleaseNotes={() => setNotesOpen(true)}
@@ -83,6 +110,7 @@ export function LandingClient({ release, dynamicData }: LandingClientProps) {
           locale={locale}
           releases={dynamicData.releasesTimeline}
           latestFallback={release}
+          detectedArch={detectedArch}
           onDownloadClick={handleDownloadClick}
         />
         <GoldHairlineDivider />
@@ -91,6 +119,7 @@ export function LandingClient({ release, dynamicData }: LandingClientProps) {
         <DownloadSection
           locale={locale}
           release={release}
+          detection={detection}
           downloadCount={displayedDownloadCount}
           onDownloadClick={handleDownloadClick}
         />
@@ -105,6 +134,8 @@ export function LandingClient({ release, dynamicData }: LandingClientProps) {
         open={notesOpen}
         locale={locale}
         release={release}
+        detectedArch={detectedArch}
+        matchedVariant={matchedVariant}
         onDownloadClick={handleDownloadClick}
         onClose={() => setNotesOpen(false)}
       />

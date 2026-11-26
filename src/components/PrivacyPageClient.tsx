@@ -57,7 +57,7 @@ export function PrivacyPageClient() {
                 {isAr ? siteConfig.appNameAr : siteConfig.appNameEn}
               </span>
               <span className="block text-[11px] text-[#D8B467]">
-                {isAr ? "سياسة الخصوصية" : "Privacy Policy"}
+                {t.headerSubtitle}
               </span>
             </div>
           </Link>

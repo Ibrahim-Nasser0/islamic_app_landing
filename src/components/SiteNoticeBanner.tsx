@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { AlertTriangle, ArrowUpRight, Info, Sparkles, X } from "lucide-react";
-import { Locale } from "@/lib/landing-content";
+import { Locale, landingCopy } from "@/lib/landing-content";
 import { SiteNoticeItem } from "@/lib/supabase/config";
 
 interface SiteNoticeBannerProps {
@@ -28,6 +28,7 @@ export function SiteNoticeBanner({ notice, locale }: SiteNoticeBannerProps) {
   }
 
   const isAr = locale === "ar";
+  const noticeCopy = landingCopy[locale].siteNotice;
   const text = isAr
     ? notice.title_ar
     : notice.title_en?.trim() || notice.title_ar;
@@ -89,7 +90,7 @@ export function SiteNoticeBanner({ notice, locale }: SiteNoticeBannerProps) {
         <button
           type="button"
           onClick={() => setDismissedId(notice.id)}
-          aria-label={isAr ? "إغلاق التنبيه" : "Dismiss notice"}
+          aria-label={noticeCopy.dismiss}
           className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-current/70 transition-colors hover:bg-white/10 hover:text-current"
         >
           <X className="h-3.5 w-3.5" />

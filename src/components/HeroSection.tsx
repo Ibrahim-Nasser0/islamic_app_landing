@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { QRCodeSVG } from "qrcode.react";
 import {
   BellRing,
@@ -12,6 +12,7 @@ import {
   ShieldCheck,
   Smartphone,
 } from "lucide-react";
+import { ApkVariant, DeviceDetectionResult } from "@/lib/device-apk";
 import { Locale, landingCopy } from "@/lib/landing-content";
 import { ReleaseDownloadInfo } from "@/lib/github-release";
 import { buildTrackedDownloadPath } from "@/lib/download-url";
@@ -25,9 +26,13 @@ import {
   SANCTUARY_SECONDARY_BTN,
 } from "./GeometricMotifs";
 
+const emptySubscribe = () => () => {};
+
 interface HeroSectionProps {
   locale: Locale;
   release: ReleaseDownloadInfo;
+  detection: DeviceDetectionResult | null;
+  matchedVariant: ApkVariant | null;
   downloadCount: number;
   onDownloadClick: () => void;
   onOpenReleaseNotes: () => void;
@@ -36,6 +41,8 @@ interface HeroSectionProps {
 export function HeroSection({
   locale,
   release,
+  detection,
+  matchedVariant,
   downloadCount,
   onDownloadClick,
   onOpenReleaseNotes,
@@ -43,19 +50,28 @@ export function HeroSection({
   const t = landingCopy[locale].hero;
   const isAr = locale === "ar";
   const [showQr, setShowQr] = useState(false);
+
+  const origin = useSyncExternalStore(
+    emptySubscribe,
+    () => window.location.origin,
+    () => ""
+  );
+
+  const detectedArch = detection?.arch ?? null;
   const trackedDownloadHref = buildTrackedDownloadPath({
     source: "hero",
     locale,
     version: release.version,
+    arch: detectedArch,
   });
-  const qrHref =
-    typeof window !== "undefined"
-      ? `${window.location.origin}${buildTrackedDownloadPath({
-          source: "qr",
-          locale,
-          version: release.version,
-        })}`
-      : release.downloadUrl;
+  const qrHref = origin
+    ? `${origin}${buildTrackedDownloadPath({
+        source: "qr",
+        locale,
+        version: release.version,
+      })}`
+    : release.downloadUrl;
+  const displaySizeMb = matchedVariant?.sizeMb ?? release.fileSizeMb;
 
   return (
     <section
@@ -116,9 +132,10 @@ export function HeroSection({
                 <span className="block text-[11px] font-medium text-[#FBF7ED]/80">
                   <span className="font-latin">
                     {release.version}
-                    {release.fileSizeMb ? ` • ${release.fileSizeMb} MB` : ""}
+                    {displaySizeMb ? ` • ${displaySizeMb} MB` : ""}
+                    {matchedVariant ? ` • ${matchedVariant.arch}` : ""}
                   </span>{" "}
-                  • {isAr ? "أندرويد 8.0 فأحدث" : "Android 8.0+"}
+                  • {t.minAndroid}
                 </span>
               </div>
             </a>
@@ -157,14 +174,20 @@ export function HeroSection({
           <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-[#92A49B]">
             <div className="inline-flex items-center gap-2">
               <Smartphone className="h-4 w-4 text-[#D8B467]" />
-              <span>{t.storesSoon}</span>
+              <span>
+                {detection
+                  ? detection.source !== "fallback"
+                    ? `${t.autoDetectedBuild} (${detection.arch})`
+                    : t.universalFallbackNote
+                  : t.storesSoon}
+              </span>
             </div>
             {downloadCount > 0 && (
               <div className="inline-flex items-center gap-1.5 rounded-full border border-[#D8B467]/30 bg-[#0D1915] px-3 py-1 text-[11px] font-semibold text-[#E5C67E]">
                 <Download className="h-3 w-3 text-[#D8B467]" />
                 <span>
                   {downloadCount.toLocaleString(isAr ? "ar-EG" : "en-US")}{" "}
-                  {isAr ? "تحميل" : "downloads"}
+                  {t.downloadsLabel}
                 </span>
               </div>
             )}
@@ -194,7 +217,7 @@ export function HeroSection({
               ) : (
                 <div className="flex flex-col items-center text-center">
                   <span className="rounded-full border border-[#E0B866]/35 bg-white/10 px-3 py-1 text-[10px] font-semibold">
-                    ★ {isAr ? "الآن موعد صلاة الفجر • 05:04 ص" : "Fajr Prayer • 05:04 AM"}
+                    {t.mockup.fajrStatus}
                   </span>
 
                   <div className="my-1 scale-90">
@@ -202,10 +225,10 @@ export function HeroSection({
                   </div>
 
                   <p className="font-sacred text-2xl font-bold text-[#FBF7EE]">
-                    {isAr ? "صلاة الفجر" : "Fajr Prayer"}
+                    {t.mockup.fajrTitle}
                   </p>
                   <p className="mt-1 text-[11px] text-[#E0B866]">
-                    {isAr ? "أذان الحرم المكي • مكة المكرمة" : "Makkah Sanctuary"}
+                    {t.mockup.muezzinName}
                   </p>
 
                   <div className="mt-4 w-full rounded-2xl border border-[#E0B866]/25 bg-white/5 p-3 text-center">
@@ -215,14 +238,14 @@ export function HeroSection({
                   </div>
 
                   <div className="mt-4 w-full rounded-full bg-[#B91C1C] py-2.5 text-xs font-bold text-white">
-                    {isAr ? "إيقاف الأذان" : "Stop Adhan"}
+                    {t.mockup.stopAdhan}
                   </div>
                   <div className="mt-2 grid w-full grid-cols-2 gap-2 text-[10px] font-semibold text-white/90">
                     <span className="rounded-full border border-white/15 bg-white/5 py-1.5">
-                      {isAr ? "اتجاه القبلة 🧭" : "Qibla 🧭"}
+                      {t.mockup.qiblaBtn}
                     </span>
                     <span className="rounded-full border border-white/15 bg-white/5 py-1.5">
-                      {isAr ? "فتح التطبيق ↗" : "Open App ↗"}
+                      {t.mockup.openAppBtn}
                     </span>
                   </div>
                 </div>
@@ -241,7 +264,7 @@ export function HeroSection({
 
             <div className="absolute -bottom-3 start-6 hidden items-center gap-1.5 rounded-full border border-[#D8B467]/30 bg-[#0D1915] px-3 py-1 text-[11px] font-semibold text-[#E0B866] shadow-md sm:inline-flex">
               <ShieldCheck className="h-3.5 w-3.5 text-[#D8B467]" />
-              <span>{isAr ? "محرك المنبه الأصلي" : "AlarmClock Native"}</span>
+              <span>{t.mockup.nativeBadge}</span>
             </div>
           </div>
         </div>

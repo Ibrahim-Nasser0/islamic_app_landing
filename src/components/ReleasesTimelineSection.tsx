@@ -8,9 +8,10 @@ import {
   Wrench,
   Zap,
 } from "lucide-react";
+import { ApkArch } from "@/lib/device-apk";
 import { buildTrackedDownloadPath } from "@/lib/download-url";
 import { ReleaseDownloadInfo } from "@/lib/github-release";
-import { Locale } from "@/lib/landing-content";
+import { Locale, landingCopy } from "@/lib/landing-content";
 import {
   AppReleaseItem,
   ReleaseHighlight,
@@ -29,31 +30,25 @@ interface ReleasesTimelineSectionProps {
   locale: Locale;
   releases: AppReleaseItem[];
   latestFallback: ReleaseDownloadInfo;
+  detectedArch: ApkArch | null;
   onDownloadClick?: () => void;
 }
 
-function getReleaseTypeLabel(type: ReleaseType, isAr: boolean): string {
-  const labels: Record<ReleaseType, { ar: string; en: string }> = {
-    major: { ar: "إصدار رئيسي", en: "Major" },
-    minor: { ar: "تحديث ميزات", en: "Minor" },
-    patch: { ar: "تحديث فرعي", en: "Patch" },
-    hotfix: { ar: "إصلاح عاجل", en: "Hotfix" },
-  };
-  return isAr ? labels[type].ar : labels[type].en;
-}
-
-function getHighlightBadge(type: ReleaseHighlightType, isAr: boolean) {
+function getHighlightBadge(
+  type: ReleaseHighlightType,
+  labels: { fix: string; improvement: string; feature: string }
+) {
   switch (type) {
     case "fix":
       return {
-        label: isAr ? "إصلاح" : "Fix",
+        label: labels.fix,
         icon: Wrench,
         className:
           "border-[#38BDF8]/35 bg-[#38BDF8]/10 text-[#7DD3FC]",
       };
     case "improvement":
       return {
-        label: isAr ? "تحسين" : "Improved",
+        label: labels.improvement,
         icon: Zap,
         className:
           "border-[#D8B467]/40 bg-[#D8B467]/12 text-[#F2D184]",
@@ -61,7 +56,7 @@ function getHighlightBadge(type: ReleaseHighlightType, isAr: boolean) {
     case "feature":
     default:
       return {
-        label: isAr ? "جديد" : "New",
+        label: labels.feature,
         icon: Sparkles,
         className:
           "border-[#10B981]/40 bg-[#10B981]/12 text-[#6EE7B7]",
@@ -73,9 +68,11 @@ export function ReleasesTimelineSection({
   locale,
   releases,
   latestFallback,
+  detectedArch,
   onDownloadClick,
 }: ReleasesTimelineSectionProps) {
   const isAr = locale === "ar";
+  const t = landingCopy[locale].timeline;
 
   const items: AppReleaseItem[] =
     releases.length > 0
@@ -85,14 +82,12 @@ export function ReleasesTimelineSection({
             id: "github-latest-fallback",
             version: latestFallback.version,
             release_type: "minor",
-            title_ar: "الإصدار الحالي من زاد المسلم",
-            title_en: "Current Release of Zad Al-Muslim",
+            title_ar: landingCopy.ar.timeline.fallbackTitle,
+            title_en: landingCopy.en.timeline.fallbackTitle,
             summary_ar:
-              latestFallback.releaseNotes ??
-              "يتضمن الأذان الأصلي فوق شاشة القفل، مواقيت الصلاة الفلكية، المصحف العثماني، الأذكار، وبوصلة القبلة.",
+              latestFallback.releaseNotes ?? landingCopy.ar.timeline.fallbackSummary,
             summary_en:
-              latestFallback.releaseNotes ??
-              "Includes native lockscreen Adhan & Azkar, astronomical prayer times, Uthmani Quran, and Qibla compass.",
+              latestFallback.releaseNotes ?? landingCopy.en.timeline.fallbackSummary,
             highlights_ar: [],
             highlights_en: [],
             apk_url: latestFallback.hasDirectApk ? latestFallback.downloadUrl : null,
@@ -113,17 +108,9 @@ export function ReleasesTimelineSection({
     >
       <SectionSanctuaryHeader
         centered
-        eyebrow={isAr ? "سجل التطور والإصدارات" : "Release Timeline"}
-        title={
-          isAr
-            ? "خط زمني يوثّق رحلة تطوير زاد المسلم"
-            : "A living timeline of every Zad Al-Muslim release"
-        }
-        subtitle={
-          isAr
-            ? "تابع الميزات الجديدة والتحسينات وإصلاحات الموثوقية في كل نسخة تصدر من التطبيق."
-            : "Follow new features, refinements, and reliability improvements shipped in each version."
-        }
+        eyebrow={t.eyebrow}
+        title={t.title}
+        subtitle={t.subtitle}
       />
 
       <div className="relative mt-12">
@@ -159,6 +146,7 @@ export function ReleasesTimelineSection({
                   locale,
                   version: item.version,
                   target: item.apk_url,
+                  arch: detectedArch,
                 })
               : null;
 
@@ -198,11 +186,11 @@ export function ReleasesTimelineSection({
                         {item.version}
                       </span>
                       <span className="rounded-xl border border-[#D8B467]/20 bg-[#07100D] px-2.5 py-1 text-[11px] font-semibold text-[#D8B467]">
-                        {getReleaseTypeLabel(item.release_type, isAr)}
+                        {t.releaseTypes[item.release_type as ReleaseType] ?? item.release_type}
                       </span>
                       {idx === 0 && (
                         <span className="rounded-xl border border-[#10B981]/35 bg-[#10B981]/15 px-2.5 py-1 text-[11px] font-bold text-[#6EE7B7]">
-                          {isAr ? "الأحدث" : "Latest"}
+                          {t.latestBadge}
                         </span>
                       )}
                     </div>
@@ -226,7 +214,7 @@ export function ReleasesTimelineSection({
                   {highlights.length > 0 && (
                     <ul className="mt-4 space-y-2.5 border-t border-[#D8B467]/12 pt-4">
                       {highlights.map((h, hIdx) => {
-                        const badge = getHighlightBadge(h.type, isAr);
+                        const badge = getHighlightBadge(h.type, t.highlightBadges);
                         const BadgeIcon = badge.icon;
                         return (
                           <li
@@ -257,9 +245,7 @@ export function ReleasesTimelineSection({
                           className={`inline-flex h-10 items-center gap-2 rounded-xl px-4 text-xs font-bold ${SANCTUARY_PRIMARY_CTA}`}
                         >
                           <Download className="h-3.5 w-3.5 text-[#F2D184]" />
-                          <span>
-                            {isAr ? "تحميل هذا الإصدار" : "Download Build"}
-                          </span>
+                          <span>{t.downloadBtn}</span>
                         </a>
                       )}
                       {item.github_release_url && (
@@ -270,9 +256,7 @@ export function ReleasesTimelineSection({
                           className={`inline-flex h-10 items-center gap-1.5 rounded-xl px-3.5 text-xs font-semibold ${SANCTUARY_SECONDARY_BTN}`}
                         >
                           <ExternalLink className="h-3.5 w-3.5 text-[#D8B467]" />
-                          <span>
-                            {isAr ? "التفاصيل على GitHub" : "View on GitHub"}
-                          </span>
+                          <span>{t.githubBtn}</span>
                         </a>
                       )}
                     </div>

@@ -2,6 +2,11 @@ import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 import { siteConfig } from "@/config/site";
 import {
+  detectDeviceApkArchFromHeaders,
+  isValidApkArch,
+  resolveApkVariant,
+} from "@/lib/device-apk";
+import {
   getGitHubReleasesAggregate,
   getLatestReleaseInfo,
 } from "@/lib/github-release";
@@ -45,19 +50,59 @@ export async function GET(req: NextRequest) {
   const locale = searchParams.get("locale") === "en" ? "en" : "ar";
   const requestedVersion = searchParams.get("version")?.trim().slice(0, 40) || null;
   const requestedTarget = searchParams.get("target")?.trim() || null;
+  const rawArch = searchParams.get("arch")?.trim() || null;
+
+  // Ephemeral device/architecture resolution (never stored in database)
+  const preferredArch = isValidApkArch(rawArch)
+    ? rawArch
+    : detectDeviceApkArchFromHeaders(req.headers).arch;
 
   const latest = await getLatestReleaseInfo();
-  const targetUrl =
+  const version = requestedVersion || latest.version;
+
+  let targetUrl = latest.downloadUrl;
+  let fileName = latest.fileName;
+
+  const validRequestedTarget =
     requestedTarget && isAllowedGithubTarget(requestedTarget)
       ? requestedTarget
-      : latest.downloadUrl;
+      : null;
 
-  const version = requestedVersion || latest.version;
-  let fileName = latest.fileName;
-  if (requestedTarget && isAllowedGithubTarget(requestedTarget)) {
-    const lastSegment = requestedTarget.split("/").pop()?.split("?")[0] ?? null;
+  if (validRequestedTarget) {
+    targetUrl = validRequestedTarget;
+    const lastSegment = validRequestedTarget.split("/").pop()?.split("?")[0] ?? null;
     if (lastSegment && lastSegment.toLowerCase().endsWith(".apk")) {
       fileName = lastSegment;
+    }
+
+    // If timeline passed a generic universal APK for a specific GitHub release, try upgrading to the device's architecture
+    if (
+      latest.variants.length > 0 &&
+      version.toLowerCase() === latest.version.toLowerCase()
+    ) {
+      const matched = resolveApkVariant(latest.variants, preferredArch);
+      if (matched) {
+        targetUrl = matched.url;
+        fileName = matched.fileName;
+      }
+    } else if (requestedVersion) {
+      const agg = await getGitHubReleasesAggregate();
+      const matchingRelease = agg.releases.find(
+        (r) => r.version.toLowerCase() === requestedVersion.toLowerCase()
+      );
+      if (matchingRelease && matchingRelease.variants.length > 0) {
+        const matched = resolveApkVariant(matchingRelease.variants, preferredArch);
+        if (matched) {
+          targetUrl = matched.url;
+          fileName = matched.fileName;
+        }
+      }
+    }
+  } else {
+    const matched = resolveApkVariant(latest.variants, preferredArch);
+    if (matched) {
+      targetUrl = matched.url;
+      fileName = matched.fileName;
     }
   }
 

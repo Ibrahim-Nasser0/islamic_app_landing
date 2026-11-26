@@ -67,7 +67,7 @@ export function Navbar({
     { id: "features", label: t.nav.features },
     { id: "lockscreen", label: t.nav.lockscreen },
     { id: "reliability", label: t.nav.reliability },
-    { id: "timeline", label: locale === "ar" ? "الإصدارات" : "Releases" },
+    { id: "timeline", label: t.nav.releases },
     { id: "feedback", label: t.nav.feedback },
   ];
 

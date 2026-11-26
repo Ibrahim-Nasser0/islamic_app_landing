@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { Download, ExternalLink, Sparkles, X } from "lucide-react";
+import { ApkArch, ApkVariant } from "@/lib/device-apk";
 import { Locale, landingCopy } from "@/lib/landing-content";
 import { ReleaseDownloadInfo } from "@/lib/github-release";
 import { buildTrackedDownloadPath } from "@/lib/download-url";
@@ -11,6 +12,8 @@ interface ReleaseNotesModalProps {
   open: boolean;
   locale: Locale;
   release: ReleaseDownloadInfo;
+  detectedArch: ApkArch | null;
+  matchedVariant: ApkVariant | null;
   onDownloadClick?: () => void;
   onClose: () => void;
 }
@@ -19,6 +22,8 @@ export function ReleaseNotesModal({
   open,
   locale,
   release,
+  detectedArch,
+  matchedVariant,
   onDownloadClick,
   onClose,
 }: ReleaseNotesModalProps) {
@@ -43,6 +48,8 @@ export function ReleaseNotesModal({
         day: "numeric",
       })
     : null;
+
+  const displaySizeMb = matchedVariant?.sizeMb ?? release.fileSizeMb;
 
   return (
     <div
@@ -69,7 +76,8 @@ export function ReleaseNotesModal({
               </h3>
               <p className="font-latin text-xs text-[#D8B467]">
                 {t.versionLabel}: {release.version}
-                {release.fileSizeMb ? ` • ${release.fileSizeMb} MB` : ""}
+                {displaySizeMb ? ` • ${displaySizeMb} MB` : ""}
+                {matchedVariant ? ` • ${matchedVariant.arch}` : ""}
                 {formattedDate ? ` • ${formattedDate}` : ""}
               </p>
             </div>
@@ -97,6 +105,7 @@ export function ReleaseNotesModal({
               source: "hero",
               locale,
               version: release.version,
+              arch: detectedArch,
             })}
             target="_blank"
             rel="noopener noreferrer"

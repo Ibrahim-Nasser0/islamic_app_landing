@@ -120,15 +120,15 @@ export function AppTourSection({ locale }: { locale: Locale }) {
                     <div className="rounded-3xl border border-[#D8B467]/30 bg-[#0B1411] p-5 text-[#EDEFEA] shadow-inner">
                       <div className="mb-3 flex items-center justify-center gap-2 rounded-xl border border-[#D8B467]/45 bg-gradient-to-b from-[#216E5C] to-[#13473B] py-2 text-center text-xs font-bold text-[#FBF7EE]">
                         <RubElHizbMark className="h-3 w-3 text-[#F2D184]" />
-                        <span>سورة الفاتحة • مكية</span>
+                        <span>{tour.quranDemo.header}</span>
                         <RubElHizbMark className="h-3 w-3 text-[#F2D184]" />
                       </div>
                       <p dir="rtl" className="font-sacred text-center text-base leading-[2.1]">
                         بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ ﴿١﴾ الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ ﴿٢﴾ الرَّحْمَٰنِ الرَّحِيمِ ﴿٣﴾ مَالِكِ يَوْمِ الدِّينِ ﴿٤﴾
                       </p>
                       <div className="mt-3 flex items-center justify-between border-t border-[#D8B467]/20 pt-2 text-[10px] font-semibold text-[#92A49B]">
-                        <span>الجزء الأول</span>
-                        <span>صفحة 1</span>
+                        <span>{tour.quranDemo.juz}</span>
+                        <span>{tour.quranDemo.page}</span>
                       </div>
                     </div>
                   )}
@@ -169,11 +169,11 @@ export function AppTourSection({ locale }: { locale: Locale }) {
 
                       <div className="mt-3.5 space-y-1.5 text-xs">
                         {[
-                          [isAr ? "الفجر" : "Fajr", activeCity.fajr],
-                          [isAr ? "الظهر" : "Dhuhr", activeCity.dhuhr],
-                          [isAr ? "العصر" : "Asr", activeCity.asr],
-                          [isAr ? "المغرب" : "Maghrib", activeCity.maghrib],
-                          [isAr ? "العشاء" : "Isha", activeCity.isha],
+                          [tour.prayerNames.fajr, activeCity.fajr],
+                          [tour.prayerNames.dhuhr, activeCity.dhuhr],
+                          [tour.prayerNames.asr, activeCity.asr],
+                          [tour.prayerNames.maghrib, activeCity.maghrib],
+                          [tour.prayerNames.isha, activeCity.isha],
                         ].map(([p, tm]) => (
                           <div
                             key={String(p)}
@@ -217,11 +217,11 @@ export function AppTourSection({ locale }: { locale: Locale }) {
                       </svg>
                       <div className="rounded-xl border border-[#D8B467]/25 bg-[#12231D] p-3">
                         <div className="flex items-center justify-between text-xs font-bold">
-                          <span>{isAr ? "مسجد الفتح" : "Al-Fath Mosque"}</span>
-                          <span className="text-[#E0B866]">{isAr ? "320 م" : "320 m"}</span>
+                          <span>{tour.mosqueDemo.name}</span>
+                          <span className="text-[#E0B866]">{tour.mosqueDemo.distance}</span>
                         </div>
                         <p className="mt-0.5 text-[10px] text-[#92A49B]">
-                          {isAr ? "حوالي 4 دقائق سيراً" : "Approx. 4 mins walk"}
+                          {tour.mosqueDemo.walkTime}
                         </p>
                       </div>
                     </div>
@@ -230,13 +230,13 @@ export function AppTourSection({ locale }: { locale: Locale }) {
                   {activeTab.id === "hadith" && (
                     <div className="rounded-3xl border border-[#D8B467]/30 bg-[#0B1411] p-5 text-[#EDEFEA]">
                       <span className="rounded-full bg-[#D8B467]/15 px-3 py-1 text-[10px] font-bold text-[#E0B866]">
-                        {isAr ? "الأربعون النووية" : "Nawawi 40"}
+                        {tour.hadithDemo.book}
                       </span>
                       <p dir="rtl" className="font-sacred mt-3 text-base leading-[1.95]">
                         «إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ، وَإِنَّمَا لِكُلِّ امْرِئٍ مَا نَوَى...»
                       </p>
                       <div className="mt-4 flex items-center justify-between rounded-xl border border-white/10 bg-[#12231D] px-3 py-2 text-xs">
-                        <span>{isAr ? "السبحة اليومية" : "Tasbeeh"}</span>
+                        <span>{tour.hadithDemo.tasbeehLabel}</span>
                         <span className="font-latin font-bold text-[#E0B866]">33 / 33</span>
                       </div>
                     </div>

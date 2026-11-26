@@ -1,3 +1,4 @@
+import { ApkArch } from "./device-apk";
 import { Locale } from "./landing-content";
 import { DownloadPlacement } from "./supabase/config";
 
@@ -6,6 +7,7 @@ export function buildTrackedDownloadPath(params: {
   locale: Locale;
   version?: string;
   target?: string | null;
+  arch?: ApkArch | null;
 }): string {
   const query = new URLSearchParams({
     source: params.source,
@@ -13,6 +15,9 @@ export function buildTrackedDownloadPath(params: {
   });
   if (params.version) {
     query.set("version", params.version);
+  }
+  if (params.arch) {
+    query.set("arch", params.arch);
   }
   if (params.target) {
     query.set("target", params.target);

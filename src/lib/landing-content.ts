@@ -145,35 +145,61 @@ export const SAMPLE_AZKAR: SampleDhikr[] = [
 export const POST_ADHAN_DUAA =
   "اللَّهُمَّ رَبَّ هَذِهِ الدَّعْوَةِ التَّامَّةِ، وَالصَّلَاةِ القَائِمَةِ، آتِ مُحَمَّدًا الوَسِيلَةَ وَالفَضِيلَةَ، وَابْعَثْهُ مَقَامًا مَحْمُودًا الَّذِي وَعَدْتَهُ";
 
-export const landingCopy = {
-  ar: {
-    brand: "زاد المسلم",
-    tagline: "رفيقك اليومي في الذكر والصلاة والقرآن",
-    nav: {
-      tour: "جولة بالتطبيق",
-      features: "المميزات",
-      lockscreen: "شاشة القفل",
-      reliability: "الموثوقية",
-      feedback: "الشكاوى والاقتراحات",
-      download: "التحميل",
-      menuLabel: "فتح القائمة",
-      closeMenuLabel: "إغلاق القائمة",
+type WidenPrimitives<T> = T extends string
+  ? string
+  : T extends boolean
+    ? boolean
+    : T extends readonly (infer U)[]
+      ? readonly WidenPrimitives<U>[]
+      : T extends object
+        ? { readonly [K in keyof T]: WidenPrimitives<T[K]> }
+        : T;
+
+const arCopy = {
+  brand: "زاد المسلم",
+  tagline: "رفيقك اليومي في الذكر والصلاة والقرآن",
+  nav: {
+    tour: "جولة بالتطبيق",
+    features: "المميزات",
+    lockscreen: "شاشة القفل",
+    reliability: "الموثوقية",
+    releases: "الإصدارات",
+    feedback: "الشكاوى والاقتراحات",
+    download: "التحميل",
+    menuLabel: "فتح القائمة",
+    closeMenuLabel: "إغلاق القائمة",
+  },
+  siteNotice: {
+    dismiss: "إغلاق التنبيه",
+  },
+  hero: {
+    waqfBadge: "صدقة جارية • مجاني 100% بلا إعلانات",
+    verse: "﴿ وَتَزَوَّدُوا فَإِنَّ خَيْرَ الزَّادِ التَّقْوَىٰ ﴾",
+    verseSource: "سورة البقرة: 197",
+    title: "عبادتك اليومية في ملاذٍ ليلي هادئ، دقيق، وموثوق",
+    subtitle:
+      "مواقيت صلاة فلكية دقيقة دون إنترنت، أذان أصلي يصدح حتى والهاتف مقفول، أذكار الصباح والمساء التفاعلية على شاشة القفل، والمصحف الشريف بالرسم العثماني.",
+    downloadApk: "تحميل للأندرويد (APK)",
+    releaseFallback: "تحميل عبر GitHub Releases",
+    minAndroid: "أندرويد 8.0 فأحدث",
+    downloadsLabel: "تحميل",
+    autoDetectedBuild: "مناسب لجهازك تلقائياً",
+    universalFallbackNote: "نسخة شاملة تعمل على أي هاتف أندرويد",
+    whatsNew: "ما الجديد في الإصدار؟",
+    scanQr: "مسح QR للتحميل",
+    storesSoon: "قريباً على Google Play و App Store",
+    floatingNextPrayer: "صلاة الفجر بعد 04:12 س",
+    floatingLockOk: "الأذان يعمل والهاتف مقفول ✓",
+    mockup: {
+      fajrStatus: "★ الآن موعد صلاة الفجر • 05:04 ص",
+      fajrTitle: "صلاة الفجر",
+      muezzinName: "أذان الحرم المكي • مكة المكرمة",
+      stopAdhan: "إيقاف الأذان",
+      qiblaBtn: "اتجاه القبلة 🧭",
+      openAppBtn: "فتح التطبيق ↗",
+      nativeBadge: "محرك المنبه الأصلي",
     },
-    hero: {
-      waqfBadge: "صدقة جارية • مجاني 100% بلا إعلانات",
-      verse: "﴿ وَتَزَوَّدُوا فَإِنَّ خَيْرَ الزَّادِ التَّقْوَىٰ ﴾",
-      verseSource: "سورة البقرة: 197",
-      title: "عبادتك اليومية في ملاذٍ ليلي هادئ، دقيق، وموثوق",
-      subtitle:
-        "مواقيت صلاة فلكية دقيقة دون إنترنت، أذان أصلي يصدح حتى والهاتف مقفول، أذكار الصباح والمساء التفاعلية على شاشة القفل، والمصحف الشريف بالرسم العثماني.",
-      downloadApk: "تحميل للأندرويد (APK)",
-      releaseFallback: "تحميل عبر GitHub Releases",
-      whatsNew: "ما الجديد في الإصدار؟",
-      scanQr: "مسح QR للتحميل",
-      storesSoon: "قريباً على Google Play و App Store",
-      floatingNextPrayer: "صلاة الفجر بعد 04:12 س",
-      floatingLockOk: "الأذان يعمل والهاتف مقفول ✓",
-    },
+  },
     releaseModal: {
       title: "سجل تحديثات الإصدار",
       versionLabel: "الإصدار الحالي",
@@ -196,6 +222,27 @@ export const landingCopy = {
       subtitle:
         "تعرّف على شاشات التطبيق في الوضع الليلي الهادئ، وجرّب معاين المواقيت الفورية حسب مدينتك.",
       citySwitcherLabel: "جرّب مواقيت المدن:",
+      quranDemo: {
+        header: "سورة الفاتحة • مكية",
+        juz: "الجزء الأول",
+        page: "صفحة 1",
+      },
+      prayerNames: {
+        fajr: "الفجر",
+        dhuhr: "الظهر",
+        asr: "العصر",
+        maghrib: "المغرب",
+        isha: "العشاء",
+      },
+      mosqueDemo: {
+        name: "مسجد الفتح",
+        distance: "320 م",
+        walkTime: "حوالي 4 دقائق سيراً",
+      },
+      hadithDemo: {
+        book: "الأربعون النووية",
+        tasbeehLabel: "السبحة اليومية",
+      },
       tabs: [
         {
           id: "quran",
@@ -383,6 +430,7 @@ export const landingCopy = {
         },
       ],
       privacyTitle: "دفتر الشفافية والخصوصية (Permissions & Privacy Ledger)",
+      fullPrivacyBtn: "سياسة الخصوصية الكاملة",
       privacyItems: [
         {
           perm: "الموقع الجغرافي (GPS)",
@@ -393,10 +441,33 @@ export const landingCopy = {
           why: "مطلوب فقط لكي يصدح الأذان في الثانية الدقيقة لدخول الوقت دون تأخير من نظام توفير البطارية.",
         },
         {
-          perm: "بدون حسابات أو إعلانات",
-          why: "جميع إعداداتك وحفظ القراءة والأذكار مخزّنة محلياً على جهازك فقط بلا ملفات تعريف إعلانية.",
+          perm: "بدون حسابات أو تتبع",
+          why: "جميع إعداداتك مخزّنة محلياً على جهازك فقط، وحتى توجيه نسخة الـ APK المناسبة لهاتفك يتم لحظياً دون تخزين بصمة جهازك أو عنوان IP.",
         },
       ],
+    },
+    timeline: {
+      eyebrow: "سجل التطور والإصدارات",
+      title: "خط زمني يوثّق رحلة تطوير زاد المسلم",
+      subtitle:
+        "تابع الميزات الجديدة والتحسينات وإصلاحات الموثوقية في كل نسخة تصدر من التطبيق.",
+      fallbackTitle: "الإصدار الحالي من زاد المسلم",
+      fallbackSummary:
+        "يتضمن الأذان الأصلي فوق شاشة القفل، مواقيت الصلاة الفلكية، المصحف العثماني، الأذكار، وبوصلة القبلة.",
+      latestBadge: "الأحدث",
+      downloadBtn: "تحميل هذا الإصدار",
+      githubBtn: "التفاصيل على GitHub",
+      releaseTypes: {
+        major: "إصدار رئيسي",
+        minor: "تحديث ميزات",
+        patch: "تحديث فرعي",
+        hotfix: "إصلاح عاجل",
+      },
+      highlightBadges: {
+        fix: "إصلاح",
+        improvement: "تحسين",
+        feature: "جديد",
+      },
     },
     feedbackSection: {
       eyebrow: "نستمع لك باهتمام",
@@ -457,12 +528,54 @@ export const landingCopy = {
       badge: "الإصدار الحالي متاح عبر GitHub Releases",
       title: "حمّل تطبيق زاد المسلم الآن",
       subtitle:
-        "تثبيت مباشر بصيغة APK لأجهزة Android 8.0 فأعلى، وشارك الصفحة لغيرك لتنال أجر الدلالة على الخير.",
+        "تثبيت مباشر بصيغة APK لأجهزة Android 8.0 فأعلى، مع اختيار تلقائي لأخف نسخة تناسب معالج جهازك.",
       primaryBtn: "تحميل ملف APK مباشرة",
       allReleases: "تصفح جميع الإصدارات",
       shareBtn: "نسخ رابط المشاركة",
       shareCopied: "تم نسخ الرابط ✓",
       qrLabel: "امسح الرمز بهاتفك للتحميل الفوري",
+      downloadsLabel: "تحميل",
+      directDownloadFallback: "تحميل مباشر عبر GitHub Releases",
+      recommendedArchLabel: "النسخة الأنسب لجهازك تلقائياً",
+      universalFallbackBanner:
+        "لم نتمكن من تحديد معمارية هاتفك بدقة (أو تتصفح من كمبيوتر)، لذلك تم توجيهك تلقائياً إلى النسخة الشاملة Universal لتعمل على أي جهاز دون مشاكل.",
+      matchedBanner:
+        "تم التعرّف على معمارية جهازك تلقائياً؛ عند الضغط على زر التحميل سيتم إرسالك مباشرة إلى النسخة الأخف والأنسب لهاتفك.",
+      manualOverrideBanner:
+        "قمت باختيار هذه النسخة يدوياً بدلاً من الاختيار التلقائي.",
+      resetAutoBtn: "العودة للاختيار التلقائي",
+      selectedBadge: "المختارة حالياً",
+      selectArchTitle: "دليل النسخ المتوفرة — اختر يدوياً إذا كنت تحمّل لهاتف آخر:",
+      archLabels: {
+        "arm64-v8a": {
+          label: "الهواتف الحديثة",
+          badge: "الأكثر شيوعاً",
+          hint: "معالجات 64-bit • حجم أخف وأسرع",
+          audience:
+            "تنفع لمعظم هواتف أندرويد الحديثة الصادرة منذ 2017 تقريباً (Samsung و Xiaomi و Honor و Oppo و Realme و Pixel) — حجم أصغر وتثبيت أسرع.",
+        },
+        "armeabi-v7a": {
+          label: "الهواتف الأقدم / 32-bit",
+          badge: "أجهزة قديمة",
+          hint: "معالجات 32-bit",
+          audience:
+            "تنفع للهواتف القديمة أو بعض الهواتف الاقتصادية بنظام أندرويد 32-bit (مثل Android Go أو أجهزة ما قبل 2017).",
+        },
+        x86_64: {
+          label: "تابلت ومحاكيات الكمبيوتر",
+          badge: "Intel / AMD",
+          hint: "معالجات x86_64",
+          audience:
+            "مخصصة فقط للأجهزة اللوحية بمعالجات Intel/AMD أو محاكيات أندرويد على الكمبيوتر و Chromebook (نادرة في الهواتف).",
+        },
+        universal: {
+          label: "النسخة الشاملة",
+          badge: "مضمونة للجميع",
+          hint: "تعمل على كل الأجهزة",
+          audience:
+            "تجمع كل المعالجات في ملف واحد وتعمل على أي هاتف أندرويد بلا استثناء؛ مثالية إذا لم تعرف نوع المعالج أو عند إرسال الملف لشخص آخر.",
+        },
+      },
     },
     stickyCta: {
       download: "تحميل APK",
@@ -471,36 +584,57 @@ export const landingCopy = {
     footer: {
       waqf: "«إِذَا مَاتَ الإنْسَانُ انْقَطَعَ عنْه عَمَلُهُ إِلَّا مِن ثَلَاثَةٍ: إِلَّا مِن صَدَقَةٍ جَارِيَةٍ، أَوْ عِلْمٍ يُنْتَفَعُ بِهِ، أَوْ وَلَدٍ صَالِحٍ يَدْعُو له» — صحيح مسلم",
       builtWith: "زاد المسلم • Flutter + Native Kotlin/Swift + Next.js • صدقة جارية مفتوحة المصدر",
+      privacyLink: "سياسة الخصوصية (التطبيق والموقع)",
+    },
+} as const;
+
+export type LandingCopySchema = WidenPrimitives<typeof arCopy>;
+
+const enCopy: LandingCopySchema = {
+  brand: "Zad Al-Muslim",
+  tagline: "Your Daily Sanctuary for Prayer, Dhikr & Quran",
+  nav: {
+    tour: "App Tour",
+    features: "Features",
+    lockscreen: "Lockscreen",
+    reliability: "Reliability",
+    releases: "Releases",
+    feedback: "Feedback",
+    download: "Download",
+    menuLabel: "Open menu",
+    closeMenuLabel: "Close menu",
+  },
+  siteNotice: {
+    dismiss: "Dismiss notice",
+  },
+  hero: {
+    waqfBadge: "Sadaqah Jariyah • 100% Free & Ad-Free",
+    verse: "﴿ وَتَزَوَّدُوا فَإِنَّ خَيْرَ الزَّادِ التَّقْوَىٰ ﴾",
+    verseSource: "Al-Baqarah: 197",
+    title: "Your daily worship in a calm, nocturnal, trustworthy sanctuary",
+    subtitle:
+      "Offline astronomical prayer times, native Adhan playback that completes over the lockscreen, interactive morning & evening Azkar, and the complete Uthmani Quran — zero ads.",
+    downloadApk: "Download Android APK",
+    releaseFallback: "Download via GitHub Releases",
+    minAndroid: "Android 8.0+",
+    downloadsLabel: "downloads",
+    autoDetectedBuild: "Auto-matched for your device",
+    universalFallbackNote: "Universal APK — fits every Android phone",
+    whatsNew: "What's New?",
+    scanQr: "Scan QR to Download",
+    storesSoon: "Google Play & App Store — Coming Soon",
+    floatingNextPrayer: "Fajr in 04h 12m",
+    floatingLockOk: "Plays over Lockscreen ✓",
+    mockup: {
+      fajrStatus: "★ Fajr Prayer • 05:04 AM",
+      fajrTitle: "Fajr Prayer",
+      muezzinName: "Makkah Sanctuary",
+      stopAdhan: "Stop Adhan",
+      qiblaBtn: "Qibla 🧭",
+      openAppBtn: "Open App ↗",
+      nativeBadge: "AlarmClock Native",
     },
   },
-  en: {
-    brand: "Zad Al-Muslim",
-    tagline: "Your Daily Sanctuary for Prayer, Dhikr & Quran",
-    nav: {
-      tour: "App Tour",
-      features: "Features",
-      lockscreen: "Lockscreen",
-      reliability: "Reliability",
-      feedback: "Feedback",
-      download: "Download",
-      menuLabel: "Open menu",
-      closeMenuLabel: "Close menu",
-    },
-    hero: {
-      waqfBadge: "Sadaqah Jariyah • 100% Free & Ad-Free",
-      verse: "﴿ وَتَزَوَّدُوا فَإِنَّ خَيْرَ الزَّادِ التَّقْوَىٰ ﴾",
-      verseSource: "Al-Baqarah: 197",
-      title: "Your daily worship in a calm, nocturnal, trustworthy sanctuary",
-      subtitle:
-        "Offline astronomical prayer times, native Adhan playback that completes over the lockscreen, interactive morning & evening Azkar, and the complete Uthmani Quran — zero ads.",
-      downloadApk: "Download Android APK",
-      releaseFallback: "Download via GitHub Releases",
-      whatsNew: "What's New?",
-      scanQr: "Scan QR to Download",
-      storesSoon: "Google Play & App Store — Coming Soon",
-      floatingNextPrayer: "Fajr in 04h 12m",
-      floatingLockOk: "Plays over Lockscreen ✓",
-    },
     releaseModal: {
       title: "Release Changelog",
       versionLabel: "Current Release",
@@ -523,6 +657,27 @@ export const landingCopy = {
       subtitle:
         "Explore the nocturnal Sanctuary screens and test live prayer previews across major cities.",
       citySwitcherLabel: "Preview city times:",
+      quranDemo: {
+        header: "Surah Al-Fatihah • Makkiyah",
+        juz: "Juz 1",
+        page: "Page 1",
+      },
+      prayerNames: {
+        fajr: "Fajr",
+        dhuhr: "Dhuhr",
+        asr: "Asr",
+        maghrib: "Maghrib",
+        isha: "Isha",
+      },
+      mosqueDemo: {
+        name: "Al-Fath Mosque",
+        distance: "320 m",
+        walkTime: "Approx. 4 mins walk",
+      },
+      hadithDemo: {
+        book: "Nawawi 40",
+        tasbeehLabel: "Daily Tasbeeh",
+      },
       tabs: [
         {
           id: "quran",
@@ -710,6 +865,7 @@ export const landingCopy = {
         },
       ],
       privacyTitle: "Permissions & Privacy Ledger",
+      fullPrivacyBtn: "Full Privacy Policy",
       privacyItems: [
         {
           perm: "Location Access (GPS)",
@@ -720,10 +876,33 @@ export const landingCopy = {
           why: "Required solely so the Adhan triggers at the exact second without OEM battery-saver delays.",
         },
         {
-          perm: "Zero Accounts or Ads",
-          why: "All settings, Quran bookmarks, and Azkar progress live privately on your device.",
+          perm: "Zero Accounts or Trackers",
+          why: "All settings live privately on your device, and even device-matched APK routing runs ephemerally without storing device fingerprints or IP addresses.",
         },
       ],
+    },
+    timeline: {
+      eyebrow: "Release Timeline",
+      title: "A living timeline of every Zad Al-Muslim release",
+      subtitle:
+        "Follow new features, refinements, and reliability improvements shipped in each version.",
+      fallbackTitle: "Current Release of Zad Al-Muslim",
+      fallbackSummary:
+        "Includes native lockscreen Adhan & Azkar, astronomical prayer times, Uthmani Quran, and Qibla compass.",
+      latestBadge: "Latest",
+      downloadBtn: "Download Build",
+      githubBtn: "View on GitHub",
+      releaseTypes: {
+        major: "Major",
+        minor: "Minor",
+        patch: "Patch",
+        hotfix: "Hotfix",
+      },
+      highlightBadges: {
+        fix: "Fix",
+        improvement: "Improved",
+        feature: "New",
+      },
     },
     feedbackSection: {
       eyebrow: "We Listen Carefully",
@@ -784,12 +963,54 @@ export const landingCopy = {
       badge: "Latest Build Hosted on GitHub Releases",
       title: "Download Zad Al-Muslim Now",
       subtitle:
-        "Install the direct APK on Android 8.0+, and share this page as an ongoing charity with friends and family.",
+        "Install the direct APK on Android 8.0+ — automatically matched to your device processor for a lighter download.",
       primaryBtn: "Download Latest APK",
       allReleases: "All Releases",
       shareBtn: "Copy Share Link",
       shareCopied: "Link Copied ✓",
       qrLabel: "Scan with your phone camera",
+      downloadsLabel: "downloads",
+      directDownloadFallback: "GitHub Releases • APK",
+      recommendedArchLabel: "Auto-matched for your device",
+      universalFallbackBanner:
+        "Could not verify a specific Android CPU architecture (or browsing from desktop), so we automatically selected the Universal APK — guaranteed to work on every Android device.",
+      matchedBanner:
+        "Your device architecture was detected automatically — clicking Download will take you directly to the lightest matching APK.",
+      manualOverrideBanner:
+        "You manually selected this build instead of automatic device matching.",
+      resetAutoBtn: "Use auto-detected build",
+      selectedBadge: "Active",
+      selectArchTitle: "Available Builds Guide — pick manually if downloading for another device:",
+      archLabels: {
+        "arm64-v8a": {
+          label: "Modern Phones",
+          badge: "Most Common",
+          hint: "64-bit ARM • Lighter & faster",
+          audience:
+            "Best for almost all modern Android phones since ~2017 (Samsung, Xiaomi, Honor, Oppo, Realme, Pixel) — smaller download size.",
+        },
+        "armeabi-v7a": {
+          label: "Older / 32-bit Phones",
+          badge: "Legacy Hardware",
+          hint: "32-bit ARM",
+          audience:
+            "Built for older Android devices or budget 32-bit phones (Android Go or pre-2017 hardware).",
+        },
+        x86_64: {
+          label: "Tablets & Emulators",
+          badge: "Intel / AMD",
+          hint: "x86_64 CPU",
+          audience:
+            "Strictly for Intel/AMD Android tablets, Chromebooks, or PC Android emulators (rare on smartphones).",
+        },
+        universal: {
+          label: "Universal Build",
+          badge: "Guaranteed Fit",
+          hint: "Works on every device",
+          audience:
+            "Bundles every CPU type into one APK so it installs on any Android phone; ideal if unsure of processor type or sharing with others.",
+        },
+      },
     },
     stickyCta: {
       download: "Download APK",
@@ -798,6 +1019,11 @@ export const landingCopy = {
     footer: {
       waqf: "«When a person dies, their deeds end except for three: ongoing charity, beneficial knowledge, or a righteous child who prays for them» — Sahih Muslim",
       builtWith: "Zad Al-Muslim • Flutter + Native Kotlin/Swift + Next.js • Open-Source Waqf",
+      privacyLink: "Privacy Policy (App & Web)",
     },
-  },
-} as const;
+};
+
+export const landingCopy: Record<Locale, LandingCopySchema> = {
+  ar: arCopy,
+  en: enCopy,
+};

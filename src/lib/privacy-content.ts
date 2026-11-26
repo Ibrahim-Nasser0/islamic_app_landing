@@ -7,6 +7,7 @@ export interface PrivacyCardItem {
 }
 
 export interface PrivacyCopy {
+  headerSubtitle: string;
   backHome: string;
   eyebrow: string;
   title: string;
@@ -40,6 +41,7 @@ export interface PrivacyCopy {
 
 export const privacyCopy: Record<Locale, PrivacyCopy> = {
   ar: {
+    headerSubtitle: "سياسة الخصوصية",
     backHome: "العودة للصفحة الرئيسية",
     eyebrow: "الشفافية الكاملة • التطبيق والموقع",
     title: "سياسة الخصوصية لزاد المسلم",
@@ -111,11 +113,12 @@ export const privacyCopy: Record<Locale, PrivacyCopy> = {
           ],
         },
         {
-          title: "عدّاد التحميلات المجهول (/api/download)",
-          badge: "إحصاء مجهول الهوية",
+          title: "توجيه نسخة الجهاز وعدّاد التحميلات (/api/download)",
+          badge: "توجيه ذكي بلا تتبع",
           points: [
-            "عند ضغطك على زر تحميل APK أو مسح رمز QR، يسجّل الخادم حدث تحميل عام يقتصر على: رقم الإصدار، اسم ملف APK، موضع الزر في الصفحة، ولغة العرض.",
-            "لا نقوم بتخزين عنوان الـ IP الخاص بك، ولا بصمة جهازك، ولا نزرع ملفات تعريف ارتباط (Cookies) لتتبّع الزوار.",
+            "عند ضغطك على زر تحميل APK أو مسح رمز QR، يفحص المتصفح والخادم لحظياً نوع النظام ومعمارية المعالج فقط (عبر تلميحات المتصفح Client Hints مثل Sec-CH-UA-Arch و Sec-CH-UA-Bitness أو User-Agent) لتوجيهك تلقائياً إلى النسخة الأنسب والأخف حجماً لهاتفك (arm64-v8a أو armeabi-v7a أو x86_64 أو النسخة الشاملة universal).",
+            "تُعالج إشارات المعمارية لحظياً في الذاكرة أثناء التحويل فقط ولا تُحفظ أبداً؛ بل يقتصر السجل الإحصائي المجهول في قاعدة البيانات على: رقم الإصدار، اسم ملف APK المُحمّل، موضع الزر، ولغة العرض، كما يمكنك دائماً اختيار أي معمارية يدوياً من قسم التحميل.",
+            "لا نقوم بتخزين عنوان الـ IP الخاص بك، ولا نص User-Agent الكامل، ولا بصمة جهازك، ولا نزرع ملفات تعريف ارتباط (Cookies) لتتبّع الزوار.",
           ],
         },
         {
@@ -161,6 +164,7 @@ export const privacyCopy: Record<Locale, PrivacyCopy> = {
     },
   },
   en: {
+    headerSubtitle: "Privacy Policy",
     backHome: "Back to Home",
     eyebrow: "Full Transparency • App & Web",
     title: "Zad Al-Muslim Privacy Policy",
@@ -232,11 +236,12 @@ export const privacyCopy: Record<Locale, PrivacyCopy> = {
           ],
         },
         {
-          title: "Anonymous Download Counter (/api/download)",
-          badge: "Privacy-Preserving Count",
+          title: "Device-Matched Routing & Download Counter (/api/download)",
+          badge: "Smart Privacy-First Routing",
           points: [
-            "When you click a download button or scan a QR code, the server logs an anonymous event containing only the release version, APK filename, page button placement, and display locale.",
-            "We do not store your IP address, device fingerprint, or tracking cookies.",
+            "When you click Download or scan a QR code, your browser and our server ephemerally inspect only your OS and CPU architecture (via standard Client Hints like Sec-CH-UA-Arch / Sec-CH-UA-Bitness or User-Agent) to route you to the lightest compatible APK (arm64-v8a, armeabi-v7a, x86_64, or universal).",
+            "Architecture signals are evaluated solely in memory during the redirect and are never persisted; our anonymous download counter logs only the release version, chosen APK filename, button placement, and display locale. You can also select any build manually in the Download section.",
+            "We never store your IP address, raw User-Agent string, or device fingerprint, and we never set visitor tracking cookies.",
           ],
         },
         {

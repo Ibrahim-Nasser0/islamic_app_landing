@@ -1,4 +1,9 @@
 import { siteConfig } from "@/config/site";
+import {
+  APK_ARCH_ORDER,
+  ApkVariant,
+  inferArchFromAssetName,
+} from "./device-apk";
 
 export interface ReleaseDownloadInfo {
   downloadUrl: string;
@@ -9,6 +14,7 @@ export interface ReleaseDownloadInfo {
   publishedAt: string | null;
   releaseNotes: string | null;
   hasDirectApk: boolean;
+  variants: ApkVariant[];
 }
 
 export interface GitHubReleaseSummaryItem {
@@ -20,6 +26,7 @@ export interface GitHubReleaseSummaryItem {
   fileName: string | null;
   downloadCount: number;
   notes: string | null;
+  variants: ApkVariant[];
 }
 
 export interface GitHubReleasesAggregate {
@@ -50,6 +57,31 @@ function pickPrimaryApkAsset(assets: GitHubAsset[] | undefined) {
       a.name.toLowerCase().endsWith(".apk") &&
       typeof a.browser_download_url === "string"
   );
+
+  const variantMap = new Map<string, ApkVariant>();
+  for (const asset of apkAssets) {
+    const arch = inferArchFromAssetName(asset.name);
+    if (!variantMap.has(arch)) {
+      variantMap.set(arch, {
+        arch,
+        url: asset.browser_download_url,
+        fileName: asset.name,
+        sizeMb:
+          asset.size && asset.size > 0
+            ? (asset.size / (1024 * 1024)).toFixed(1)
+            : null,
+        downloadCount:
+          typeof asset.download_count === "number" ? asset.download_count : 0,
+      });
+    }
+  }
+
+  const variants: ApkVariant[] = [];
+  for (const arch of APK_ARCH_ORDER) {
+    const found = variantMap.get(arch);
+    if (found) variants.push(found);
+  }
+
   const primary =
     apkAssets.find((a) => a.name.toLowerCase().includes("universal")) ??
     apkAssets.find((a) => a.name.toLowerCase().includes("arm64")) ??
@@ -60,7 +92,7 @@ function pickPrimaryApkAsset(assets: GitHubAsset[] | undefined) {
     0
   );
 
-  return { primary, totalDownloadCount };
+  return { primary, variants, totalDownloadCount };
 }
 
 export async function getLatestReleaseInfo(): Promise<ReleaseDownloadInfo> {
@@ -73,6 +105,7 @@ export async function getLatestReleaseInfo(): Promise<ReleaseDownloadInfo> {
     publishedAt: null,
     releaseNotes: null,
     hasDirectApk: false,
+    variants: [],
   };
 
   try {
@@ -88,7 +121,7 @@ export async function getLatestReleaseInfo(): Promise<ReleaseDownloadInfo> {
 
     if (!res.ok) return fallback;
     const data = (await res.json()) as GitHubReleaseResponse;
-    const { primary: apkAsset } = pickPrimaryApkAsset(data.assets);
+    const { primary: apkAsset, variants } = pickPrimaryApkAsset(data.assets);
 
     const sizeMb =
       apkAsset?.size && apkAsset.size > 0
@@ -109,6 +142,7 @@ export async function getLatestReleaseInfo(): Promise<ReleaseDownloadInfo> {
       publishedAt: data.published_at ?? null,
       releaseNotes: cleanNotes,
       hasDirectApk: Boolean(apkAsset?.browser_download_url),
+      variants,
     };
   } catch {
     return fallback;
@@ -140,7 +174,7 @@ export async function getGitHubReleasesAggregate(): Promise<GitHubReleasesAggreg
     const releases: GitHubReleaseSummaryItem[] = list
       .filter((item) => typeof item.tag_name === "string")
       .map((item) => {
-        const { primary, totalDownloadCount } = pickPrimaryApkAsset(item.assets);
+        const { primary, variants, totalDownloadCount } = pickPrimaryApkAsset(item.assets);
         totalApkDownloads += totalDownloadCount;
         return {
           version: item.tag_name as string,
@@ -154,6 +188,7 @@ export async function getGitHubReleasesAggregate(): Promise<GitHubReleasesAggreg
             typeof item.body === "string" && item.body.trim().length > 0
               ? item.body.trim()
               : null,
+          variants,
         };
       });
 
