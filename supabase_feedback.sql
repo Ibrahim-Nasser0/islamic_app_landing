@@ -1,3 +1,4 @@
+-- Note: Superseded by ./supabase_schema.sql (full schema: admin_users, feedback, download_events, site_notices, app_releases).
 -- Run this SQL inside your Supabase SQL Editor when you create your Admin Panel project
 create table if not exists public.feedback (
   id uuid primary key default gen_random_uuid(),

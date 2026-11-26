@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { Download, ExternalLink, Sparkles, X } from "lucide-react";
 import { Locale, landingCopy } from "@/lib/landing-content";
 import { ReleaseDownloadInfo } from "@/lib/github-release";
+import { buildTrackedDownloadPath } from "@/lib/download-url";
 import { ManuscriptCorners, SANCTUARY_PRIMARY_CTA, SANCTUARY_SECONDARY_BTN } from "./GeometricMotifs";
 
 interface ReleaseNotesModalProps {
@@ -90,7 +91,11 @@ export function ReleaseNotesModal({
 
         <div className="mt-6 flex flex-wrap gap-3">
           <a
-            href={release.downloadUrl}
+            href={buildTrackedDownloadPath({
+              source: "hero",
+              locale,
+              version: release.version,
+            })}
             target="_blank"
             rel="noopener noreferrer"
             className={`inline-flex flex-1 items-center justify-center gap-2 rounded-2xl px-5 py-3 text-sm font-bold ${SANCTUARY_PRIMARY_CTA}`}

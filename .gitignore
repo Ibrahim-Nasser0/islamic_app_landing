@@ -5,7 +5,11 @@ build/
 .DS_Store
 *.pem
 npm-debug.log*
+# local env files
 .env*.local
+
+# supabase SQL schemas (kept local)
+supabase*.sql
 .vercel
 next-env.d.ts
 *.tsbuildinfo

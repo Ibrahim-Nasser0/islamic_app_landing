@@ -17,6 +17,7 @@ const SECTION_IDS = [
   "features",
   "lockscreen",
   "reliability",
+  "timeline",
   "feedback",
 ] as const;
 
@@ -64,6 +65,7 @@ export function Navbar({
     { id: "features", label: t.nav.features },
     { id: "lockscreen", label: t.nav.lockscreen },
     { id: "reliability", label: t.nav.reliability },
+    { id: "timeline", label: locale === "ar" ? "الإصدارات" : "Releases" },
     { id: "feedback", label: t.nav.feedback },
   ];
 

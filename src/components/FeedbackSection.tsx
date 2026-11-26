@@ -23,7 +23,13 @@ type SubmitState =
   | { status: "error"; message: string; fallbackUrl?: string }
   | { status: "success"; mode: "supabase" | "pending_supabase" | "ignored"; fallbackUrl?: string };
 
-export function FeedbackSection({ locale }: { locale: Locale }) {
+export function FeedbackSection({
+  locale,
+  appVersion,
+}: {
+  locale: Locale;
+  appVersion?: string;
+}) {
   const t = landingCopy[locale].feedbackSection;
 
   const [category, setCategory] = useState<string>(t.categories[0].id);
@@ -59,6 +65,7 @@ export function FeedbackSection({ locale }: { locale: Locale }) {
           deviceInfo,
           contact,
           locale,
+          appVersion,
           idempotencyKey,
           website,
         }),

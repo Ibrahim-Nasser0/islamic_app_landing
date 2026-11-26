@@ -1,9 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { QRCodeSVG } from "qrcode.react";
 import { Check, Download, ExternalLink, Share2 } from "lucide-react";
+import { buildTrackedDownloadPath } from "@/lib/download-url";
 import { Locale, landingCopy } from "@/lib/landing-content";
 import { ReleaseDownloadInfo } from "@/lib/github-release";
 import {
@@ -14,17 +15,44 @@ import {
   SANCTUARY_SECONDARY_BTN,
 } from "./GeometricMotifs";
 
+const emptySubscribe = () => () => {};
+
 interface DownloadSectionProps {
   locale: Locale;
   release: ReleaseDownloadInfo;
+  downloadCount: number;
 }
 
-export function DownloadSection({ locale, release }: DownloadSectionProps) {
+export function DownloadSection({
+  locale,
+  release,
+  downloadCount,
+}: DownloadSectionProps) {
   const t = landingCopy[locale].downloadSection;
   const brand = landingCopy[locale].brand;
   const footer = landingCopy[locale].footer;
   const isAr = locale === "ar";
   const [sharedCopied, setSharedCopied] = useState(false);
+
+  const origin = useSyncExternalStore(
+    emptySubscribe,
+    () => window.location.origin,
+    () => ""
+  );
+
+  const trackedDownloadHref = buildTrackedDownloadPath({
+    source: "download_section",
+    locale,
+    version: release.version,
+  });
+
+  const qrUrl = origin
+    ? `${origin}${buildTrackedDownloadPath({
+        source: "qr",
+        locale,
+        version: release.version,
+      })}`
+    : release.downloadUrl;
 
   const handleShareCopy = async () => {
     try {
@@ -43,12 +71,23 @@ export function DownloadSection({ locale, release }: DownloadSectionProps) {
           <ManuscriptCorners />
 
           <div className="lg:col-span-8">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-[#D8B467]/30 bg-[var(--sanctuary-paper)] px-3.5 py-1 text-xs font-semibold text-[#E5C67E]">
-              <RubElHizbMark className="h-3 w-3" />
-              <span>
-                {t.badge} • {release.version}
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-[#D8B467]/30 bg-[var(--sanctuary-paper)] px-3.5 py-1 text-xs font-semibold text-[#E5C67E]">
+                <RubElHizbMark className="h-3 w-3" />
+                <span>
+                  {t.badge} • {release.version}
+                </span>
               </span>
-            </span>
+              {downloadCount > 0 && (
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-[#10B981]/35 bg-[#10B981]/10 px-3 py-1 text-xs font-bold text-[#6EE7B7]">
+                  <Download className="h-3 w-3" />
+                  <span>
+                    {downloadCount.toLocaleString(isAr ? "ar-EG" : "en-US")}{" "}
+                    {isAr ? "تحميل" : "downloads"}
+                  </span>
+                </span>
+              )}
+            </div>
             <h2 className="font-sacred mt-4 text-2xl leading-[1.35] font-bold text-[#F4EFE4] sm:text-4xl sm:leading-[1.28]">
               {t.title}
             </h2>
@@ -58,7 +97,7 @@ export function DownloadSection({ locale, release }: DownloadSectionProps) {
 
             <div className="mt-7 flex flex-wrap gap-3.5">
               <a
-                href={release.downloadUrl}
+                href={trackedDownloadHref}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`inline-flex min-h-13 items-center gap-2.5 rounded-2xl px-6 py-3 text-sm font-bold ${SANCTUARY_PRIMARY_CTA}`}
@@ -99,7 +138,7 @@ export function DownloadSection({ locale, release }: DownloadSectionProps) {
 
           <div className="flex flex-col items-center justify-center rounded-3xl border border-[var(--sanctuary-border)] bg-[var(--sanctuary-paper)] p-6 text-center lg:col-span-4">
             <div className="rounded-2xl border border-[#D8B467]/30 bg-white p-3.5 shadow-xs">
-              <QRCodeSVG value={release.downloadUrl} size={150} level="M" />
+              <QRCodeSVG value={qrUrl} size={150} level="M" />
             </div>
             <p className="mt-4 text-xs font-bold text-[var(--sanctuary-ink)]">
               {t.qrLabel}

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { siteConfig } from "@/config/site";
+import { getSupabaseServiceKey, getSupabaseUrl } from "@/lib/supabase/config";
 
 type FeedbackCategory = "bug" | "suggestion" | "adhan_times" | "other";
 
@@ -9,6 +10,7 @@ interface FeedbackPayload {
   deviceInfo?: string;
   contact?: string;
   locale?: string;
+  appVersion?: string;
   idempotencyKey?: string;
   website?: string; // Honeypot anti-spam field
 }
@@ -94,6 +96,8 @@ export async function POST(req: NextRequest) {
   const contact =
     typeof body.contact === "string" ? body.contact.trim().slice(0, 120) : "";
   const locale = body.locale === "en" ? "en" : "ar";
+  const appVersion =
+    typeof body.appVersion === "string" ? body.appVersion.trim().slice(0, 40) : "";
   const idempotencyKey =
     typeof body.idempotencyKey === "string"
       ? body.idempotencyKey.trim().slice(0, 80)
@@ -105,9 +109,8 @@ export async function POST(req: NextRequest) {
     deviceInfo: deviceInfo || undefined,
   });
 
-  const supabaseUrl = process.env.SUPABASE_URL?.replace(/\/+$/, "");
-  const supabaseKey =
-    process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY;
+  const supabaseUrl = getSupabaseUrl();
+  const supabaseKey = getSupabaseServiceKey();
   const tableName = process.env.SUPABASE_FEEDBACK_TABLE || "feedback";
 
   if (!supabaseUrl || !supabaseKey) {
@@ -134,6 +137,7 @@ export async function POST(req: NextRequest) {
         device_info: deviceInfo || null,
         contact: contact || null,
         locale,
+        app_version: appVersion || null,
       }),
     });
 

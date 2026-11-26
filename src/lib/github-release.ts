@@ -11,18 +11,56 @@ export interface ReleaseDownloadInfo {
   hasDirectApk: boolean;
 }
 
+export interface GitHubReleaseSummaryItem {
+  version: string;
+  name: string;
+  publishedAt: string | null;
+  htmlUrl: string;
+  apkUrl: string | null;
+  fileName: string | null;
+  downloadCount: number;
+  notes: string | null;
+}
+
+export interface GitHubReleasesAggregate {
+  totalApkDownloads: number;
+  releases: GitHubReleaseSummaryItem[];
+}
+
 interface GitHubAsset {
   name?: string;
   size?: number;
+  download_count?: number;
   browser_download_url?: string;
 }
 
 interface GitHubReleaseResponse {
   tag_name?: string;
+  name?: string;
   html_url?: string;
   published_at?: string;
   body?: string;
   assets?: GitHubAsset[];
+}
+
+function pickPrimaryApkAsset(assets: GitHubAsset[] | undefined) {
+  const apkAssets = (assets ?? []).filter(
+    (a): a is GitHubAsset & { name: string; browser_download_url: string } =>
+      typeof a.name === "string" &&
+      a.name.toLowerCase().endsWith(".apk") &&
+      typeof a.browser_download_url === "string"
+  );
+  const primary =
+    apkAssets.find((a) => a.name.toLowerCase().includes("universal")) ??
+    apkAssets.find((a) => a.name.toLowerCase().includes("arm64")) ??
+    apkAssets[0];
+
+  const totalDownloadCount = apkAssets.reduce(
+    (sum, a) => sum + (typeof a.download_count === "number" ? a.download_count : 0),
+    0
+  );
+
+  return { primary, totalDownloadCount };
 }
 
 export async function getLatestReleaseInfo(): Promise<ReleaseDownloadInfo> {
@@ -50,16 +88,7 @@ export async function getLatestReleaseInfo(): Promise<ReleaseDownloadInfo> {
 
     if (!res.ok) return fallback;
     const data = (await res.json()) as GitHubReleaseResponse;
-    const apkAssets = (data.assets ?? []).filter(
-      (a): a is GitHubAsset & { name: string; browser_download_url: string } =>
-        typeof a.name === "string" &&
-        a.name.toLowerCase().endsWith(".apk") &&
-        typeof a.browser_download_url === "string"
-    );
-    const apkAsset =
-      apkAssets.find((a) => a.name.toLowerCase().includes("universal")) ??
-      apkAssets.find((a) => a.name.toLowerCase().includes("arm64")) ??
-      apkAssets[0];
+    const { primary: apkAsset } = pickPrimaryApkAsset(data.assets);
 
     const sizeMb =
       apkAsset?.size && apkAsset.size > 0
@@ -83,5 +112,53 @@ export async function getLatestReleaseInfo(): Promise<ReleaseDownloadInfo> {
     };
   } catch {
     return fallback;
+  }
+}
+
+export async function getGitHubReleasesAggregate(): Promise<GitHubReleasesAggregate> {
+  try {
+    const res = await fetch(
+      `https://api.github.com/repos/${siteConfig.githubOwner}/${siteConfig.githubRepo}/releases?per_page=20`,
+      {
+        headers: {
+          Accept: "application/vnd.github+json",
+        },
+        next: { revalidate: 600 },
+      }
+    );
+
+    if (!res.ok) {
+      return { totalApkDownloads: 0, releases: [] };
+    }
+
+    const list = (await res.json()) as GitHubReleaseResponse[];
+    if (!Array.isArray(list)) {
+      return { totalApkDownloads: 0, releases: [] };
+    }
+
+    let totalApkDownloads = 0;
+    const releases: GitHubReleaseSummaryItem[] = list
+      .filter((item) => typeof item.tag_name === "string")
+      .map((item) => {
+        const { primary, totalDownloadCount } = pickPrimaryApkAsset(item.assets);
+        totalApkDownloads += totalDownloadCount;
+        return {
+          version: item.tag_name as string,
+          name: (item.name || item.tag_name) as string,
+          publishedAt: item.published_at ?? null,
+          htmlUrl: item.html_url ?? siteConfig.githubAllReleasesUrl,
+          apkUrl: primary?.browser_download_url ?? null,
+          fileName: primary?.name ?? null,
+          downloadCount: totalDownloadCount,
+          notes:
+            typeof item.body === "string" && item.body.trim().length > 0
+              ? item.body.trim()
+              : null,
+        };
+      });
+
+    return { totalApkDownloads, releases };
+  } catch {
+    return { totalApkDownloads: 0, releases: [] };
   }
 }

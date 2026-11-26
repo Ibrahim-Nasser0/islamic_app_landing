@@ -67,7 +67,7 @@ islamic_app_landing/
 │       ├── github-release.ts         # جلب آخر Release من GitHub وتحديد رابط Universal APK
 │       └── landing-content.ts        # جميع النصوص ثنائية اللغة (ar / en) ومحتوى الأقسام
 ├── .env.example                      # متغيرات البيئة لربط Supabase مستقبلاً
-├── supabase_feedback.sql             # سكريبت إنشاء جدول feedback + RLS Policies في Supabase
+├── supabase_schema.sql               # السكريبت الشامل لإنشاء جداول Supabase + RLS Policies
 └── package.json
 ```
 
@@ -132,7 +132,7 @@ npm run start    # تشغيل نسخة الإنتاج محلياً
 
 ### خطوات التفعيل:
 1. أنشئ مشروعاً جديداً على [Supabase](https://supabase.com/).
-2. افتح **SQL Editor** ونفّذ محتوى الملف [`supabase_feedback.sql`](./supabase_feedback.sql).
+2. افتح **SQL Editor** ونفّذ محتوى الملف [`supabase_schema.sql`](./supabase_schema.sql).
 3. أضف المتغيرات التالية في `.env.local` (وفي **Vercel Environment Variables** عند النشر):
 
 ```env

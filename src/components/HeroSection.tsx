@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { Locale, landingCopy } from "@/lib/landing-content";
 import { ReleaseDownloadInfo } from "@/lib/github-release";
+import { buildTrackedDownloadPath } from "@/lib/download-url";
 import { appScreenshots } from "@/config/screenshots";
 import {
   BreathingRosette,
@@ -27,17 +28,32 @@ import {
 interface HeroSectionProps {
   locale: Locale;
   release: ReleaseDownloadInfo;
+  downloadCount: number;
   onOpenReleaseNotes: () => void;
 }
 
 export function HeroSection({
   locale,
   release,
+  downloadCount,
   onOpenReleaseNotes,
 }: HeroSectionProps) {
   const t = landingCopy[locale].hero;
   const isAr = locale === "ar";
   const [showQr, setShowQr] = useState(false);
+  const trackedDownloadHref = buildTrackedDownloadPath({
+    source: "hero",
+    locale,
+    version: release.version,
+  });
+  const qrHref =
+    typeof window !== "undefined"
+      ? `${window.location.origin}${buildTrackedDownloadPath({
+          source: "qr",
+          locale,
+          version: release.version,
+        })}`
+      : release.downloadUrl;
 
   return (
     <section
@@ -84,7 +100,7 @@ export function HeroSection({
 
           <div className="mt-8 flex flex-wrap items-center gap-3.5">
             <a
-              href={release.downloadUrl}
+              href={trackedDownloadHref}
               target="_blank"
               rel="noopener noreferrer"
               className={`inline-flex min-h-14 items-center gap-3 rounded-2xl px-6 py-3.5 text-sm font-bold ${SANCTUARY_PRIMARY_CTA}`}
@@ -126,7 +142,7 @@ export function HeroSection({
           {showQr && (
             <div className="mt-4 inline-flex items-center gap-4 rounded-2xl border border-[#D8B467]/40 bg-[#0D1915] p-4 shadow-lg">
               <div className="rounded-xl bg-white p-2">
-                <QRCodeSVG value={release.downloadUrl} size={96} level="M" />
+                <QRCodeSVG value={qrHref} size={96} level="M" />
               </div>
               <div className="max-w-[215px] text-xs leading-relaxed text-[#92A49B]">
                 <p className="font-bold text-[#F2EFE9]">{t.scanQr}</p>
@@ -135,9 +151,20 @@ export function HeroSection({
             </div>
           )}
 
-          <div className="mt-5 flex items-center gap-2 text-xs text-[#92A49B]">
-            <Smartphone className="h-4 w-4 text-[#D8B467]" />
-            <span>{t.storesSoon}</span>
+          <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-[#92A49B]">
+            <div className="inline-flex items-center gap-2">
+              <Smartphone className="h-4 w-4 text-[#D8B467]" />
+              <span>{t.storesSoon}</span>
+            </div>
+            {downloadCount > 0 && (
+              <div className="inline-flex items-center gap-1.5 rounded-full border border-[#D8B467]/30 bg-[#0D1915] px-3 py-1 text-[11px] font-semibold text-[#E5C67E]">
+                <Download className="h-3 w-3 text-[#D8B467]" />
+                <span>
+                  {downloadCount.toLocaleString(isAr ? "ar-EG" : "en-US")}{" "}
+                  {isAr ? "تحميل" : "downloads"}
+                </span>
+              </div>
+            )}
           </div>
         </div>
 
