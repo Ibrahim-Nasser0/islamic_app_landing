@@ -123,7 +123,7 @@ export async function getGitHubReleasesAggregate(): Promise<GitHubReleasesAggreg
         headers: {
           Accept: "application/vnd.github+json",
         },
-        next: { revalidate: 600 },
+        next: { revalidate: 60 },
       }
     );
 

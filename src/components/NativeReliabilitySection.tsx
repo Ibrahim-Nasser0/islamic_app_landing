@@ -1,7 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
-import { CheckCircle2, Cpu, ShieldCheck } from "lucide-react";
+import { ArrowUpRight, CheckCircle2, Cpu, ShieldCheck } from "lucide-react";
 import { Locale, landingCopy } from "@/lib/landing-content";
 import {
   ManuscriptCorners,
@@ -89,11 +90,22 @@ export function NativeReliabilitySection({ locale }: { locale: Locale }) {
       {/* Permissions & Privacy Ledger */}
       <div className="relative mt-8 overflow-hidden rounded-3xl border border-[#D8B467]/30 bg-[#12231D]/70 p-6 sm:p-8">
         <ManuscriptCorners color="rgba(216, 180, 103, 0.38)" />
-        <div className="flex items-center gap-2.5">
-          <ShieldCheck className="h-5 w-5 text-[#E0B866]" />
-          <h3 className="font-sacred text-lg font-bold text-[#F2EFE9] sm:text-xl">
-            {rel.privacyTitle}
-          </h3>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-2.5">
+            <ShieldCheck className="h-5 w-5 text-[#E0B866]" />
+            <h3 className="font-sacred text-lg font-bold text-[#F2EFE9] sm:text-xl">
+              {rel.privacyTitle}
+            </h3>
+          </div>
+          <Link
+            href="/privacy"
+            className="inline-flex items-center gap-1.5 rounded-xl border border-[#D8B467]/35 bg-[#07100D] px-3.5 py-1.5 text-xs font-bold text-[#E5C67E] transition-colors hover:border-[#D8B467]/60 hover:bg-[#132922]"
+          >
+            <span>
+              {locale === "ar" ? "سياسة الخصوصية الكاملة" : "Full Privacy Policy"}
+            </span>
+            <ArrowUpRight className="h-3.5 w-3.5" />
+          </Link>
         </div>
         <div className="mt-5 grid gap-4 md:grid-cols-3">
           {rel.privacyItems.map((item) => (

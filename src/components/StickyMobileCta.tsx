@@ -12,9 +12,14 @@ import {
 interface StickyMobileCtaProps {
   locale: Locale;
   downloadUrl: string;
+  onDownloadClick?: () => void;
 }
 
-export function StickyMobileCta({ locale, downloadUrl }: StickyMobileCtaProps) {
+export function StickyMobileCta({
+  locale,
+  downloadUrl,
+  onDownloadClick,
+}: StickyMobileCtaProps) {
   const t = landingCopy[locale].stickyCta;
   const [visible, setVisible] = useState(false);
   const lastScrollY = useRef(0);
@@ -105,6 +110,7 @@ export function StickyMobileCta({ locale, downloadUrl }: StickyMobileCtaProps) {
           href={downloadUrl}
           target="_blank"
           rel="noopener noreferrer"
+          onClick={onDownloadClick}
           tabIndex={visible ? 0 : -1}
           className={`inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-xl text-xs font-bold ${SANCTUARY_PRIMARY_CTA}`}
         >

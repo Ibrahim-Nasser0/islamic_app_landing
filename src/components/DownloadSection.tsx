@@ -1,9 +1,10 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useState, useSyncExternalStore } from "react";
 import { QRCodeSVG } from "qrcode.react";
-import { Check, Download, ExternalLink, Share2 } from "lucide-react";
+import { Check, Download, ExternalLink, Share2, ShieldCheck } from "lucide-react";
 import { buildTrackedDownloadPath } from "@/lib/download-url";
 import { Locale, landingCopy } from "@/lib/landing-content";
 import { ReleaseDownloadInfo } from "@/lib/github-release";
@@ -21,12 +22,14 @@ interface DownloadSectionProps {
   locale: Locale;
   release: ReleaseDownloadInfo;
   downloadCount: number;
+  onDownloadClick: () => void;
 }
 
 export function DownloadSection({
   locale,
   release,
   downloadCount,
+  onDownloadClick,
 }: DownloadSectionProps) {
   const t = landingCopy[locale].downloadSection;
   const brand = landingCopy[locale].brand;
@@ -100,6 +103,7 @@ export function DownloadSection({
                 href={trackedDownloadHref}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={onDownloadClick}
                 className={`inline-flex min-h-13 items-center gap-2.5 rounded-2xl px-6 py-3 text-sm font-bold ${SANCTUARY_PRIMARY_CTA}`}
               >
                 <Download className="h-4 w-4 text-[#F2D184]" />
@@ -180,6 +184,19 @@ export function DownloadSection({
             <RubElHizbMark className="h-3 w-3 text-[#D8B467]/70" />
             <span>{footer.builtWith}</span>
             <RubElHizbMark className="h-3 w-3 text-[#D8B467]/70" />
+          </div>
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-4 text-xs">
+            <Link
+              href="/privacy"
+              className="inline-flex items-center gap-1.5 rounded-full border border-[#D8B467]/25 bg-[#0D1915] px-4 py-1.5 font-semibold text-[#E5C67E] transition-colors hover:border-[#D8B467]/55 hover:text-[#F6E2A8]"
+            >
+              <ShieldCheck className="h-3.5 w-3.5 text-[#10B981]" />
+              <span>
+                {isAr
+                  ? "سياسة الخصوصية (التطبيق والموقع)"
+                  : "Privacy Policy (App & Web)"}
+              </span>
+            </Link>
           </div>
         </div>
       </footer>

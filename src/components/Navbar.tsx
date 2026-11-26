@@ -9,6 +9,7 @@ import { ManuscriptCorners, RubElHizbMark } from "./GeometricMotifs";
 interface NavbarProps {
   locale: Locale;
   downloadUrl: string;
+  onDownloadClick?: () => void;
   onToggleLocale: () => void;
 }
 
@@ -24,6 +25,7 @@ const SECTION_IDS = [
 export function Navbar({
   locale,
   downloadUrl,
+  onDownloadClick,
   onToggleLocale,
 }: NavbarProps) {
   const t = landingCopy[locale];
@@ -177,6 +179,7 @@ export function Navbar({
             href={downloadUrl}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={onDownloadClick}
             className="hidden h-10 items-center gap-2 rounded-xl border border-[#D8B467]/45 bg-gradient-to-b from-[#216E5C] to-[#13473B] px-4 text-xs font-bold text-[#FBF7ED] shadow-[inset_0_1px_0_rgba(245,223,164,0.22)] transition-all hover:brightness-110 active:scale-[0.98] sm:inline-flex"
           >
             <Download className="h-3.5 w-3.5 text-[#F2D184]" />
@@ -226,7 +229,10 @@ export function Navbar({
               href={downloadUrl}
               target="_blank"
               rel="noopener noreferrer"
-              onClick={() => setMenuOpen(false)}
+              onClick={() => {
+                onDownloadClick?.();
+                setMenuOpen(false);
+              }}
               className="mt-2 flex h-11 items-center justify-center gap-2 rounded-xl border border-[#D8B467]/45 bg-gradient-to-b from-[#216E5C] to-[#13473B] text-sm font-bold text-[#FBF7ED] shadow-[inset_0_1px_0_rgba(245,223,164,0.22)] sm:hidden"
             >
               <Download className="h-4 w-4 text-[#F2D184]" />

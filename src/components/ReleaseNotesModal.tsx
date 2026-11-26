@@ -11,6 +11,7 @@ interface ReleaseNotesModalProps {
   open: boolean;
   locale: Locale;
   release: ReleaseDownloadInfo;
+  onDownloadClick?: () => void;
   onClose: () => void;
 }
 
@@ -18,6 +19,7 @@ export function ReleaseNotesModal({
   open,
   locale,
   release,
+  onDownloadClick,
   onClose,
 }: ReleaseNotesModalProps) {
   const t = landingCopy[locale].releaseModal;
@@ -98,6 +100,7 @@ export function ReleaseNotesModal({
             })}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={onDownloadClick}
             className={`inline-flex flex-1 items-center justify-center gap-2 rounded-2xl px-5 py-3 text-sm font-bold ${SANCTUARY_PRIMARY_CTA}`}
           >
             <Download className="h-4 w-4 text-[#F2D184]" />

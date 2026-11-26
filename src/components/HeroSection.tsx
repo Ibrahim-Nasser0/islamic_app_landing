@@ -29,6 +29,7 @@ interface HeroSectionProps {
   locale: Locale;
   release: ReleaseDownloadInfo;
   downloadCount: number;
+  onDownloadClick: () => void;
   onOpenReleaseNotes: () => void;
 }
 
@@ -36,6 +37,7 @@ export function HeroSection({
   locale,
   release,
   downloadCount,
+  onDownloadClick,
   onOpenReleaseNotes,
 }: HeroSectionProps) {
   const t = landingCopy[locale].hero;
@@ -103,6 +105,7 @@ export function HeroSection({
               href={trackedDownloadHref}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={onDownloadClick}
               className={`inline-flex min-h-14 items-center gap-3 rounded-2xl px-6 py-3.5 text-sm font-bold ${SANCTUARY_PRIMARY_CTA}`}
             >
               <Download className="h-5 w-5 text-[#F2D184]" />

@@ -30,11 +30,17 @@ export function LandingClient({ release, dynamicData }: LandingClientProps) {
   // Arabic is always the strict initial default unless toggled explicitly by the visitor
   const [locale, setLocale] = useState<Locale>("ar");
   const [notesOpen, setNotesOpen] = useState(false);
+  const [localDownloadDelta, setLocalDownloadDelta] = useState(0);
 
   useEffect(() => {
     document.documentElement.lang = locale;
     document.documentElement.dir = locale === "ar" ? "rtl" : "ltr";
   }, [locale]);
+
+  const displayedDownloadCount = dynamicData.downloadCount + localDownloadDelta;
+  const handleDownloadClick = () => {
+    setLocalDownloadDelta((prev) => prev + 1);
+  };
 
   const navDownloadUrl = buildTrackedDownloadPath({
     source: "hero",
@@ -54,13 +60,15 @@ export function LandingClient({ release, dynamicData }: LandingClientProps) {
       <Navbar
         locale={locale}
         downloadUrl={navDownloadUrl}
+        onDownloadClick={handleDownloadClick}
         onToggleLocale={() => setLocale((l) => (l === "ar" ? "en" : "ar"))}
       />
       <main>
         <HeroSection
           locale={locale}
           release={release}
-          downloadCount={dynamicData.downloadCount}
+          downloadCount={displayedDownloadCount}
+          onDownloadClick={handleDownloadClick}
           onOpenReleaseNotes={() => setNotesOpen(true)}
         />
         <TrustStrip locale={locale} />
@@ -75,6 +83,7 @@ export function LandingClient({ release, dynamicData }: LandingClientProps) {
           locale={locale}
           releases={dynamicData.releasesTimeline}
           latestFallback={release}
+          onDownloadClick={handleDownloadClick}
         />
         <GoldHairlineDivider />
         <FeedbackSection locale={locale} appVersion={release.version} />
@@ -82,15 +91,21 @@ export function LandingClient({ release, dynamicData }: LandingClientProps) {
         <DownloadSection
           locale={locale}
           release={release}
-          downloadCount={dynamicData.downloadCount}
+          downloadCount={displayedDownloadCount}
+          onDownloadClick={handleDownloadClick}
         />
       </main>
 
-      <StickyMobileCta locale={locale} downloadUrl={stickyDownloadUrl} />
+      <StickyMobileCta
+        locale={locale}
+        downloadUrl={stickyDownloadUrl}
+        onDownloadClick={handleDownloadClick}
+      />
       <ReleaseNotesModal
         open={notesOpen}
         locale={locale}
         release={release}
+        onDownloadClick={handleDownloadClick}
         onClose={() => setNotesOpen(false)}
       />
     </div>

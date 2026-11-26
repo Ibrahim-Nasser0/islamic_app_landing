@@ -29,6 +29,7 @@ interface ReleasesTimelineSectionProps {
   locale: Locale;
   releases: AppReleaseItem[];
   latestFallback: ReleaseDownloadInfo;
+  onDownloadClick?: () => void;
 }
 
 function getReleaseTypeLabel(type: ReleaseType, isAr: boolean): string {
@@ -72,6 +73,7 @@ export function ReleasesTimelineSection({
   locale,
   releases,
   latestFallback,
+  onDownloadClick,
 }: ReleasesTimelineSectionProps) {
   const isAr = locale === "ar";
 
@@ -251,6 +253,7 @@ export function ReleasesTimelineSection({
                           href={downloadHref}
                           target="_blank"
                           rel="noopener noreferrer"
+                          onClick={onDownloadClick}
                           className={`inline-flex h-10 items-center gap-2 rounded-xl px-4 text-xs font-bold ${SANCTUARY_PRIMARY_CTA}`}
                         >
                           <Download className="h-3.5 w-3.5 text-[#F2D184]" />

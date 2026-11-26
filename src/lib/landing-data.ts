@@ -45,14 +45,20 @@ export async function getLandingDynamicData(): Promise<LandingDynamicData> {
       if (!supabase) {
         return {
           siteDownloadCount: 0,
+          downloadsBaseline: null as number | null,
           activeNotice: null as SiteNoticeItem | null,
           releasesTimeline: [] as AppReleaseItem[],
         };
       }
 
       try {
-        const [countRes, noticeRes, releasesRes] = await Promise.all([
+        const [countRes, baselineRes, noticeRes, releasesRes] = await Promise.all([
           supabase.rpc("get_public_download_count"),
+          supabase
+            .from("site_counters")
+            .select("value")
+            .eq("key", "downloads_baseline")
+            .maybeSingle(),
           supabase
             .from("site_notices")
             .select("*")
@@ -68,15 +74,26 @@ export async function getLandingDynamicData(): Promise<LandingDynamicData> {
             .limit(12),
         ]);
 
-        const rawCount = typeof countRes.data === "number" ? countRes.data : Number(countRes.data ?? 0);
-        const siteDownloadCount = Number.isFinite(rawCount) && rawCount > 0 ? rawCount : 0;
+        const rawCount =
+          typeof countRes.data === "number"
+            ? countRes.data
+            : Number(countRes.data ?? 0);
+        const siteDownloadCount =
+          Number.isFinite(rawCount) && rawCount > 0 ? rawCount : 0;
+
+        const downloadsBaseline =
+          baselineRes.data && typeof baselineRes.data.value === "number"
+            ? baselineRes.data.value
+            : null;
 
         const now = Date.now();
         let activeNotice: SiteNoticeItem | null = null;
         if (noticeRes.data) {
           const candidate = noticeRes.data as SiteNoticeItem;
-          const startsOk = !candidate.starts_at || new Date(candidate.starts_at).getTime() <= now;
-          const endsOk = !candidate.ends_at || new Date(candidate.ends_at).getTime() >= now;
+          const startsOk =
+            !candidate.starts_at || new Date(candidate.starts_at).getTime() <= now;
+          const endsOk =
+            !candidate.ends_at || new Date(candidate.ends_at).getTime() >= now;
           if (startsOk && endsOk) {
             activeNotice = candidate;
           }
@@ -90,10 +107,16 @@ export async function getLandingDynamicData(): Promise<LandingDynamicData> {
             }))
           : [];
 
-        return { siteDownloadCount, activeNotice, releasesTimeline };
+        return {
+          siteDownloadCount,
+          downloadsBaseline,
+          activeNotice,
+          releasesTimeline,
+        };
       } catch {
         return {
           siteDownloadCount: 0,
+          downloadsBaseline: null as number | null,
           activeNotice: null as SiteNoticeItem | null,
           releasesTimeline: [] as AppReleaseItem[],
         };
@@ -103,8 +126,14 @@ export async function getLandingDynamicData(): Promise<LandingDynamicData> {
 
   const githubDownloadCount = githubAggregate.totalApkDownloads;
   const siteDownloadCount = supabaseData.siteDownloadCount;
-  // Combine safely without double-counting clicks that proceed to GitHub
-  const downloadCount = Math.max(githubDownloadCount, siteDownloadCount);
+  const baseline = supabaseData.downloadsBaseline;
+
+  // When baseline is initialized, every new click through /api/download immediately
+  // increases the total without waiting for GitHub cache and without double-counting.
+  const downloadCount =
+    baseline !== null
+      ? Math.max(githubDownloadCount, baseline + siteDownloadCount)
+      : Math.max(githubDownloadCount, siteDownloadCount);
 
   return {
     downloadCount,

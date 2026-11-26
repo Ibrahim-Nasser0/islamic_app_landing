@@ -1,6 +1,10 @@
+import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 import { siteConfig } from "@/config/site";
-import { getLatestReleaseInfo } from "@/lib/github-release";
+import {
+  getGitHubReleasesAggregate,
+  getLatestReleaseInfo,
+} from "@/lib/github-release";
 import { DownloadPlacement } from "@/lib/supabase/config";
 import { createSupabaseServiceClient } from "@/lib/supabase/server";
 
@@ -60,14 +64,46 @@ export async function GET(req: NextRequest) {
   const supabase = createSupabaseServiceClient();
   if (supabase) {
     try {
-      await supabase.from("download_events").insert({
+      // Seed baseline once (before inserting this event) so prior GitHub downloads
+      // are preserved while new site downloads immediately increment +1
+      const { data: existingBaseline } = await supabase
+        .from("site_counters")
+        .select("value")
+        .eq("key", "downloads_baseline")
+        .maybeSingle();
+
+      if (!existingBaseline) {
+        const [{ count: existingSiteCount }, githubAgg] = await Promise.all([
+          supabase
+            .from("download_events")
+            .select("*", { count: "exact", head: true }),
+          getGitHubReleasesAggregate(),
+        ]);
+        const baselineVal = Math.max(
+          0,
+          githubAgg.totalApkDownloads - (existingSiteCount ?? 0)
+        );
+        await supabase.from("site_counters").upsert(
+          { key: "downloads_baseline", value: baselineVal },
+          { onConflict: "key", ignoreDuplicates: true }
+        );
+      }
+
+      const { error: insertError } = await supabase.from("download_events").insert({
         version,
         file_name: fileName,
         placement,
         locale,
       });
-    } catch {
-      // Never block APK download if analytics insert fails
+
+      if (insertError) {
+        console.error("[/api/download] insert failed:", insertError.message);
+      } else {
+        revalidatePath("/");
+        revalidatePath("/admin");
+      }
+    } catch (err) {
+      console.error("[/api/download] unexpected error:", err);
     }
   }
 
