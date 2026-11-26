@@ -11,6 +11,7 @@ import {
   SANCTUARY_PRIMARY_CTA,
 } from "@/components/GeometricMotifs";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
+import { hasPublicSupabaseEnv } from "@/lib/supabase/config";
 
 const NOT_ADMIN_MESSAGE =
   "هذا الحساب غير مصرّح له بالدخول إلى لوحة الإدارة. يجب أن يكون البريد مضافاً في جدول admin_users.";
@@ -28,6 +29,7 @@ export function AdminLoginForm({
     initialNotAdmin ? NOT_ADMIN_MESSAGE : null
   );
   const [isNotAdminError, setIsNotAdminError] = useState(Boolean(initialNotAdmin));
+  const isEnvConfigured = hasPublicSupabaseEnv();
 
   useEffect(() => {
     if (!initialNotAdmin) return;
@@ -55,8 +57,17 @@ export function AdminLoginForm({
           password,
         });
 
-      if (signInError || !signInData.user) {
-        setError("بيانات الدخول غير صحيحة أو الحساب غير مفعّل.");
+      if (signInError || !signInData?.user) {
+        let msg = "بيانات الدخول غير صحيحة.";
+        const rawErr = (signInError?.message || "").toLowerCase();
+        if (rawErr.includes("email not confirmed")) {
+          msg = "البريد الإلكتروني غير مفعّل في Supabase Auth. يرجى تفعيله من لوحة التحكم (Authentication -> Users).";
+        } else if (rawErr.includes("invalid login credentials")) {
+          msg = "بيانات الدخول (البريد الإلكتروني أو كلمة المرور) غير صحيحة.";
+        } else if (signInError?.message) {
+          msg = `خطأ أثناء تسجيل الدخول: ${signInError.message}`;
+        }
+        setError(msg);
         setLoading(false);
         return;
       }
@@ -79,8 +90,20 @@ export function AdminLoginForm({
 
       router.replace("/admin");
       router.refresh();
-    } catch {
-      setError("تعذر الاتصال بـ Supabase. تأكد من متغيرات البيئة.");
+    } catch (err: unknown) {
+      console.error("Admin login error:", err);
+      const rawMsg = err instanceof Error ? err.message : String(err);
+      if (
+        rawMsg.includes("متغيرات البيئة") ||
+        rawMsg.includes("NEXT_PUBLIC") ||
+        rawMsg.includes("Missing environment variables")
+      ) {
+        setError(
+          "تعذر الاتصال بـ Supabase: متغيرات البيئة غير مدمجة في هذا الـ Build على السيرفر. تأكد من إضافة NEXT_PUBLIC_SUPABASE_URL و NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY في إعدادات الاستضافة (Vercel) ثم عمل Redeploy للمشروع."
+        );
+      } else {
+        setError(`تعذر الاتصال بـ Supabase: ${rawMsg}`);
+      }
       setLoading(false);
     }
   };
@@ -112,6 +135,26 @@ export function AdminLoginForm({
             <code className="font-latin text-[#E5C67E]">admin_users</code>
           </p>
         </div>
+
+        {!isEnvConfigured && (
+          <div
+            role="alert"
+            className="mt-5 flex items-start gap-2.5 rounded-2xl border border-amber-500/40 bg-amber-500/10 p-3.5 text-xs text-amber-200"
+          >
+            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-amber-400" />
+            <div className="space-y-1 text-right">
+              <p className="font-bold text-amber-300">
+                تنبيه: مفاتيح Supabase غير متوفرة في هذا الـ Build
+              </p>
+              <p className="text-[11px] leading-relaxed text-amber-200/90">
+                في منصة الاستضافة (Vercel)، يجب إضافة{" "}
+                <code className="font-mono text-amber-300">NEXT_PUBLIC_SUPABASE_URL</code> و{" "}
+                <code className="font-mono text-amber-300">NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY</code>{" "}
+                ثم الضغط على <strong>Redeploy</strong> لتضمينها في كود المتصفح.
+              </p>
+            </div>
+          </div>
+        )}
 
         <form onSubmit={(e) => void handleSubmit(e)} className="mt-7 space-y-4">
           <div>

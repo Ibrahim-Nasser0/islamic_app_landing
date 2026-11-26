@@ -104,25 +104,38 @@ export interface AdminLogItem {
   created_at: string;
 }
 
+function cleanEnvString(val: string | undefined): string {
+  if (!val) return "";
+  let trimmed = val.trim();
+  if (
+    (trimmed.startsWith('"') && trimmed.endsWith('"')) ||
+    (trimmed.startsWith("'") && trimmed.endsWith("'"))
+  ) {
+    trimmed = trimmed.slice(1, -1).trim();
+  }
+  return trimmed;
+}
+
 export function getSupabaseUrl(): string {
-  return (
+  const raw =
     process.env.NEXT_PUBLIC_SUPABASE_URL ||
     process.env.SUPABASE_URL ||
-    ""
-  ).replace(/\/+$/, "");
+    "";
+  return cleanEnvString(raw).replace(/\/+$/, "");
 }
 
 export function getSupabasePublishableKey(): string {
-  return (
+  const raw =
     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
     process.env.SUPABASE_ANON_KEY ||
-    ""
-  );
+    "";
+  return cleanEnvString(raw);
 }
 
 export function getSupabaseServiceKey(): string {
-  return process.env.SUPABASE_SERVICE_ROLE_KEY || "";
+  const raw = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
+  return cleanEnvString(raw);
 }
 
 export function hasPublicSupabaseEnv(): boolean {
