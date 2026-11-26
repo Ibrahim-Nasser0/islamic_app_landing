@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import {
   Activity,
   ArrowRight,
@@ -11,9 +11,11 @@ import {
   Bell,
   GitBranch,
   KeyRound,
+  LayoutDashboard,
   LogOut,
   Menu,
   MessageSquare,
+  RefreshCw,
   Shield,
   Users,
   X,
@@ -30,25 +32,21 @@ import {
   FeedbackItem,
   SiteNoticeItem,
 } from "@/lib/supabase/config";
+import { AdminToast, ToastType, ToastViewport } from "./AdminUi";
 import { DownloadsTab } from "./DownloadsTab";
 import { FeedbackTab } from "./FeedbackTab";
 import { LogsTab } from "./LogsTab";
 import { NoticesTab } from "./NoticesTab";
+import { AdminSectionId, OverviewTab } from "./OverviewTab";
 import { ReleasesTab } from "./ReleasesTab";
 import { TeamAccountTab } from "./TeamAccountTab";
 
-type AdminSectionId =
-  | "feedback"
-  | "releases"
-  | "downloads"
-  | "notices"
-  | "logs"
-  | "team";
-
 interface AdminDashboardClientProps {
+  serverRenderedAt: string;
   currentUserId: string;
   adminEmail: string;
   adminRole: AdminRole;
+  hasServiceKey: boolean;
   feedbackItems: FeedbackItem[];
   releases: AppReleaseItem[];
   notices: SiteNoticeItem[];
@@ -60,27 +58,56 @@ interface AdminDashboardClientProps {
   adminUsers: AdminUserItem[];
 }
 
-export function AdminDashboardClient({
+function AdminWorkspace({
+  activeTab,
+  onSelectTab,
+  onNotify,
+  onRefresh,
+  refreshing,
   currentUserId,
   adminEmail,
   adminRole,
-  feedbackItems,
-  releases,
-  notices,
+  hasServiceKey,
+  initialFeedback,
+  initialReleases,
+  initialNotices,
   downloadEvents,
   totalSiteDownloads,
   githubReleases,
   githubTotalDownloads,
   adminLogs,
-  adminUsers,
-}: AdminDashboardClientProps) {
+  initialAdmins,
+}: {
+  activeTab: AdminSectionId;
+  onSelectTab: (tab: AdminSectionId) => void;
+  onNotify: (type: ToastType, message: string) => void;
+  onRefresh: () => void;
+  refreshing: boolean;
+  currentUserId: string;
+  adminEmail: string;
+  adminRole: AdminRole;
+  hasServiceKey: boolean;
+  initialFeedback: FeedbackItem[];
+  initialReleases: AppReleaseItem[];
+  initialNotices: SiteNoticeItem[];
+  downloadEvents: DownloadEventItem[];
+  totalSiteDownloads: number;
+  githubReleases: GitHubReleaseSummaryItem[];
+  githubTotalDownloads: number;
+  adminLogs: AdminLogItem[];
+  initialAdmins: AdminUserItem[];
+}) {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState<AdminSectionId>("feedback");
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const [feedbackItems, setFeedbackItems] = useState<FeedbackItem[]>(initialFeedback);
+  const [releases, setReleases] = useState<AppReleaseItem[]>(initialReleases);
+  const [notices, setNotices] = useState<SiteNoticeItem[]>(initialNotices);
+  const [admins, setAdmins] = useState<AdminUserItem[]>(initialAdmins);
 
   const isOwner = adminRole === "owner";
   const newFeedbackCount = feedbackItems.filter((f) => f.status === "new").length;
-  const publishedReleasesCount = releases.filter((r) => r.is_published).length;
+  const activeNoticesCount = notices.filter((n) => n.is_active).length;
 
   const handleSignOut = async () => {
     const supabase = createSupabaseBrowserClient();
@@ -95,6 +122,11 @@ export function AdminDashboardClient({
     icon: typeof MessageSquare;
     badge?: number;
   }[] = [
+    {
+      id: "overview",
+      label: "نظرة عامة",
+      icon: LayoutDashboard,
+    },
     {
       id: "feedback",
       label: "البلاغات والشكاوى",
@@ -116,10 +148,11 @@ export function AdminDashboardClient({
       id: "notices",
       label: "شريط التنبيهات",
       icon: Bell,
+      badge: activeNoticesCount > 0 ? activeNoticesCount : undefined,
     },
     {
       id: "logs",
-      label: "سجل النشاطات (Logs)",
+      label: "سجل النشاطات",
       icon: Activity,
       badge: adminLogs.length > 0 ? adminLogs.length : undefined,
     },
@@ -138,7 +171,7 @@ export function AdminDashboardClient({
         {/* Brand */}
         <div className="flex items-center justify-between gap-2 border-b border-[#D8B467]/15 pb-4">
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 shrink-0 overflow-hidden rounded-xl border border-[#D8B467]/45 bg-[#0D1E18] p-0.5">
+            <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-xl border border-[#D8B467]/50 bg-[#0D1E18] p-0.5 shadow-[inset_0_1px_0_rgba(245,223,164,0.2)]">
               <Image
                 src="/images/app_logo.png"
                 alt="زاد المسلم"
@@ -151,7 +184,7 @@ export function AdminDashboardClient({
               <p className="font-sacred text-base font-bold text-[#F4EFE4]">
                 زاد المسلم
               </p>
-              <p className="text-[11px] text-[#D8B467]">لوحة الإدارة</p>
+              <p className="text-[11px] text-[#D8B467]">لوحة القيادة</p>
             </div>
           </div>
           <button
@@ -166,21 +199,24 @@ export function AdminDashboardClient({
 
         {/* User Role Card */}
         <div className="mt-4 rounded-2xl border border-[#D8B467]/20 bg-[#07100D] p-3">
-          <div className="flex items-center gap-2">
-            <Shield
-              className={`h-4 w-4 shrink-0 ${
-                isOwner ? "text-[#D8B467]" : "text-[#6EE7B7]"
-              }`}
-            />
-            <span
-              className={`rounded-md px-1.5 py-0.5 font-latin text-[10px] font-bold uppercase ${
-                isOwner
-                  ? "bg-[#D8B467]/20 text-[#F5DFA4]"
-                  : "bg-[#10B981]/15 text-[#6EE7B7]"
-              }`}
-            >
-              {adminRole}
-            </span>
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-1.5">
+              <Shield
+                className={`h-4 w-4 shrink-0 ${
+                  isOwner ? "text-[#D8B467]" : "text-[#6EE7B7]"
+                }`}
+              />
+              <span
+                className={`rounded-md px-1.5 py-0.5 font-latin text-[10px] font-bold uppercase ${
+                  isOwner
+                    ? "bg-[#D8B467]/20 text-[#F5DFA4]"
+                    : "bg-[#10B981]/15 text-[#6EE7B7]"
+                }`}
+              >
+                {adminRole}
+              </span>
+            </div>
+            <span className="h-2 w-2 rounded-full bg-[#10B981]" title="متصل" />
           </div>
           <p
             dir="ltr"
@@ -191,7 +227,7 @@ export function AdminDashboardClient({
         </div>
 
         {/* Navigation Links */}
-        <nav className="mt-5 space-y-1.5">
+        <nav className="mt-5 space-y-1">
           {navItems.map((item) => {
             const Icon = item.icon;
             const active = activeTab === item.id;
@@ -200,12 +236,12 @@ export function AdminDashboardClient({
                 key={item.id}
                 type="button"
                 onClick={() => {
-                  setActiveTab(item.id);
+                  onSelectTab(item.id);
                   setSidebarOpen(false);
                 }}
                 className={`flex w-full items-center justify-between gap-2 rounded-xl border px-3.5 py-2.5 text-xs font-bold transition-all ${
                   active
-                    ? "border-[#D8B467]/50 bg-gradient-to-b from-[#216E5C] to-[#13473B] text-[#F6E2A8] shadow-sm"
+                    ? "border-[#D8B467]/50 bg-gradient-to-b from-[#216E5C] to-[#13473B] text-[#F6E2A8] shadow-[inset_0_1px_0_rgba(245,223,164,0.2)]"
                     : "border-transparent text-[#9FB0A8] hover:border-[#D8B467]/20 hover:bg-white/[0.03] hover:text-[#F2EFE9]"
                 }`}
               >
@@ -276,7 +312,7 @@ export function AdminDashboardClient({
       {/* Main Content Area */}
       <div className="min-w-0 flex-1">
         {/* Top Bar */}
-        <header className="sticky top-0 z-30 flex items-center justify-between gap-3 border-b border-[#D8B467]/15 bg-[#07100D]/92 px-5 py-4 backdrop-blur-md sm:px-8">
+        <header className="sticky top-0 z-30 flex items-center justify-between gap-3 border-b border-[#D8B467]/15 bg-[#07100D]/92 px-5 py-3.5 backdrop-blur-md sm:px-8">
           <div className="flex items-center gap-3">
             <button
               type="button"
@@ -294,59 +330,49 @@ export function AdminDashboardClient({
             </div>
           </div>
 
-          <div className="hidden items-center gap-3 text-xs text-[#92A49B] sm:flex">
-            <span>
-              إصدارات منشورة:{" "}
-              <strong className="font-latin text-[#F2EFE9]">
-                {publishedReleasesCount}
-              </strong>
-            </span>
-            <span className="text-[#D8B467]/40">•</span>
-            <span>
-              GitHub:{" "}
-              <strong className="font-latin text-[#6EE7B7]">
-                {githubTotalDownloads.toLocaleString("en-US")}
-              </strong>
-            </span>
+          <div className="flex items-center gap-2.5">
+            <button
+              type="button"
+              onClick={onRefresh}
+              disabled={refreshing}
+              className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-[#D8B467]/30 bg-[#0D1915] px-3 text-xs font-semibold text-[#E5C67E] transition-colors hover:bg-[#132922] disabled:opacity-50"
+            >
+              <RefreshCw
+                className={`h-3.5 w-3.5 ${refreshing ? "animate-spin" : ""}`}
+              />
+              <span className="hidden sm:inline">تحديث</span>
+            </button>
           </div>
         </header>
 
         <main className="mx-auto max-w-6xl px-5 py-6 sm:px-8">
-          {/* Quick KPI Strip */}
-          <div className="mb-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            <div className="rounded-2xl border border-[var(--sanctuary-border)] bg-[#0D1915] p-4">
-              <p className="text-xs text-[#92A49B]">بلاغات جديدة</p>
-              <p className="font-latin mt-1 text-2xl font-extrabold text-[#F2D184]">
-                {newFeedbackCount}
-              </p>
-            </div>
-            <div className="rounded-2xl border border-[var(--sanctuary-border)] bg-[#0D1915] p-4">
-              <p className="text-xs text-[#92A49B]">إجمالي التحميلات (GitHub)</p>
-              <p className="font-latin mt-1 text-2xl font-extrabold text-[#6EE7B7]">
-                {githubTotalDownloads.toLocaleString("en-US")}
-              </p>
-            </div>
-            <div className="rounded-2xl border border-[var(--sanctuary-border)] bg-[#0D1915] p-4">
-              <p className="text-xs text-[#92A49B]">ضغطات التحميل من الموقع</p>
-              <p className="font-latin mt-1 text-2xl font-extrabold text-[#E5C67E]">
-                {totalSiteDownloads.toLocaleString("en-US")}
-              </p>
-            </div>
-            <div className="rounded-2xl border border-[var(--sanctuary-border)] bg-[#0D1915] p-4">
-              <p className="text-xs text-[#92A49B]">سجلات النشاط المرئية لك</p>
-              <p className="font-latin mt-1 text-2xl font-extrabold text-[#F4EFE4]">
-                {adminLogs.length}
-              </p>
-            </div>
-          </div>
-
+          {activeTab === "overview" && (
+            <OverviewTab
+              adminEmail={adminEmail}
+              feedbackItems={feedbackItems}
+              releases={releases}
+              notices={notices}
+              downloadEvents={downloadEvents}
+              totalSiteDownloads={totalSiteDownloads}
+              githubReleases={githubReleases}
+              githubTotalDownloads={githubTotalDownloads}
+              adminLogs={adminLogs}
+              onNavigate={onSelectTab}
+            />
+          )}
           {activeTab === "feedback" && (
-            <FeedbackTab initialItems={feedbackItems} />
+            <FeedbackTab
+              items={feedbackItems}
+              onItemsChange={setFeedbackItems}
+              onNotify={onNotify}
+            />
           )}
           {activeTab === "releases" && (
             <ReleasesTab
-              initialReleases={releases}
+              releases={releases}
               githubReleases={githubReleases}
+              onReleasesChange={setReleases}
+              onNotify={onNotify}
             />
           )}
           {activeTab === "downloads" && (
@@ -355,9 +381,16 @@ export function AdminDashboardClient({
               events={downloadEvents}
               githubReleases={githubReleases}
               githubTotalDownloads={githubTotalDownloads}
+              onNotify={onNotify}
             />
           )}
-          {activeTab === "notices" && <NoticesTab initialNotices={notices} />}
+          {activeTab === "notices" && (
+            <NoticesTab
+              notices={notices}
+              onNoticesChange={setNotices}
+              onNotify={onNotify}
+            />
+          )}
           {activeTab === "logs" && (
             <LogsTab logs={adminLogs} currentRole={adminRole} />
           )}
@@ -366,11 +399,69 @@ export function AdminDashboardClient({
               currentUserId={currentUserId}
               currentEmail={adminEmail}
               currentRole={adminRole}
-              initialAdmins={adminUsers}
+              admins={admins}
+              hasServiceKey={hasServiceKey}
+              onAdminsChange={setAdmins}
+              onNotify={onNotify}
             />
           )}
         </main>
       </div>
     </div>
+  );
+}
+
+export function AdminDashboardClient(props: AdminDashboardClientProps) {
+  const router = useRouter();
+  const [activeTab, setActiveTab] = useState<AdminSectionId>("overview");
+  const [toasts, setToasts] = useState<AdminToast[]>([]);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const dismissToast = useCallback((id: string) => {
+    setToasts((prev) => prev.filter((t) => t.id !== id));
+  }, []);
+
+  const notify = useCallback((type: ToastType, message: string) => {
+    const id = `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+    setToasts((prev) => [...prev.slice(-3), { id, type, message }]);
+    setTimeout(() => {
+      setToasts((prev) => prev.filter((t) => t.id !== id));
+    }, 4000);
+  }, []);
+
+  const handleRefresh = useCallback(() => {
+    setRefreshing(true);
+    router.refresh();
+    setTimeout(() => {
+      setRefreshing(false);
+      notify("info", "تم تحديث بيانات اللوحة.");
+    }, 600);
+  }, [router, notify]);
+
+  return (
+    <>
+      <AdminWorkspace
+        key={props.serverRenderedAt}
+        activeTab={activeTab}
+        onSelectTab={setActiveTab}
+        onNotify={notify}
+        onRefresh={handleRefresh}
+        refreshing={refreshing}
+        currentUserId={props.currentUserId}
+        adminEmail={props.adminEmail}
+        adminRole={props.adminRole}
+        hasServiceKey={props.hasServiceKey}
+        initialFeedback={props.feedbackItems}
+        initialReleases={props.releases}
+        initialNotices={props.notices}
+        downloadEvents={props.downloadEvents}
+        totalSiteDownloads={props.totalSiteDownloads}
+        githubReleases={props.githubReleases}
+        githubTotalDownloads={props.githubTotalDownloads}
+        adminLogs={props.adminLogs}
+        initialAdmins={props.adminUsers}
+      />
+      <ToastViewport toasts={toasts} onDismiss={dismissToast} />
+    </>
   );
 }

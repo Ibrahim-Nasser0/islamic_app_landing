@@ -1,16 +1,30 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import { CheckCircle2, Loader2, Power, Trash2 } from "lucide-react";
+import {
+  AlertTriangle,
+  Edit3,
+  Info,
+  Loader2,
+  Power,
+  Sparkles,
+  Trash2,
+  X,
+} from "lucide-react";
 import { SANCTUARY_PRIMARY_CTA } from "@/components/GeometricMotifs";
 import { SiteNoticeItem, SiteNoticeVariant } from "@/lib/supabase/config";
+import { ToastType } from "./AdminUi";
 
 export function NoticesTab({
-  initialNotices,
+  notices,
+  onNoticesChange,
+  onNotify,
 }: {
-  initialNotices: SiteNoticeItem[];
+  notices: SiteNoticeItem[];
+  onNoticesChange: (next: SiteNoticeItem[]) => void;
+  onNotify: (type: ToastType, message: string) => void;
 }) {
-  const [notices, setNotices] = useState<SiteNoticeItem[]>(initialNotices);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [titleAr, setTitleAr] = useState("");
   const [titleEn, setTitleEn] = useState("");
   const [ctaLabelAr, setCtaLabelAr] = useState("");
@@ -19,17 +33,43 @@ export function NoticesTab({
   const [variant, setVariant] = useState<SiteNoticeVariant>("release");
   const [isActive, setIsActive] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [savedMsg, setSavedMsg] = useState<string | null>(null);
+
+  const resetForm = () => {
+    setEditingId(null);
+    setTitleAr("");
+    setTitleEn("");
+    setCtaLabelAr("");
+    setCtaLabelEn("");
+    setCtaUrl("");
+    setVariant("release");
+    setIsActive(true);
+  };
+
+  const loadForEdit = (item: SiteNoticeItem) => {
+    setEditingId(item.id);
+    setTitleAr(item.title_ar);
+    setTitleEn(item.title_en ?? "");
+    setCtaLabelAr(item.cta_label_ar ?? "");
+    setCtaLabelEn(item.cta_label_en ?? "");
+    setCtaUrl(item.cta_url ?? "");
+    setVariant(item.variant);
+    setIsActive(item.is_active);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (saving) return;
     setSaving(true);
-    setSavedMsg(null);
 
     try {
-      const res = await fetch("/api/admin/notices", {
-        method: "POST",
+      const endpoint = editingId
+        ? `/api/admin/notices/${editingId}`
+        : "/api/admin/notices";
+      const method = editingId ? "PATCH" : "POST";
+
+      const res = await fetch(endpoint, {
+        method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           title_ar: titleAr,
@@ -42,19 +82,34 @@ export function NoticesTab({
         }),
       });
 
-      const data = (await res.json()) as { ok?: boolean; item?: SiteNoticeItem };
-      if (res.ok && data.ok && data.item) {
-        setNotices((prev) => [
-          data.item!,
-          ...(isActive ? prev.map((n) => ({ ...n, is_active: false })) : prev),
-        ]);
-        setTitleAr("");
-        setTitleEn("");
-        setCtaLabelAr("");
-        setCtaLabelEn("");
-        setCtaUrl("");
-        setSavedMsg("تم حفظ التنبيه وتحديث الصفحة الرئيسية.");
+      const data = (await res.json()) as {
+        ok?: boolean;
+        item?: SiteNoticeItem;
+        error?: string;
+      };
+      if (!res.ok || !data.ok || !data.item) {
+        onNotify("error", data.error ?? "تعذر حفظ التنبيه.");
+        return;
       }
+
+      if (editingId) {
+        onNoticesChange(
+          notices.map((n) => {
+            if (n.id === data.item!.id) return data.item!;
+            return isActive ? { ...n, is_active: false } : n;
+          })
+        );
+        onNotify("success", "تم تعديل التنبيه وتحديث الصفحة الرئيسية.");
+      } else {
+        onNoticesChange([
+          data.item!,
+          ...(isActive
+            ? notices.map((n) => ({ ...n, is_active: false }))
+            : notices),
+        ]);
+        onNotify("success", "تم إنشاء التنبيه وتحديث الصفحة الرئيسية.");
+      }
+      resetForm();
     } finally {
       setSaving(false);
     }
@@ -69,12 +124,18 @@ export function NoticesTab({
     });
     const data = (await res.json()) as { ok?: boolean; item?: SiteNoticeItem };
     if (res.ok && data.ok && data.item) {
-      setNotices((prev) =>
-        prev.map((n) => {
+      onNoticesChange(
+        notices.map((n) => {
           if (n.id === item.id) return data.item!;
           return nextActive ? { ...n, is_active: false } : n;
         })
       );
+      onNotify(
+        "success",
+        nextActive ? "تم تفعيل التنبيه أعلى الموقع." : "تم إيقاف التنبيه."
+      );
+    } else {
+      onNotify("error", "تعذر تغيير حالة التنبيه.");
     }
   };
 
@@ -82,9 +143,27 @@ export function NoticesTab({
     if (!window.confirm("حذف هذا التنبيه؟")) return;
     const res = await fetch(`/api/admin/notices/${id}`, { method: "DELETE" });
     if (res.ok) {
-      setNotices((prev) => prev.filter((n) => n.id !== id));
+      onNoticesChange(notices.filter((n) => n.id !== id));
+      if (editingId === id) resetForm();
+      onNotify("success", "تم حذف التنبيه.");
+    } else {
+      onNotify("error", "تعذر حذف التنبيه.");
     }
   };
+
+  const previewStyle =
+    variant === "release"
+      ? "border-[#D8B467]/35 bg-gradient-to-r from-[#1A2618] via-[#132922] to-[#1A2618] text-[#F6E2A8]"
+      : variant === "warning"
+        ? "border-[#F59E0B]/35 bg-gradient-to-r from-[#241B0D] via-[#1B160D] to-[#241B0D] text-[#FDE68A]"
+        : "border-[#10B981]/30 bg-gradient-to-r from-[#0A1E18] via-[#0F2A22] to-[#0A1E18] text-[#D1FAE5]";
+
+  const PreviewIcon =
+    variant === "release"
+      ? Sparkles
+      : variant === "warning"
+        ? AlertTriangle
+        : Info;
 
   return (
     <div className="grid gap-6 lg:grid-cols-12">
@@ -92,9 +171,36 @@ export function NoticesTab({
         onSubmit={(e) => void handleSubmit(e)}
         className="space-y-4 rounded-2xl border border-[#D8B467]/30 bg-[#0D1915] p-5 lg:col-span-6"
       >
-        <h2 className="text-base font-bold text-[#F4EFE4]">
-          إنشاء تنبيه أعلى الصفحة (Site Notice)
-        </h2>
+        <div className="flex items-center justify-between gap-2">
+          <h2 className="text-base font-bold text-[#F4EFE4]">
+            {editingId ? "تعديل التنبيه" : "إنشاء تنبيه أعلى الصفحة (Site Notice)"}
+          </h2>
+          {editingId && (
+            <button
+              type="button"
+              onClick={resetForm}
+              className="inline-flex h-8 items-center gap-1 rounded-lg border border-white/15 bg-[#07100D] px-2.5 text-xs text-[#92A49B] hover:text-white"
+            >
+              <X className="h-3.5 w-3.5" />
+              <span>إلغاء</span>
+            </button>
+          )}
+        </div>
+
+        {/* Live Banner Preview */}
+        <div className={`flex items-center justify-between gap-2 rounded-xl border px-3.5 py-2.5 text-xs ${previewStyle}`}>
+          <div className="flex min-w-0 items-center gap-2">
+            <PreviewIcon className="h-4 w-4 shrink-0" />
+            <span className="truncate font-medium">
+              {titleAr.trim() || "معاينة شريط التنبيه كما سيظهر أعلى الصفحة"}
+            </span>
+          </div>
+          {ctaLabelAr.trim() && (
+            <span className="shrink-0 rounded-md border border-current/30 bg-black/25 px-2 py-0.5 text-[10px] font-bold">
+              {ctaLabelAr}
+            </span>
+          )}
+        </div>
 
         <div>
           <label className="mb-1 block text-xs text-[#92A49B]">نص التنبيه بالعربية *</label>
@@ -180,20 +286,13 @@ export function NoticesTab({
           <span>تفعيل هذا التنبيه فوراً (ويتم إيقاف التنبيهات السابقة تلقائياً)</span>
         </label>
 
-        {savedMsg && (
-          <p className="flex items-center gap-1.5 rounded-xl border border-[#10B981]/40 bg-[#10B981]/10 px-3 py-2 text-xs text-[#6EE7B7]">
-            <CheckCircle2 className="h-4 w-4" />
-            <span>{savedMsg}</span>
-          </p>
-        )}
-
         <button
           type="submit"
           disabled={saving}
           className={`inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl text-xs font-bold ${SANCTUARY_PRIMARY_CTA}`}
         >
           {saving && <Loader2 className="h-4 w-4 animate-spin" />}
-          <span>حفظ التنبيه</span>
+          <span>{editingId ? "حفظ تعديلات التنبيه" : "حفظ التنبيه"}</span>
         </button>
       </form>
 
@@ -209,7 +308,11 @@ export function NoticesTab({
           notices.map((item) => (
             <div
               key={item.id}
-              className="flex items-start justify-between gap-3 rounded-2xl border border-[var(--sanctuary-border)] bg-[#0D1915] p-4"
+              className={`flex items-start justify-between gap-3 rounded-2xl border p-4 transition-colors ${
+                editingId === item.id
+                  ? "border-[#D8B467] bg-[#12241D]"
+                  : "border-[var(--sanctuary-border)] bg-[#0D1915]"
+              }`}
             >
               <div>
                 <div className="flex items-center gap-2">
@@ -244,6 +347,14 @@ export function NoticesTab({
                   className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-[#07100D] text-[#D8B467] hover:bg-[#132922]"
                 >
                   <Power className="h-3.5 w-3.5" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => loadForEdit(item)}
+                  title="تعديل"
+                  className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-[#07100D] text-[#E5C67E] hover:bg-[#132922]"
+                >
+                  <Edit3 className="h-3.5 w-3.5" />
                 </button>
                 <button
                   type="button"

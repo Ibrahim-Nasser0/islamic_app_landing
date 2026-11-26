@@ -8,6 +8,7 @@ import {
   DownloadEventItem,
   FeedbackItem,
   SiteNoticeItem,
+  hasServiceSupabaseEnv,
 } from "@/lib/supabase/config";
 import { getAdminAuthStatus } from "@/lib/supabase/server";
 
@@ -54,7 +55,7 @@ export default async function AdminPage() {
       .from("download_events")
       .select("*")
       .order("created_at", { ascending: false })
-      .limit(500),
+      .limit(1000),
     auth.supabase
       .from("download_events")
       .select("*", { count: "exact", head: true }),
@@ -85,9 +86,11 @@ export default async function AdminPage() {
 
   return (
     <AdminDashboardClient
+      serverRenderedAt={new Date().toISOString()}
       currentUserId={auth.admin.user_id}
       adminEmail={auth.admin.email}
       adminRole={auth.admin.role}
+      hasServiceKey={hasServiceSupabaseEnv()}
       feedbackItems={feedbackItems}
       releases={releases}
       notices={notices}
