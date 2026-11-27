@@ -1,9 +1,7 @@
-import { Locale, landingCopy } from "@/lib/landing-content";
+import { HomeMessages } from "@/lib/i18n";
 import { RubElHizbMark } from "./GeometricMotifs";
 
-export function TrustStrip({ locale }: { locale: Locale }) {
-  const items = landingCopy[locale].trust;
-
+export function TrustStrip({ items }: { items: HomeMessages["trust"] }) {
   return (
     <section className="bg-[#0B1713]/90">
       <div className="mx-auto grid max-w-6xl grid-cols-2 divide-y divide-[#D8B467]/12 sm:divide-y-0 lg:grid-cols-4 lg:divide-x lg:rtl:divide-x-reverse">

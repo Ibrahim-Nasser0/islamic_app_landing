@@ -1,8 +1,8 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useState, useSyncExternalStore } from "react";
-import { QRCodeSVG } from "qrcode.react";
 import {
   BellRing,
   Clock,
@@ -12,11 +12,11 @@ import {
   ShieldCheck,
   Smartphone,
 } from "lucide-react";
-import { ApkVariant, DeviceDetectionResult } from "@/lib/device-apk";
-import { Locale, landingCopy } from "@/lib/landing-content";
-import { ReleaseDownloadInfo } from "@/lib/github-release";
-import { buildTrackedDownloadPath } from "@/lib/download-url";
 import { appScreenshots } from "@/config/screenshots";
+import { POST_ADHAN_DUAA } from "@/data/islamic-data";
+import { buildTrackedDownloadPath } from "@/lib/download-url";
+import { ReleaseDownloadInfo } from "@/lib/github-release";
+import { HomeMessages, Locale } from "@/lib/i18n";
 import {
   BreathingRosette,
   ManuscriptCorners,
@@ -25,29 +25,33 @@ import {
   SANCTUARY_PRIMARY_CTA,
   SANCTUARY_SECONDARY_BTN,
 } from "./GeometricMotifs";
+import { useLandingState } from "./LandingStateProvider";
+
+const QrCodeBox = dynamic(
+  () => import("./QrCodeBox").then((m) => m.QrCodeBox),
+  { ssr: false }
+);
 
 const emptySubscribe = () => () => {};
 
 interface HeroSectionProps {
   locale: Locale;
+  messages: HomeMessages["hero"];
   release: ReleaseDownloadInfo;
-  detection: DeviceDetectionResult | null;
-  matchedVariant: ApkVariant | null;
-  downloadCount: number;
-  onDownloadClick: () => void;
-  onOpenReleaseNotes: () => void;
+  initialDownloadCount: number;
 }
 
 export function HeroSection({
   locale,
+  messages: t,
   release,
-  detection,
-  matchedVariant,
-  downloadCount,
-  onDownloadClick,
-  onOpenReleaseNotes,
+  initialDownloadCount,
 }: HeroSectionProps) {
-  const t = landingCopy[locale].hero;
+  const ctx = useLandingState();
+  const detection = ctx?.detection ?? null;
+  const matchedVariant = ctx?.matchedVariant ?? null;
+  const downloadCount = ctx?.downloadCount ?? initialDownloadCount;
+
   const isAr = locale === "ar";
   const [showQr, setShowQr] = useState(false);
 
@@ -121,8 +125,8 @@ export function HeroSection({
               href={trackedDownloadHref}
               target="_blank"
               rel="noopener noreferrer"
-              onClick={onDownloadClick}
-              className={`inline-flex min-h-14 items-center gap-3 rounded-2xl px-6 py-3.5 text-sm font-bold ${SANCTUARY_PRIMARY_CTA}`}
+              onClick={ctx?.incrementDownloadCount}
+              className={`inline-flex min-h-14 items-center gap-3 rounded-2xl px-6 py-3.5 text-sm font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D8B467] ${SANCTUARY_PRIMARY_CTA}`}
             >
               <Download className="h-5 w-5 text-[#F2D184]" />
               <div className="text-start">
@@ -142,8 +146,8 @@ export function HeroSection({
 
             <button
               type="button"
-              onClick={onOpenReleaseNotes}
-              className={`inline-flex min-h-14 items-center gap-2 rounded-2xl px-4 py-3.5 text-xs font-semibold ${SANCTUARY_SECONDARY_BTN}`}
+              onClick={ctx?.openReleaseNotes}
+              className={`inline-flex min-h-14 items-center gap-2 rounded-2xl px-4 py-3.5 text-xs font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D8B467] ${SANCTUARY_SECONDARY_BTN}`}
             >
               <FileText className="h-4 w-4 text-[#D8B467]" />
               <span>{t.whatsNew}</span>
@@ -152,7 +156,8 @@ export function HeroSection({
             <button
               type="button"
               onClick={() => setShowQr((prev) => !prev)}
-              className={`inline-flex min-h-14 items-center gap-2 rounded-2xl px-4 py-3.5 text-xs font-semibold ${SANCTUARY_SECONDARY_BTN}`}
+              aria-expanded={showQr}
+              className={`inline-flex min-h-14 items-center gap-2 rounded-2xl px-4 py-3.5 text-xs font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D8B467] ${SANCTUARY_SECONDARY_BTN}`}
             >
               <QrCode className="h-4 w-4 text-[#D8B467]" />
               <span>{t.scanQr}</span>
@@ -162,11 +167,13 @@ export function HeroSection({
           {showQr && (
             <div className="mt-4 inline-flex items-center gap-4 rounded-2xl border border-[#D8B467]/40 bg-[#0D1915] p-4 shadow-lg">
               <div className="rounded-xl bg-white p-2">
-                <QRCodeSVG value={qrHref} size={96} level="M" />
+                <QrCodeBox value={qrHref} size={96} />
               </div>
               <div className="max-w-[215px] text-xs leading-relaxed text-[#92A49B]">
                 <p className="font-bold text-[#F2EFE9]">{t.scanQr}</p>
-                <p className="mt-1 break-all">{release.downloadUrl.replace("https://", "")}</p>
+                <p className="mt-1 break-all">
+                  {release.downloadUrl.replace("https://", "")}
+                </p>
               </div>
             </div>
           )}
@@ -232,8 +239,11 @@ export function HeroSection({
                   </p>
 
                   <div className="mt-4 w-full rounded-2xl border border-[#E0B866]/25 bg-white/5 p-3 text-center">
-                    <p dir="rtl" className="font-sacred text-xs leading-[1.9] text-[#FBF7EE]/90">
-                      اللَّهُمَّ رَبَّ هَذِهِ الدَّعْوَةِ التَّامَّةِ، وَالصَّلَاةِ القَائِمَةِ، آتِ مُحَمَّدًا الوَسِيلَةَ وَالفَضِيلَةَ
+                    <p
+                      dir="rtl"
+                      className="font-sacred text-xs leading-[1.9] text-[#FBF7EE]/90"
+                    >
+                      {POST_ADHAN_DUAA}
                     </p>
                   </div>
 

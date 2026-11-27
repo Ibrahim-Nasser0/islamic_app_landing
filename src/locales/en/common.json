@@ -1,0 +1,48 @@
+{
+  "brand": "Zad Al-Muslim",
+  "tagline": "Your Daily Sanctuary for Prayer, Dhikr & Quran",
+  "skipToContent": "Skip to main content",
+  "nav": {
+    "tour": "App Tour",
+    "features": "Features",
+    "lockscreen": "Lockscreen",
+    "reliability": "Reliability",
+    "releases": "Releases",
+    "feedback": "Feedback",
+    "download": "Download",
+    "menuLabel": "Open menu",
+    "closeMenuLabel": "Close menu",
+    "home": "Home",
+    "about": "About",
+    "guide": "Adhan Guide",
+    "privacy": "Privacy",
+    "switchLocaleLabel": "عربي",
+    "switchLocaleAria": "Switch to Arabic language",
+    "backHome": "Back to Home"
+  },
+  "siteNotice": {
+    "dismiss": "Dismiss notice"
+  },
+  "footer": {
+    "waqf": "«When a person dies, their deeds end except for three: ongoing charity, beneficial knowledge, or a righteous child who prays for them» — Sahih Muslim",
+    "builtWith": "Zad Al-Muslim • Ongoing Charity (Sadaqah Jariyah) • 100% Free & Ad-Free",
+    "privacyLink": "Privacy Policy (App & Web)",
+    "brandDesc": "Your daily sanctuary for prayer times, native lockscreen Adhan, Quran, and Azkar — dedicated as an ad-free Sadaqah Jariyah.",
+    "freeBadge": "Free & Ad-Free",
+    "downloadsLabel": "downloads",
+    "colSections": "On This Page",
+    "colPages": "Pages & Guides",
+    "links": {
+      "about": "About Zad Al-Muslim",
+      "guide": "Phone Adhan Setup Guide",
+      "privacy": "Privacy Policy",
+      "feedback": "Feedback & Bug Reports"
+    }
+  },
+  "seo": {
+    "siteName": "Zad Al-Muslim",
+    "defaultTitle": "Zad Al-Muslim — Daily Sanctuary for Prayer, Dhikr & Quran",
+    "defaultDescription": "Zad Al-Muslim: Offline astronomical prayer times, native lockscreen Adhan that completes without cutting off, interactive morning & evening Azkar, and full Uthmani Quran — 100% free & ad-free.",
+    "ogDescription": "A complete ad-free Islamic sanctuary: native Adhan, Uthmani Quran, Azkar, Qibla, and nearby mosques."
+  }
+}

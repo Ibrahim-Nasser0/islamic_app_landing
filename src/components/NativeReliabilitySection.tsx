@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { ArrowUpRight, CheckCircle2, Cpu, ShieldCheck } from "lucide-react";
-import { Locale, landingCopy } from "@/lib/landing-content";
+import { buildLocalizedPath, HomeMessages, Locale } from "@/lib/i18n";
 import {
   ManuscriptCorners,
   OctagonalIconFrame,
@@ -11,13 +11,21 @@ import {
   SectionSanctuaryHeader,
 } from "./GeometricMotifs";
 
-export function NativeReliabilitySection({ locale }: { locale: Locale }) {
-  const rel = landingCopy[locale].reliability;
+export function NativeReliabilitySection({
+  locale,
+  messages: rel,
+}: {
+  locale: Locale;
+  messages: HomeMessages["reliability"];
+}) {
   const [selectedOem, setSelectedOem] = useState<string>(rel.oems[0].id);
   const currentOem = rel.oems.find((o) => o.id === selectedOem) ?? rel.oems[0];
 
   return (
-    <section id="reliability" className="mx-auto max-w-6xl px-5 py-16 sm:px-8 sm:py-24">
+    <section
+      id="reliability"
+      className="scroll-mt-28 mx-auto max-w-6xl px-5 py-16 sm:px-8 sm:py-24"
+    >
       <SectionSanctuaryHeader
         eyebrow={rel.eyebrow}
         title={rel.title}
@@ -39,7 +47,9 @@ export function NativeReliabilitySection({ locale }: { locale: Locale }) {
               <Cpu className="h-5 w-5 text-[#2A8772]" />
             </div>
             <h3 className="mt-4 text-lg font-bold text-[#F2EFE9]">{s.title}</h3>
-            <p className="mt-2 text-sm leading-relaxed text-[#92A49B]">{s.desc}</p>
+            <p className="mt-2 text-sm leading-relaxed text-[#92A49B]">
+              {s.desc}
+            </p>
           </div>
         ))}
       </div>
@@ -56,7 +66,7 @@ export function NativeReliabilitySection({ locale }: { locale: Locale }) {
                 key={oem.id}
                 type="button"
                 onClick={() => setSelectedOem(oem.id)}
-                className={`rounded-xl border px-3.5 py-2 text-xs font-semibold transition-colors ${
+                className={`min-h-10 rounded-xl border px-3.5 py-2 text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D8B467] ${
                   oem.id === currentOem.id
                     ? "border-[#D8B467]/45 bg-gradient-to-b from-[#216E5C] to-[#13473B] text-[#F6E2A8]"
                     : "border-transparent text-[#92A49B] hover:text-[#E5C67E]"
@@ -85,6 +95,16 @@ export function NativeReliabilitySection({ locale }: { locale: Locale }) {
             </li>
           ))}
         </ul>
+
+        <div className="mt-5 flex justify-end">
+          <Link
+            href={buildLocalizedPath(locale, "/guide")}
+            className="inline-flex min-h-11 items-center gap-1.5 rounded-xl border border-[#D8B467]/35 bg-[#07100D] px-3.5 py-2 text-xs font-bold text-[#E5C67E] transition-colors hover:border-[#D8B467]/60 hover:bg-[#132922] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D8B467]"
+          >
+            <span>{rel.fullGuideBtn}</span>
+            <ArrowUpRight className="h-3.5 w-3.5" />
+          </Link>
+        </div>
       </div>
 
       {/* Permissions & Privacy Ledger */}
@@ -98,8 +118,8 @@ export function NativeReliabilitySection({ locale }: { locale: Locale }) {
             </h3>
           </div>
           <Link
-            href="/privacy"
-            className="inline-flex items-center gap-1.5 rounded-xl border border-[#D8B467]/35 bg-[#07100D] px-3.5 py-1.5 text-xs font-bold text-[#E5C67E] transition-colors hover:border-[#D8B467]/60 hover:bg-[#132922]"
+            href={buildLocalizedPath(locale, "/privacy")}
+            className="inline-flex min-h-11 items-center gap-1.5 rounded-xl border border-[#D8B467]/35 bg-[#07100D] px-3.5 py-1.5 text-xs font-bold text-[#E5C67E] transition-colors hover:border-[#D8B467]/60 hover:bg-[#132922] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D8B467]"
           >
             <span>{rel.fullPrivacyBtn}</span>
             <ArrowUpRight className="h-3.5 w-3.5" />

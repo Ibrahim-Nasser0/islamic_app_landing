@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { Activity, Search, Shield, UserCheck } from "lucide-react";
+import adminMessages from "@/locales/ar/admin.json";
 import { AdminLogItem, AdminRole } from "@/lib/supabase/config";
 
 interface LogsTabProps {
@@ -94,7 +95,7 @@ export function LogsTab({ logs, currentRole }: LogsTabProps) {
               dir="ltr"
               className="h-9 rounded-xl border border-[var(--sanctuary-border)] bg-[#07100D] px-3 text-xs text-[#F2EFE9]"
             >
-              <option value="all">All admins</option>
+              <option value="all">{adminMessages.allAdmins}</option>
               {actors.map((email) => (
                 <option key={email} value={email}>
                   {email}

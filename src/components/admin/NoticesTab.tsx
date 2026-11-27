@@ -3,11 +3,11 @@
 import { FormEvent, useState } from "react";
 import {
   AlertTriangle,
+  BellRing,
   Edit3,
   Info,
   Loader2,
   Power,
-  Sparkles,
   Trash2,
   X,
 } from "lucide-react";
@@ -160,7 +160,7 @@ export function NoticesTab({
 
   const PreviewIcon =
     variant === "release"
-      ? Sparkles
+      ? BellRing
       : variant === "warning"
         ? AlertTriangle
         : Info;

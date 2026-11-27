@@ -3,12 +3,11 @@
 import { useEffect, useRef, useState } from "react";
 import { Check, Copy, RotateCcw, Volume2, VolumeX } from "lucide-react";
 import {
-  Locale,
   MUEZZIN_PREVIEWS,
   POST_ADHAN_DUAA,
   SAMPLE_AZKAR,
-  landingCopy,
-} from "@/lib/landing-content";
+} from "@/data/islamic-data";
+import { HomeMessages, Locale } from "@/lib/i18n";
 import {
   BreathingRosette,
   EqualizerBars,
@@ -28,13 +27,20 @@ const SKY_GRADIENTS: Record<SkyKey, string> = {
   isha: "from-[#050B14] via-[#0B172A] to-[#193257]",
 };
 
-export function InteractiveLockscreenShowcase({ locale }: { locale: Locale }) {
-  const t = landingCopy[locale].spotlight;
+export function InteractiveLockscreenShowcase({
+  locale,
+  messages: t,
+}: {
+  locale: Locale;
+  messages: HomeMessages["spotlight"];
+}) {
   const isAr = locale === "ar";
 
   const [mode, setMode] = useState<"adhan" | "azkar">("adhan");
   const [sky, setSky] = useState<SkyKey>("fajr");
-  const [selectedMuezzinId, setSelectedMuezzinId] = useState(MUEZZIN_PREVIEWS[0].id);
+  const [selectedMuezzinId, setSelectedMuezzinId] = useState(
+    MUEZZIN_PREVIEWS[0].id
+  );
   const [isPlaying, setIsPlaying] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -44,7 +50,8 @@ export function InteractiveLockscreenShowcase({ locale }: { locale: Locale }) {
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const activeMuezzin =
-    MUEZZIN_PREVIEWS.find((m) => m.id === selectedMuezzinId) ?? MUEZZIN_PREVIEWS[0];
+    MUEZZIN_PREVIEWS.find((m) => m.id === selectedMuezzinId) ??
+    MUEZZIN_PREVIEWS[0];
 
   useEffect(() => {
     return () => {
@@ -126,7 +133,7 @@ export function InteractiveLockscreenShowcase({ locale }: { locale: Locale }) {
   return (
     <section
       id="lockscreen"
-      className={`relative overflow-hidden bg-gradient-to-b ${SKY_GRADIENTS[sky]} py-16 text-white transition-colors duration-500 sm:py-24`}
+      className={`scroll-mt-28 relative overflow-hidden bg-gradient-to-b ${SKY_GRADIENTS[sky]} py-16 text-white transition-colors duration-500 sm:py-24`}
     >
       <OctagramPatternOverlay />
 
@@ -145,10 +152,10 @@ export function InteractiveLockscreenShowcase({ locale }: { locale: Locale }) {
               <button
                 type="button"
                 onClick={() => setMode("adhan")}
-                className={`inline-flex items-center gap-1.5 rounded-xl px-5 py-2 text-xs font-bold transition-colors ${
+                className={`inline-flex min-h-10 items-center gap-1.5 rounded-xl px-5 py-2 text-xs font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D8B467] ${
                   mode === "adhan"
                     ? "bg-gradient-to-b from-[#E5C67E] to-[#C8A151] text-[#07141A]"
-                    : "text-white/85 hover:text-[#E5C67E]"
+                    : "text-white/85 hover:text-[#E0B866]"
                 }`}
               >
                 {mode === "adhan" && <RubElHizbMark className="h-3 w-3" />}
@@ -160,10 +167,10 @@ export function InteractiveLockscreenShowcase({ locale }: { locale: Locale }) {
                   stopAudio();
                   setMode("azkar");
                 }}
-                className={`inline-flex items-center gap-1.5 rounded-xl px-5 py-2 text-xs font-bold transition-colors ${
+                className={`inline-flex min-h-10 items-center gap-1.5 rounded-xl px-5 py-2 text-xs font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D8B467] ${
                   mode === "azkar"
                     ? "bg-gradient-to-b from-[#E5C67E] to-[#C8A151] text-[#07141A]"
-                    : "text-white/85 hover:text-[#E5C67E]"
+                    : "text-white/85 hover:text-[#E0B866]"
                 }`}
               >
                 {mode === "azkar" && <RubElHizbMark className="h-3 w-3" />}
@@ -178,7 +185,7 @@ export function InteractiveLockscreenShowcase({ locale }: { locale: Locale }) {
                     key={k}
                     type="button"
                     onClick={() => setSky(k)}
-                    className={`rounded-xl px-3 py-2 text-[11px] font-semibold transition-colors ${
+                    className={`min-h-11 rounded-xl px-3.5 py-2 text-[11px] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D8B467] sm:min-h-10 ${
                       sky === k
                         ? "bg-white/15 text-[#E0B866]"
                         : "text-white/75 hover:text-white"
@@ -222,14 +229,16 @@ export function InteractiveLockscreenShowcase({ locale }: { locale: Locale }) {
                     key={m.id}
                     type="button"
                     onClick={() => handleSelectMuezzin(m.id, m.audioSrc)}
-                    className={`rounded-xl border px-3 py-2 text-xs font-semibold transition-colors ${
+                    className={`min-h-10 rounded-xl border px-3 py-2 text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D8B467] ${
                       selectedMuezzinId === m.id
                         ? "border-[#E0B866] bg-[#E0B866]/20 text-[#E0B866]"
                         : "border-white/15 bg-white/5 text-white/80 hover:border-white/35"
                     }`}
                   >
                     {isAr ? m.locationAr : m.locationEn} •{" "}
-                    {isAr ? m.nameAr.split("•")[0].trim() : m.nameEn.split("•")[0].trim()}
+                    {isAr
+                      ? m.nameAr.split("•")[0].trim()
+                      : m.nameEn.split("•")[0].trim()}
                   </button>
                 ))}
               </div>
@@ -242,9 +251,13 @@ export function InteractiveLockscreenShowcase({ locale }: { locale: Locale }) {
                   <button
                     type="button"
                     onClick={handleCopyDuaa}
-                    className="inline-flex items-center gap-1 rounded-lg border border-white/15 bg-white/10 px-2.5 py-1 text-[11px] font-medium text-white hover:bg-white/20"
+                    className="inline-flex min-h-11 items-center gap-1 rounded-lg border border-white/15 bg-white/10 px-3 py-1 text-[11px] font-medium text-white hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D8B467] sm:min-h-8 sm:px-2.5"
                   >
-                    {copied ? <Check className="h-3 w-3 text-[#10B981]" /> : <Copy className="h-3 w-3" />}
+                    {copied ? (
+                      <Check className="h-3 w-3 text-[#10B981]" />
+                    ) : (
+                      <Copy className="h-3 w-3" />
+                    )}
                     <span>{copied ? t.copied : t.copy}</span>
                   </button>
                 </div>
@@ -262,7 +275,7 @@ export function InteractiveLockscreenShowcase({ locale }: { locale: Locale }) {
               <button
                 type="button"
                 onClick={() => void togglePlay()}
-                className={`mt-6 inline-flex h-13 w-full items-center justify-center gap-2 rounded-full text-sm font-bold text-white transition-all active:scale-[0.98] ${
+                className={`mt-6 inline-flex h-13 w-full items-center justify-center gap-2 rounded-full text-sm font-bold text-white transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D8B467] active:scale-[0.98] ${
                   isPlaying
                     ? "border border-[#EF4444]/60 bg-[#B91C1C]"
                     : SANCTUARY_PRIMARY_CTA
@@ -318,9 +331,14 @@ export function InteractiveLockscreenShowcase({ locale }: { locale: Locale }) {
               <button
                 type="button"
                 onClick={handleAzkarTap}
-                className="relative mt-6 flex h-32 w-32 items-center justify-center rounded-full bg-[#1B5E4F] text-white transition-transform active:scale-95"
+                aria-label={`${t.tapCounter} (${remaining})`}
+                className="relative mt-6 flex h-32 w-32 items-center justify-center rounded-full bg-[#1B5E4F] text-white transition-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D8B467] active:scale-95"
               >
-                <svg className="absolute inset-0 h-full w-full -rotate-90" viewBox="0 0 100 100">
+                <svg
+                  aria-hidden="true"
+                  className="absolute inset-0 h-full w-full -rotate-90"
+                  viewBox="0 0 100 100"
+                >
                   <circle
                     cx="50"
                     cy="50"
@@ -356,7 +374,7 @@ export function InteractiveLockscreenShowcase({ locale }: { locale: Locale }) {
                 <button
                   type="button"
                   onClick={resetAzkarDemo}
-                  className="mt-4 inline-flex items-center gap-1.5 rounded-xl border border-white/20 px-4 py-2 text-xs font-semibold text-white/85 hover:bg-white/10"
+                  className="mt-4 inline-flex min-h-10 items-center gap-1.5 rounded-xl border border-white/20 px-4 py-2 text-xs font-semibold text-white/85 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D8B467]"
                 >
                   <RotateCcw className="h-3.5 w-3.5" />
                   <span>{t.resetAzkar}</span>

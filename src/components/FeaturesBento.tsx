@@ -3,10 +3,10 @@ import {
   BookOpen,
   Clock,
   Compass,
+  Heart,
   MapPin,
-  Sparkles,
 } from "lucide-react";
-import { Locale, landingCopy } from "@/lib/landing-content";
+import { HomeMessages } from "@/lib/i18n";
 import {
   EqualizerBars,
   ManuscriptCorners,
@@ -17,17 +17,22 @@ import {
 const CARD_ICONS = {
   native: BellRing,
   quran: BookOpen,
-  azkar: Sparkles,
+  azkar: Heart,
   prayers: Clock,
   qibla: Compass,
   mosques: MapPin,
 } as const;
 
-export function FeaturesBento({ locale }: { locale: Locale }) {
-  const section = landingCopy[locale].featuresSection;
-
+export function FeaturesBento({
+  section,
+}: {
+  section: HomeMessages["featuresSection"];
+}) {
   return (
-    <section id="features" className="mx-auto max-w-6xl px-5 py-16 sm:px-8 sm:py-24">
+    <section
+      id="features"
+      className="scroll-mt-28 mx-auto max-w-6xl px-5 py-16 sm:px-8 sm:py-24"
+    >
       <SectionSanctuaryHeader
         eyebrow={section.eyebrow}
         title={section.title}
@@ -57,17 +62,18 @@ export function FeaturesBento({ locale }: { locale: Locale }) {
                 <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/85 sm:text-base">
                   {card.desc}
                 </p>
-                <div className="mt-5 flex flex-wrap gap-2 text-xs text-[#E0B866]">
-                  <span className="rounded-lg border border-white/15 bg-white/5 px-3 py-1 font-latin">
-                    AlarmManager.setAlarmClock
-                  </span>
-                  <span className="rounded-lg border border-white/15 bg-white/5 px-3 py-1 font-latin">
-                    AudioAttributes.USAGE_ALARM
-                  </span>
-                  <span className="rounded-lg border border-white/15 bg-white/5 px-3 py-1 font-latin">
-                    SwiftUI Content Extension
-                  </span>
-                </div>
+                {card.techBadges && card.techBadges.length > 0 && (
+                  <div className="mt-5 flex flex-wrap gap-2 text-xs text-[#E0B866]">
+                    {card.techBadges.map((badge, idx) => (
+                      <span
+                        key={idx}
+                        className="rounded-lg border border-white/15 bg-white/5 px-3 py-1 font-medium"
+                      >
+                        {badge}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
             );
           }

@@ -7,7 +7,6 @@ import {
   Download,
   GitBranch,
   MessageSquare,
-  Sparkles,
 } from "lucide-react";
 import { ManuscriptCorners, RubElHizbMark } from "@/components/GeometricMotifs";
 import { GitHubReleaseSummaryItem } from "@/lib/github-release";
@@ -171,7 +170,7 @@ export function OverviewTab({
         >
           <div className="flex items-center justify-between text-xs text-[#92A49B]">
             <span>إصدارات الـ Timeline المنشورة</span>
-            <Sparkles className="h-4 w-4 text-[#D8B467]" />
+            <RubElHizbMark className="h-4 w-4 text-[#D8B467]" />
           </div>
           <p className="font-latin mt-2 text-3xl font-extrabold text-[#F4EFE4]">
             {publishedReleases.length}

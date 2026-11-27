@@ -2,16 +2,15 @@
 
 import {
   Calendar,
+  CheckCircle2,
   Download,
   ExternalLink,
-  Sparkles,
   Wrench,
   Zap,
 } from "lucide-react";
-import { ApkArch } from "@/lib/device-apk";
 import { buildTrackedDownloadPath } from "@/lib/download-url";
 import { ReleaseDownloadInfo } from "@/lib/github-release";
-import { Locale, landingCopy } from "@/lib/landing-content";
+import { HomeMessages, Locale } from "@/lib/i18n";
 import {
   AppReleaseItem,
   ReleaseHighlight,
@@ -25,54 +24,51 @@ import {
   SANCTUARY_SECONDARY_BTN,
   SectionSanctuaryHeader,
 } from "./GeometricMotifs";
+import { useLandingState } from "./LandingStateProvider";
 
 interface ReleasesTimelineSectionProps {
   locale: Locale;
+  messages: HomeMessages["timeline"];
   releases: AppReleaseItem[];
   latestFallback: ReleaseDownloadInfo;
-  detectedArch: ApkArch | null;
-  onDownloadClick?: () => void;
 }
 
 function getHighlightBadge(
   type: ReleaseHighlightType,
-  labels: { fix: string; improvement: string; feature: string }
+  labels: HomeMessages["timeline"]["highlightBadges"]
 ) {
   switch (type) {
     case "fix":
       return {
         label: labels.fix,
         icon: Wrench,
-        className:
-          "border-[#38BDF8]/35 bg-[#38BDF8]/10 text-[#7DD3FC]",
+        className: "border-[#38BDF8]/35 bg-[#38BDF8]/10 text-[#7DD3FC]",
       };
     case "improvement":
       return {
         label: labels.improvement,
         icon: Zap,
-        className:
-          "border-[#D8B467]/40 bg-[#D8B467]/12 text-[#F2D184]",
+        className: "border-[#D8B467]/40 bg-[#D8B467]/12 text-[#F2D184]",
       };
     case "feature":
     default:
       return {
         label: labels.feature,
-        icon: Sparkles,
-        className:
-          "border-[#10B981]/40 bg-[#10B981]/12 text-[#6EE7B7]",
+        icon: CheckCircle2,
+        className: "border-[#D8B467]/40 bg-[#D8B467]/10 text-[#F5DFA4]",
       };
   }
 }
 
 export function ReleasesTimelineSection({
   locale,
+  messages: t,
   releases,
   latestFallback,
-  detectedArch,
-  onDownloadClick,
 }: ReleasesTimelineSectionProps) {
+  const ctx = useLandingState();
+  const detectedArch = ctx?.detectedArch ?? null;
   const isAr = locale === "ar";
-  const t = landingCopy[locale].timeline;
 
   const items: AppReleaseItem[] =
     releases.length > 0
@@ -82,15 +78,15 @@ export function ReleasesTimelineSection({
             id: "github-latest-fallback",
             version: latestFallback.version,
             release_type: "minor",
-            title_ar: landingCopy.ar.timeline.fallbackTitle,
-            title_en: landingCopy.en.timeline.fallbackTitle,
-            summary_ar:
-              latestFallback.releaseNotes ?? landingCopy.ar.timeline.fallbackSummary,
-            summary_en:
-              latestFallback.releaseNotes ?? landingCopy.en.timeline.fallbackSummary,
+            title_ar: t.fallbackTitle,
+            title_en: t.fallbackTitle,
+            summary_ar: latestFallback.releaseNotes ?? t.fallbackSummary,
+            summary_en: latestFallback.releaseNotes ?? t.fallbackSummary,
             highlights_ar: [],
             highlights_en: [],
-            apk_url: latestFallback.hasDirectApk ? latestFallback.downloadUrl : null,
+            apk_url: latestFallback.hasDirectApk
+              ? latestFallback.downloadUrl
+              : null,
             github_release_url: latestFallback.releasesPageUrl,
             is_featured: true,
             is_published: true,
@@ -104,7 +100,7 @@ export function ReleasesTimelineSection({
   return (
     <section
       id="timeline"
-      className="mx-auto max-w-5xl px-5 py-16 sm:px-8 sm:py-24"
+      className="scroll-mt-28 mx-auto max-w-5xl px-5 py-16 sm:px-8 sm:py-24"
     >
       <SectionSanctuaryHeader
         centered
@@ -151,10 +147,7 @@ export function ReleasesTimelineSection({
               : null;
 
             return (
-              <article
-                key={item.id}
-                className="relative ps-11 sm:ps-16"
-              >
+              <article key={item.id} className="relative ps-11 sm:ps-16">
                 {/* Timeline Node */}
                 <span
                   aria-hidden="true"
@@ -186,11 +179,13 @@ export function ReleasesTimelineSection({
                         {item.version}
                       </span>
                       <span className="rounded-xl border border-[#D8B467]/20 bg-[#07100D] px-2.5 py-1 text-[11px] font-semibold text-[#D8B467]">
-                        {t.releaseTypes[item.release_type as ReleaseType] ?? item.release_type}
+                        {t.releaseTypes[item.release_type as ReleaseType] ??
+                          item.release_type}
                       </span>
                       {idx === 0 && (
-                        <span className="rounded-xl border border-[#10B981]/35 bg-[#10B981]/15 px-2.5 py-1 text-[11px] font-bold text-[#6EE7B7]">
-                          {t.latestBadge}
+                        <span className="inline-flex items-center gap-1 rounded-xl border border-[#D8B467]/45 bg-[#0C1713] px-2.5 py-1 text-[11px] font-bold text-[#F5DFA4]">
+                          <RubElHizbMark className="h-2.5 w-2.5 text-[#D8B467]" />
+                          <span>{t.latestBadge}</span>
                         </span>
                       )}
                     </div>
@@ -214,7 +209,10 @@ export function ReleasesTimelineSection({
                   {highlights.length > 0 && (
                     <ul className="mt-4 space-y-2.5 border-t border-[#D8B467]/12 pt-4">
                       {highlights.map((h, hIdx) => {
-                        const badge = getHighlightBadge(h.type, t.highlightBadges);
+                        const badge = getHighlightBadge(
+                          h.type,
+                          t.highlightBadges
+                        );
                         const BadgeIcon = badge.icon;
                         return (
                           <li
@@ -241,8 +239,8 @@ export function ReleasesTimelineSection({
                           href={downloadHref}
                           target="_blank"
                           rel="noopener noreferrer"
-                          onClick={onDownloadClick}
-                          className={`inline-flex h-10 items-center gap-2 rounded-xl px-4 text-xs font-bold ${SANCTUARY_PRIMARY_CTA}`}
+                          onClick={ctx?.incrementDownloadCount}
+                          className={`inline-flex min-h-11 items-center gap-2 rounded-xl px-4 text-xs font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D8B467] ${SANCTUARY_PRIMARY_CTA}`}
                         >
                           <Download className="h-3.5 w-3.5 text-[#F2D184]" />
                           <span>{t.downloadBtn}</span>
@@ -253,7 +251,7 @@ export function ReleasesTimelineSection({
                           href={item.github_release_url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className={`inline-flex h-10 items-center gap-1.5 rounded-xl px-3.5 text-xs font-semibold ${SANCTUARY_SECONDARY_BTN}`}
+                          className={`inline-flex min-h-11 items-center gap-1.5 rounded-xl px-3.5 text-xs font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D8B467] ${SANCTUARY_SECONDARY_BTN}`}
                         >
                           <ExternalLink className="h-3.5 w-3.5 text-[#D8B467]" />
                           <span>{t.githubBtn}</span>

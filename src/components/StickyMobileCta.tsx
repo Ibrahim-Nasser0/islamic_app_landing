@@ -2,25 +2,29 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Download, MessageSquarePlus } from "lucide-react";
-import { Locale, landingCopy } from "@/lib/landing-content";
+import { buildTrackedDownloadPath } from "@/lib/download-url";
+import { HomeMessages, Locale } from "@/lib/i18n";
 import {
   RubElHizbMark,
   SANCTUARY_PRIMARY_CTA,
   SANCTUARY_SECONDARY_BTN,
 } from "./GeometricMotifs";
+import { useLandingState } from "./LandingStateProvider";
 
 interface StickyMobileCtaProps {
   locale: Locale;
-  downloadUrl: string;
-  onDownloadClick?: () => void;
+  messages: HomeMessages["stickyCta"];
+  releaseVersion: string;
 }
 
 export function StickyMobileCta({
   locale,
-  downloadUrl,
-  onDownloadClick,
+  messages: t,
+  releaseVersion,
 }: StickyMobileCtaProps) {
-  const t = landingCopy[locale].stickyCta;
+  const ctx = useLandingState();
+  const detectedArch = ctx?.detectedArch ?? null;
+
   const [visible, setVisible] = useState(false);
   const lastScrollY = useRef(0);
   const downloadVisibleRef = useRef(false);
@@ -96,6 +100,13 @@ export function StickyMobileCta({
     };
   }, []);
 
+  const downloadUrl = buildTrackedDownloadPath({
+    source: "sticky_cta",
+    locale,
+    version: releaseVersion,
+    arch: detectedArch,
+  });
+
   return (
     <div
       aria-hidden={!visible}
@@ -110,9 +121,9 @@ export function StickyMobileCta({
           href={downloadUrl}
           target="_blank"
           rel="noopener noreferrer"
-          onClick={onDownloadClick}
+          onClick={ctx?.incrementDownloadCount}
           tabIndex={visible ? 0 : -1}
-          className={`inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-xl text-xs font-bold ${SANCTUARY_PRIMARY_CTA}`}
+          className={`inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-xl text-xs font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D8B467] ${SANCTUARY_PRIMARY_CTA}`}
         >
           <RubElHizbMark className="h-3 w-3 text-[#F2D184]" />
           <Download className="h-3.5 w-3.5 text-[#F2D184]" />
@@ -121,7 +132,7 @@ export function StickyMobileCta({
         <a
           href="#feedback"
           tabIndex={visible ? 0 : -1}
-          className={`inline-flex h-11 items-center justify-center gap-1.5 rounded-xl px-3.5 text-xs font-semibold ${SANCTUARY_SECONDARY_BTN}`}
+          className={`inline-flex h-11 items-center justify-center gap-1.5 rounded-xl px-3.5 text-xs font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D8B467] ${SANCTUARY_SECONDARY_BTN}`}
         >
           <MessageSquarePlus className="h-3.5 w-3.5 text-[#D8B467]" />
           <span>{t.feedback}</span>

@@ -5,13 +5,13 @@ import {
   ArrowDown,
   ArrowUp,
   Calendar,
+  CheckCircle2,
   Download,
   Edit3,
   Eye,
   EyeOff,
   Loader2,
   Plus,
-  Sparkles,
   Trash2,
   Wrench,
   X,
@@ -292,7 +292,7 @@ export function ReleasesTab({
       {missingGithubReleases.length > 0 && (
         <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#D8B467]/35 bg-[#12221C] px-4 py-3 text-xs">
           <div className="flex items-center gap-2 text-[#F5DFA4]">
-            <Sparkles className="h-4 w-4 text-[#D8B467]" />
+            <RubElHizbMark className="h-4 w-4 text-[#D8B467]" />
             <span>
               توجد إصدارات على GitHub غير مضافة بعد للـ Timeline:
             </span>
@@ -429,7 +429,7 @@ export function ReleasesTab({
                 <ul className="mt-3 space-y-1.5 border-t border-[#D8B467]/15 pt-3">
                   {previewHighlights.map((h, i) => {
                     const Icon =
-                      h.type === "fix" ? Wrench : h.type === "improvement" ? Zap : Sparkles;
+                      h.type === "fix" ? Wrench : h.type === "improvement" ? Zap : CheckCircle2;
                     const color =
                       h.type === "fix"
                         ? "border-[#38BDF8]/35 bg-[#38BDF8]/10 text-[#7DD3FC]"

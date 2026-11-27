@@ -1,5 +1,5 @@
 import { ApkArch } from "./device-apk";
-import { Locale } from "./landing-content";
+import { Locale } from "./i18n";
 import { DownloadPlacement } from "./supabase/config";
 
 export function buildTrackedDownloadPath(params: {

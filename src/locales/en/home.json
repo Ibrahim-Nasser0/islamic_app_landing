@@ -1,0 +1,450 @@
+{
+  "seo": {
+    "title": "Zad Al-Muslim — Your Daily Sanctuary for Prayer, Dhikr & Quran",
+    "description": "Offline astronomical prayer times, native lockscreen Adhan engine, morning & evening Azkar, and the complete Uthmani Quran — open-source Sadaqah Jariyah."
+  },
+  "sectionRail": {
+    "navLabel": "Page sections navigation",
+    "items": [
+      { "id": "top", "label": "Intro" },
+      { "id": "features", "label": "Features" },
+      { "id": "lockscreen", "label": "Lockscreen" },
+      { "id": "tour", "label": "App Tour" },
+      { "id": "reliability", "label": "Reliability" },
+      { "id": "download", "label": "Download" },
+      { "id": "timeline", "label": "Releases" },
+      { "id": "faq", "label": "FAQ" },
+      { "id": "feedback", "label": "Feedback" }
+    ]
+  },
+  "hero": {
+    "waqfBadge": "Sadaqah Jariyah • 100% Free & Ad-Free",
+    "verse": "﴿ وَتَزَوَّدُوا فَإِنَّ خَيْرَ الزَّادِ التَّقْوَىٰ ﴾",
+    "verseSource": "Al-Baqarah: 197",
+    "title": "Your daily worship in a calm, nocturnal, trustworthy sanctuary",
+    "subtitle": "Offline astronomical prayer times, native Adhan playback that completes over the lockscreen, interactive morning & evening Azkar, and the complete Uthmani Quran — zero ads.",
+    "downloadApk": "Download Android APK",
+    "releaseFallback": "Download via GitHub Releases",
+    "minAndroid": "Android 8.0+",
+    "downloadsLabel": "downloads",
+    "autoDetectedBuild": "Auto-matched for your device",
+    "universalFallbackNote": "Universal APK — fits every Android phone",
+    "whatsNew": "What's New?",
+    "scanQr": "Scan QR to Download",
+    "storesSoon": "Google Play & App Store — Coming Soon",
+    "floatingNextPrayer": "Fajr in 04h 12m",
+    "floatingLockOk": "Plays over Lockscreen ✓",
+    "mockup": {
+      "fajrStatus": "★ Fajr Prayer • 05:04 AM",
+      "fajrTitle": "Fajr Prayer",
+      "muezzinName": "Makkah Sanctuary",
+      "stopAdhan": "Stop Adhan",
+      "qiblaBtn": "Qibla 🧭",
+      "openAppBtn": "Open App ↗",
+      "nativeBadge": "AlarmClock Native"
+    }
+  },
+  "releaseModal": {
+    "title": "Release Changelog",
+    "versionLabel": "Current Release",
+    "publishedLabel": "Published",
+    "emptyNotes": "Includes the native Lockscreen Adhan & Azkar Engine, offline astronomical prayer times, complete Uthmani Quran, live Qibla compass, and nearby mosques map.",
+    "downloadNow": "Download This Release (APK)",
+    "viewOnGithub": "View on GitHub",
+    "close": "Close"
+  },
+  "trust": [
+    {
+      "metric": "100%",
+      "label": "Free Waqf Edition",
+      "detail": "Purely non-commercial"
+    },
+    {
+      "metric": "0",
+      "label": "Ads or Trackers",
+      "detail": "Privacy-first architecture"
+    },
+    {
+      "metric": "114",
+      "label": "Surahs Offline",
+      "detail": "Plus local prayer math"
+    },
+    {
+      "metric": "7 Days",
+      "label": "Native Pre-Scheduled",
+      "detail": "Android & iOS Native"
+    }
+  ],
+  "appTour": {
+    "eyebrow": "Inside The App Worlds",
+    "title": "A cohesive worship flow crafted for focus, not noise",
+    "subtitle": "Explore the nocturnal Sanctuary screens and test live prayer previews across major cities.",
+    "citySwitcherLabel": "Preview city times:",
+    "quranDemo": {
+      "header": "Surah Al-Fatihah • Makkiyah",
+      "juz": "Juz 1",
+      "page": "Page 1"
+    },
+    "prayerNames": {
+      "fajr": "Fajr",
+      "dhuhr": "Dhuhr",
+      "asr": "Asr",
+      "maghrib": "Maghrib",
+      "isha": "Isha"
+    },
+    "mosqueDemo": {
+      "name": "Al-Fath Mosque",
+      "distance": "320 m",
+      "walkTime": "Approx. 4 mins walk"
+    },
+    "hadithDemo": {
+      "book": "Nawawi 40",
+      "tasbeehLabel": "Daily Tasbeeh"
+    },
+    "tabs": [
+      {
+        "id": "quran",
+        "title": "Uthmani Mushaf",
+        "badge": "Night Reading Comfort",
+        "headline": "Eye-friendly nocturnal Uthmani pages with instant bookmarking",
+        "points": [
+          "Complete 114 Surahs and 30 Juz index with fast search.",
+          "Saved reading bookmarks so you resume right where you paused.",
+          "Authentic Arabic Quranic script preserved across every language."
+        ]
+      },
+      {
+        "id": "prayers",
+        "title": "Prayers & Qibla",
+        "badge": "Live City Switcher",
+        "headline": "Second-accurate times with tactile Qibla compass alignment",
+        "points": [
+          "Automatic GPS or manual city selection with Hijri calendar sync.",
+          "Gentle 5-minute pre-prayer alert to prepare for wudu.",
+          "Real-time compass dial with subtle haptic snap toward Makkah."
+        ]
+      },
+      {
+        "id": "mosques",
+        "title": "Nearby Mosques",
+        "badge": "OpenStreetMap Live",
+        "headline": "Locate the nearest mosque around you even while traveling",
+        "points": [
+          "Flexible search radius: 500m, 1km, 3km, or 5km.",
+          "Estimated walking and driving times to each mosque.",
+          "One-tap handoff to turn-by-turn maps navigation."
+        ]
+      },
+      {
+        "id": "hadith",
+        "title": "Hadith & Azkar",
+        "badge": "Verified Sources",
+        "headline": "Authentic Hadith collections and smart tactile Tasbeeh",
+        "points": [
+          "Built-in Bukhari, Muslim, Nawawi 40, and Riyad Al-Salihin.",
+          "Smart Tasbeeh counter with milestone haptics at 33 and 100.",
+          "Clear scholarly citations and virtues on every dhikr card."
+        ]
+      }
+    ]
+  },
+  "featuresSection": {
+    "eyebrow": "Craft & Architecture",
+    "title": "Thoughtful engineering behind every daily moment",
+    "subtitle": "Designed under strict zero-clutter standards combining fast native response with quiet typographic clarity.",
+    "cards": [
+      {
+        "id": "native",
+        "featured": true,
+        "badge": "Full Lockscreen Reliability",
+        "title": "Independent Native Adhan Sanctuary that never cuts off mid-call",
+        "desc": "Audio never stops after 2 seconds. Android uses AlarmClock scheduling and a dedicated mediaPlayback Foreground Service decoupled from Flutter to play Makkah, Abdulbasit, or Al-Afasy cleanly.",
+        "techBadges": [
+          "Exact System Alarm (AlarmManager.setAlarmClock)",
+          "Guaranteed Audio Focus (AudioAttributes.USAGE_ALARM)",
+          "Native Lockscreen Extension (SwiftUI)"
+        ]
+      },
+      {
+        "id": "quran",
+        "featured": false,
+        "badge": "114 Surahs Offline",
+        "title": "Holy Quran in Uthmani Script",
+        "desc": "Readable Amiri typography tailored for sustained nocturnal recitation.",
+        "techBadges": []
+      },
+      {
+        "id": "azkar",
+        "featured": false,
+        "badge": "Two-Way Sync",
+        "title": "Lockscreen Azkar Companion",
+        "desc": "Complete Morning/Evening Azkar on lockscreen and sync straight into the app.",
+        "techBadges": []
+      },
+      {
+        "id": "prayers",
+        "featured": false,
+        "badge": "Local Calculations",
+        "title": "Prayer Times & Hijri Calendar",
+        "desc": "High astronomical precision with zero background data drain.",
+        "techBadges": []
+      },
+      {
+        "id": "qibla",
+        "featured": false,
+        "badge": "Live Sensors",
+        "title": "Qibla Compass Alignment",
+        "desc": "Smooth magnetometer dial with physical haptic feedback at alignment.",
+        "techBadges": []
+      },
+      {
+        "id": "mosques",
+        "featured": false,
+        "badge": "Ad-Free Waqf",
+        "title": "Mosques Map & Hadith Library",
+        "desc": "Clean OSM nearby mosque finder alongside authentic Prophetic books.",
+        "techBadges": []
+      }
+    ]
+  },
+  "spotlight": {
+    "eyebrow": "Interactive Browser Preview",
+    "title": "Experience the Lockscreen Adhan & Azkar UI live",
+    "subtitle": "Switch prayer sky atmospheres, play real Muezzin previews, and tap the Azkar counter ring right in your browser.",
+    "modeAdhan": "Adhan Mode",
+    "modeAzkar": "Azkar Companion",
+    "skyLabels": {
+      "fajr": "Fajr Dawn",
+      "dhuhr": "Dhuhr Emerald",
+      "maghrib": "Maghrib Dusk",
+      "isha": "Isha Night"
+    },
+    "nowPrayerMap": {
+      "fajr": "Now Time for Fajr Prayer • 05:04 AM",
+      "dhuhr": "Now Time for Dhuhr Prayer • 11:51 AM",
+      "maghrib": "Now Time for Maghrib Prayer • 05:42 PM",
+      "isha": "Now Time for Isha Prayer • 07:03 PM"
+    },
+    "prayerTitleMap": {
+      "fajr": "Fajr Prayer",
+      "dhuhr": "Dhuhr Prayer",
+      "maghrib": "Maghrib Prayer",
+      "isha": "Isha Prayer"
+    },
+    "selectMuezzin": "Choose Muezzin to preview:",
+    "playAdhan": "Play Adhan Preview",
+    "stopAdhan": "Stop Adhan",
+    "duaaHeader": "Supplication After Adhan",
+    "copy": "Copy",
+    "copied": "Copied",
+    "hadithRef": "Sahih Al-Bukhari • Hadith 614",
+    "azkarPill": "Morning Azkar ☀️",
+    "tapCounter": "Tap Dhikr",
+    "azkarDone": "Completed Alhamdulillah ✓",
+    "resetAzkar": "Reset Preview"
+  },
+  "reliability": {
+    "eyebrow": "Under The Hood",
+    "title": "Why Adhan sounds reliably even when killed or locked",
+    "subtitle": "We eliminated the classic Flutter audio-focus conflict using a three-stage native pipeline:",
+    "steps": [
+      {
+        "step": "01",
+        "title": "Native AlarmClock Scheduling",
+        "desc": "Bypasses Android Doze restrictions and auto-restores 7 days of alarms after device reboots or timezone shifts."
+      },
+      {
+        "step": "02",
+        "title": "Isolated MediaPlayback Service",
+        "desc": "Holds a bounded 4-minute WakeLock with USAGE_ALARM audio focus so nothing cuts off the Adhan midway."
+      },
+      {
+        "step": "03",
+        "title": "Lightweight Lockscreen UI (~12MB)",
+        "desc": "Boots in under 50ms independently from Flutter; prepared on iOS via Time-Sensitive Alerts & SwiftUI Extension."
+      }
+    ],
+    "oemTitle": "One-time device checklist by manufacturer:",
+    "fullGuideBtn": "Full Setup Guide (All Brands)",
+    "oems": [
+      {
+        "id": "honor",
+        "name": "Honor / Huawei (MagicOS)",
+        "steps": [
+          "Open Settings → Apps → App Launch.",
+          "Disable automatic management for Zad Al-Muslim and enable Auto-launch, Secondary launch & Run in background.",
+          "In App Settings → Fix Settings, enable Lockscreen display permission."
+        ]
+      },
+      {
+        "id": "xiaomi",
+        "name": "Xiaomi / Redmi (HyperOS)",
+        "steps": [
+          "Long-press the app icon → App Info.",
+          "Enable Autostart and set Battery Saver to No Restrictions.",
+          "In Other Permissions, enable Show on Lock screen and Display pop-up windows."
+        ]
+      },
+      {
+        "id": "samsung",
+        "name": "Samsung (OneUI)",
+        "steps": [
+          "Open App Info → Battery → select Unrestricted.",
+          "Ensure Zad Al-Muslim is excluded from Sleeping or Deep Sleeping apps.",
+          "Verify Notifications and Alarms & Reminders permissions remain allowed."
+        ]
+      }
+    ],
+    "privacyTitle": "Permissions & Privacy Ledger",
+    "fullPrivacyBtn": "Full Privacy Policy",
+    "privacyItems": [
+      {
+        "perm": "Location Access (GPS)",
+        "why": "Used purely on-device for astronomical prayer calculations, Qibla bearing, and nearby mosque search — never transmitted to tracking servers."
+      },
+      {
+        "perm": "Exact Alarms Permission",
+        "why": "Required solely so the Adhan triggers at the exact second without OEM battery-saver delays."
+      },
+      {
+        "perm": "Zero Accounts or Trackers",
+        "why": "All settings live privately on your device, and even device-matched APK routing runs ephemerally without storing device fingerprints or IP addresses."
+      }
+    ]
+  },
+  "timeline": {
+    "eyebrow": "Release Timeline",
+    "title": "A living timeline of every Zad Al-Muslim release",
+    "subtitle": "Follow new features, refinements, and reliability improvements shipped in each version.",
+    "fallbackTitle": "Current Release of Zad Al-Muslim",
+    "fallbackSummary": "Includes native lockscreen Adhan & Azkar, astronomical prayer times, Uthmani Quran, and Qibla compass.",
+    "latestBadge": "Latest",
+    "downloadBtn": "Download Build",
+    "githubBtn": "View on GitHub",
+    "releaseTypes": {
+      "major": "Major",
+      "minor": "Minor",
+      "patch": "Patch",
+      "hotfix": "Hotfix"
+    },
+    "highlightBadges": {
+      "fix": "Fix",
+      "improvement": "Improved",
+      "feature": "New"
+    }
+  },
+  "feedbackSection": {
+    "eyebrow": "We Listen Carefully",
+    "title": "Have a complaint, bug report, or feature idea?",
+    "subtitle": "Your feedback directly shapes the next update of Zad Al-Muslim. No account required—pick a category and write directly.",
+    "categories": [
+      {
+        "id": "bug",
+        "label": "Bug / Complaint"
+      },
+      {
+        "id": "suggestion",
+        "label": "Feature Idea"
+      },
+      {
+        "id": "adhan_times",
+        "label": "Adhan / Times"
+      },
+      {
+        "id": "other",
+        "label": "General Inquiry"
+      }
+    ],
+    "messageLabel": "Your message",
+    "messagePlaceholder": "Describe the issue or feature idea you would like to share...",
+    "deviceLabel": "Phone Model (Optional — helps reproduce bugs)",
+    "devicePlaceholder": "e.g., Honor X9b / Samsung A54",
+    "contactLabel": "Contact for reply (Optional)",
+    "contactPlaceholder": "Email or Telegram handle",
+    "submitBtn": "Send Feedback",
+    "submittingBtn": "Sending...",
+    "minCharError": "Please enter at least 8 characters so we can clearly understand your note.",
+    "networkError": "Unable to reach the server right now. You can send it directly via GitHub.",
+    "successSupabaseTitle": "JazakAllahu Khayran! Feedback received",
+    "successSupabaseDesc": "Your note has been logged and will be reviewed for upcoming releases.",
+    "successFallbackTitle": "Your feedback is formatted and ready",
+    "successFallbackDesc": "Direct database storage is pending connection—you can submit this exact note in one click via GitHub Issues so it reaches us immediately.",
+    "openGithubIssue": "Submit via GitHub Issues",
+    "sendAnother": "Send another message"
+  },
+  "faqSection": {
+    "eyebrow": "Questions & Answers",
+    "title": "Clear answers before you install",
+    "items": [
+      {
+        "q": "Is Zad Al-Muslim completely free with zero ads or tracking?",
+        "a": "Yes. It is 100% free, ad-free, and tracker-free, built as an open-source ongoing charity (Sadaqah Jariyah)."
+      },
+      {
+        "q": "Does the Adhan ring when the phone is locked or app closed?",
+        "a": "Yes. On Android it schedules AlarmClock triggers and plays audio from an isolated native mediaPlayback service with full lockscreen support."
+      },
+      {
+        "q": "Can I use Quran, Azkar, Qibla, and Prayer Times offline?",
+        "a": "Yes. Every core worship feature works offline. Internet is only required for loading live nearby mosque map tiles."
+      },
+      {
+        "q": "What about the iOS / App Store version?",
+        "a": "Current GitHub Releases distribute the Android APK directly, while native SwiftUI Lockscreen extensions and Time-Sensitive notifications are implemented for upcoming macOS/iOS builds."
+      },
+      {
+        "q": "Do Quran verses and Azkar stay in Arabic in English mode?",
+        "a": "Always. All UI labels adapt to English while sacred Quranic and Prophetic texts remain in their authentic Arabic script."
+      }
+    ]
+  },
+  "downloadSection": {
+    "badge": "Latest Build Hosted on GitHub Releases",
+    "title": "Download Zad Al-Muslim Now",
+    "subtitle": "Install the direct APK on Android 8.0+ — automatically matched to your device processor for a lighter download.",
+    "primaryBtn": "Download Latest APK",
+    "allReleases": "All Releases",
+    "shareBtn": "Copy Share Link",
+    "shareCopied": "Link Copied ✓",
+    "qrLabel": "Scan with your phone camera",
+    "downloadsLabel": "downloads",
+    "directDownloadFallback": "GitHub Releases • APK",
+    "recommendedArchLabel": "Auto-matched for your device",
+    "universalFallbackBanner": "Could not verify a specific Android CPU architecture (or browsing from desktop), so we automatically selected the Universal APK — guaranteed to work on every Android device.",
+    "matchedBanner": "Your device architecture was detected automatically — clicking Download will take you directly to the lightest matching APK.",
+    "manualOverrideBanner": "You manually selected this build instead of automatic device matching.",
+    "resetAutoBtn": "Use auto-detected build",
+    "selectedBadge": "Active",
+    "selectArchTitle": "Available Builds Guide — pick manually if downloading for another device:",
+    "archLabels": {
+      "arm64-v8a": {
+        "label": "Modern Phones",
+        "badge": "Most Common",
+        "hint": "64-bit ARM • Lighter & faster",
+        "audience": "Best for almost all modern Android phones since ~2017 (Samsung, Xiaomi, Honor, Oppo, Realme, Pixel) — smaller download size."
+      },
+      "armeabi-v7a": {
+        "label": "Older / 32-bit Phones",
+        "badge": "Legacy Hardware",
+        "hint": "32-bit ARM",
+        "audience": "Built for older Android devices or budget 32-bit phones (Android Go or pre-2017 hardware)."
+      },
+      "x86_64": {
+        "label": "Tablets & Emulators",
+        "badge": "Intel / AMD",
+        "hint": "x86_64 CPU",
+        "audience": "Strictly for Intel/AMD Android tablets, Chromebooks, or PC Android emulators (rare on smartphones)."
+      },
+      "universal": {
+        "label": "Universal Build",
+        "badge": "Guaranteed Fit",
+        "hint": "Works on every device",
+        "audience": "Bundles every CPU type into one APK so it installs on any Android phone; ideal if unsure of processor type or sharing with others."
+      }
+    }
+  },
+  "stickyCta": {
+    "download": "Download APK",
+    "feedback": "Feedback"
+  }
+}

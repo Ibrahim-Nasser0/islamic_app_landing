@@ -2,17 +2,20 @@
 
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
-import { Locale, landingCopy } from "@/lib/landing-content";
+import { HomeMessages } from "@/lib/i18n";
 import { RubElHizbMark, SectionSanctuaryHeader } from "./GeometricMotifs";
 
-export function FaqSection({ locale }: { locale: Locale }) {
-  const faq = landingCopy[locale].faqSection;
+export function FaqSection({
+  messages: faq,
+}: {
+  messages: HomeMessages["faqSection"];
+}) {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
     <section
       id="faq"
-      className="border-y border-[var(--sanctuary-border)] bg-[var(--sanctuary-surface)]/55 py-16 sm:py-24"
+      className="scroll-mt-28 border-y border-[var(--sanctuary-border)] bg-[var(--sanctuary-surface)]/55 py-16 sm:py-24"
     >
       <div className="mx-auto max-w-4xl px-5 sm:px-8">
         <SectionSanctuaryHeader
@@ -30,7 +33,7 @@ export function FaqSection({ locale }: { locale: Locale }) {
                   type="button"
                   aria-expanded={isOpen}
                   onClick={() => setOpenIndex(isOpen ? null : idx)}
-                  className="flex w-full items-center justify-between gap-4 text-start"
+                  className="flex min-h-11 w-full items-center justify-between gap-4 rounded-xl text-start focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D8B467]"
                 >
                   <span className="inline-flex items-center gap-2.5 text-sm font-bold text-[var(--sanctuary-ink)] sm:text-base">
                     <RubElHizbMark

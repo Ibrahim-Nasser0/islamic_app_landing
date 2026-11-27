@@ -1,0 +1,136 @@
+{
+  "seo": {
+    "title": "Phone Adhan Setup Guide — Zad Al-Muslim",
+    "description": "One-time battery and Exact Alarm settings across Honor, Xiaomi, Samsung, Oppo, Vivo, OnePlus, and Pixel phones to keep lockscreen Adhan reliable."
+  },
+  "headerSubtitle": "Phone Adhan Setup Guide",
+  "backHome": "Back to Home",
+  "eyebrow": "One-Time Checklist",
+  "title": "Complete Guide to Reliable Lockscreen Adhan Across Android Brands",
+  "subtitle": "Many Android phone makers enforce aggressive battery-saving managers that pause alarms or block lockscreen overlays when the screen is off. Follow your phone brand's steps below once to keep Adhan ringing reliably.",
+  "checklistSection": {
+    "eyebrow": "Three Essentials on Every Android Phone",
+    "title": "The 3 permissions behind 100% reliable Adhan",
+    "subtitle": "Zad Al-Muslim checks these automatically inside Settings → Fix Permissions:",
+    "items": [
+      {
+        "code": "01",
+        "title": "Alarms & Reminders (Exact Alarms)",
+        "desc": "Lets AlarmClock wake the phone at the exact second of prayer even during Android Doze sleep mode."
+      },
+      {
+        "code": "02",
+        "title": "Unrestricted Battery / No Restrictions",
+        "desc": "Prevents the OEM battery optimizer from killing background scheduling overnight before Fajr."
+      },
+      {
+        "code": "03",
+        "title": "Show on Lock Screen & Display Pop-ups",
+        "desc": "Allows the native lockscreen Adhan interface, Stop button, and post-Adhan Duaa to appear immediately over the lock screen."
+      }
+    ]
+  },
+  "brandsSection": {
+    "eyebrow": "Device-Specific Steps",
+    "title": "Select your phone manufacturer",
+    "subtitle": "Verified menu paths across the most widely used Android skins:",
+    "allBrandsLabel": "All Brands",
+    "stepPrefix": "Step",
+    "brands": [
+      {
+        "id": "honor",
+        "brand": "Honor / Huawei",
+        "osName": "MagicOS / EMUI",
+        "summary": "Honor & Huawei enable automatic app management by default, which terminates background alarms unless switched to manual.",
+        "steps": [
+          "Open phone Settings → Apps → App Launch.",
+          "Find 'Zad Al-Muslim' and toggle OFF 'Manage automatically'.",
+          "Manually turn ON all three switches: Auto-launch, Secondary launch, and Run in background.",
+          "Inside the app: Settings → Fix Permissions, ensure Lockscreen display and Appear on top are allowed."
+        ],
+        "note": "Avoid enabling Ultra Power Saving overnight as it pauses third-party media services."
+      },
+      {
+        "id": "xiaomi",
+        "brand": "Xiaomi / Redmi / POCO",
+        "osName": "HyperOS / MIUI",
+        "summary": "Xiaomi requires toggling two extra permissions inside 'Other permissions' so lockscreen overlays can open automatically.",
+        "steps": [
+          "Long-press the Zad Al-Muslim icon → App Info.",
+          "Enable 'Autostart' (or Background autostart).",
+          "Open 'Battery saver' and select 'No restrictions'.",
+          "Open 'Other permissions' and enable both 'Show on Lock screen' and 'Display pop-up windows while running in the background'."
+        ]
+      },
+      {
+        "id": "samsung",
+        "brand": "Samsung Galaxy",
+        "osName": "OneUI",
+        "summary": "Samsung OneUI may automatically move apps into 'Sleeping apps' after a few days without manual opening.",
+        "steps": [
+          "Open App Info → Battery → select 'Unrestricted'.",
+          "Go to Device Care → Battery → Background usage limits and verify Zad Al-Muslim is NOT in Sleeping or Deep Sleeping apps.",
+          "Add it to 'Never auto sleeping apps' if available.",
+          "Ensure Notifications and 'Alarms & reminders' remain enabled."
+        ]
+      },
+      {
+        "id": "oppo",
+        "brand": "Oppo / Realme",
+        "osName": "ColorOS / Realme UI",
+        "summary": "ColorOS relies on allowing background activity and auto-launch inside App Battery Settings.",
+        "steps": [
+          "Open App Info → Battery usage.",
+          "Enable 'Allow foreground activity' and 'Allow background activity'.",
+          "Enable 'Allow auto-launch' if visible on the same screen.",
+          "Verify Alarms & reminders and Lockscreen display are allowed."
+        ]
+      },
+      {
+        "id": "vivo",
+        "brand": "Vivo / iQOO",
+        "osName": "FuntouchOS / OriginOS",
+        "summary": "Vivo devices use a dedicated high background power usage toggle to preserve alarm apps.",
+        "steps": [
+          "Open App Info → Battery → select 'High background power usage' or 'Unrestricted'.",
+          "Go to Settings → Apps & Permissions → Permission Management → Autostart and enable Zad Al-Muslim.",
+          "Enable Floating window and Lockscreen display under Permissions."
+        ]
+      },
+      {
+        "id": "oneplus",
+        "brand": "OnePlus",
+        "osName": "OxygenOS",
+        "summary": "OxygenOS is close to stock Android but applies sleep standby optimization overnight unless exempted.",
+        "steps": [
+          "Long-press the app icon → App Info → Battery usage.",
+          "Enable 'Allow background activity' and 'Allow auto-launch'.",
+          "Open phone Settings → Battery → More settings → disable 'Sleep standby optimization' if alarms delay overnight."
+        ]
+      },
+      {
+        "id": "pixel",
+        "brand": "Google Pixel / Stock Android",
+        "osName": "Stock Android / AOSP",
+        "summary": "Stock Android has minimal OEM interference—simply grant Unrestricted battery and Full-screen alarm permissions.",
+        "steps": [
+          "Open App Info → App battery usage.",
+          "Select 'Unrestricted' (or toggle ON Allow background usage).",
+          "Open 'Alarms & reminders' and confirm it is enabled.",
+          "On Android 14+, ensure Full-screen notifications and regular Notifications are allowed."
+        ]
+      }
+    ]
+  },
+  "verifySection": {
+    "eyebrow": "Instant Self-Check",
+    "title": "Verify Adhan on your phone in 10 seconds",
+    "steps": [
+      "Open Zad Al-Muslim → Settings → Test Adhan / Lockscreen Check.",
+      "Tap 'Test Adhan in 5 seconds' and immediately lock your screen with the power button.",
+      "Wait 5 seconds: the screen wakes cleanly with the lockscreen UI and full Adhan audio."
+    ],
+    "feedbackCta": "Still having issues on your model? Tell us",
+    "downloadCta": "Go to Download"
+  }
+}

@@ -10,13 +10,9 @@ import {
   MapPin,
   ScrollText,
 } from "lucide-react";
-import {
-  CityPrayerPreview,
-  Locale,
-  QUICK_CITIES,
-  landingCopy,
-} from "@/lib/landing-content";
 import { appScreenshots } from "@/config/screenshots";
+import { CityPrayerPreview, QUICK_CITIES } from "@/data/islamic-data";
+import { HomeMessages, Locale } from "@/lib/i18n";
 import {
   ManuscriptCorners,
   OctagonalIconFrame,
@@ -31,11 +27,17 @@ const TAB_ICONS = {
   hadith: ScrollText,
 } as const;
 
-export function AppTourSection({ locale }: { locale: Locale }) {
-  const tour = landingCopy[locale].appTour;
+export function AppTourSection({
+  locale,
+  messages: tour,
+}: {
+  locale: Locale;
+  messages: HomeMessages["appTour"];
+}) {
   const isAr = locale === "ar";
   const [activeId, setActiveId] = useState<string>(tour.tabs[0].id);
-  const [selectedCityId, setSelectedCityId] = useState<CityPrayerPreview["id"]>("cairo");
+  const [selectedCityId, setSelectedCityId] =
+    useState<CityPrayerPreview["id"]>("cairo");
 
   const activeTab = tour.tabs.find((t) => t.id === activeId) ?? tour.tabs[0];
   const activeCity =
@@ -51,7 +53,10 @@ export function AppTourSection({ locale }: { locale: Locale }) {
           : appScreenshots.hadithTour;
 
   return (
-    <section id="tour" className="mx-auto max-w-6xl px-5 py-16 sm:px-8 sm:py-24">
+    <section
+      id="tour"
+      className="scroll-mt-28 mx-auto max-w-6xl px-5 py-16 sm:px-8 sm:py-24"
+    >
       <SectionSanctuaryHeader
         eyebrow={tour.eyebrow}
         title={tour.title}
@@ -68,7 +73,7 @@ export function AppTourSection({ locale }: { locale: Locale }) {
                 key={tab.id}
                 type="button"
                 onClick={() => setActiveId(tab.id)}
-                className={`flex w-full items-start gap-4 rounded-2xl border p-4 text-start transition-all ${
+                className={`flex w-full items-start gap-4 rounded-2xl border p-4 text-start transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D8B467] ${
                   selected
                     ? "border-[#D8B467]/60 bg-[#11211B] shadow-sm"
                     : "border-[var(--sanctuary-border)] bg-[#0D1915]/60 hover:bg-[#0D1915]"
@@ -123,8 +128,13 @@ export function AppTourSection({ locale }: { locale: Locale }) {
                         <span>{tour.quranDemo.header}</span>
                         <RubElHizbMark className="h-3 w-3 text-[#F2D184]" />
                       </div>
-                      <p dir="rtl" className="font-sacred text-center text-base leading-[2.1]">
-                        بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ ﴿١﴾ الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ ﴿٢﴾ الرَّحْمَٰنِ الرَّحِيمِ ﴿٣﴾ مَالِكِ يَوْمِ الدِّينِ ﴿٤﴾
+                      <p
+                        dir="rtl"
+                        className="font-sacred text-center text-base leading-[2.1]"
+                      >
+                        بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ ﴿١﴾ الْحَمْدُ
+                        لِلَّهِ رَبِّ الْعَالَمِينَ ﴿٢﴾ الرَّحْمَٰنِ
+                        الرَّحِيمِ ﴿٣﴾ مَالِكِ يَوْمِ الدِّينِ ﴿٤﴾
                       </p>
                       <div className="mt-3 flex items-center justify-between border-t border-[#D8B467]/20 pt-2 text-[10px] font-semibold text-[#92A49B]">
                         <span>{tour.quranDemo.juz}</span>
@@ -156,7 +166,7 @@ export function AppTourSection({ locale }: { locale: Locale }) {
                             key={city.id}
                             type="button"
                             onClick={() => setSelectedCityId(city.id)}
-                            className={`rounded-lg px-2.5 py-1 text-[10px] font-semibold transition-colors ${
+                            className={`min-h-11 rounded-lg px-2.5 py-1 text-[10px] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D8B467] sm:min-h-8 ${
                               city.id === activeCity.id
                                 ? "bg-gradient-to-b from-[#E5C67E] to-[#C8A151] text-[#07141A]"
                                 : "text-white/80 hover:bg-white/5 hover:text-[#E5C67E]"
@@ -218,7 +228,9 @@ export function AppTourSection({ locale }: { locale: Locale }) {
                       <div className="rounded-xl border border-[#D8B467]/25 bg-[#12231D] p-3">
                         <div className="flex items-center justify-between text-xs font-bold">
                           <span>{tour.mosqueDemo.name}</span>
-                          <span className="text-[#E0B866]">{tour.mosqueDemo.distance}</span>
+                          <span className="text-[#E0B866]">
+                            {tour.mosqueDemo.distance}
+                          </span>
                         </div>
                         <p className="mt-0.5 text-[10px] text-[#92A49B]">
                           {tour.mosqueDemo.walkTime}
@@ -232,12 +244,18 @@ export function AppTourSection({ locale }: { locale: Locale }) {
                       <span className="rounded-full bg-[#D8B467]/15 px-3 py-1 text-[10px] font-bold text-[#E0B866]">
                         {tour.hadithDemo.book}
                       </span>
-                      <p dir="rtl" className="font-sacred mt-3 text-base leading-[1.95]">
-                        «إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ، وَإِنَّمَا لِكُلِّ امْرِئٍ مَا نَوَى...»
+                      <p
+                        dir="rtl"
+                        className="font-sacred mt-3 text-base leading-[1.95]"
+                      >
+                        «إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ، وَإِنَّمَا
+                        لِكُلِّ امْرِئٍ مَا نَوَى...»
                       </p>
                       <div className="mt-4 flex items-center justify-between rounded-xl border border-white/10 bg-[#12231D] px-3 py-2 text-xs">
                         <span>{tour.hadithDemo.tasbeehLabel}</span>
-                        <span className="font-latin font-bold text-[#E0B866]">33 / 33</span>
+                        <span className="font-latin font-bold text-[#E0B866]">
+                          33 / 33
+                        </span>
                       </div>
                     </div>
                   )}
@@ -267,7 +285,9 @@ export function AppTourSection({ locale }: { locale: Locale }) {
               {activeTab.id === "prayers" && (
                 <p className="mt-4 text-[11px] font-medium text-[#D8B467]">
                   {tour.citySwitcherLabel}{" "}
-                  {QUICK_CITIES.map((c) => (isAr ? c.nameAr : c.nameEn)).join(" • ")}
+                  {QUICK_CITIES.map((c) => (isAr ? c.nameAr : c.nameEn)).join(
+                    " • "
+                  )}
                 </p>
               )}
             </div>

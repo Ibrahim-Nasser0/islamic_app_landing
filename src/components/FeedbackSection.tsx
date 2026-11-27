@@ -8,7 +8,7 @@ import {
   Loader2,
   Send,
 } from "lucide-react";
-import { Locale, landingCopy } from "@/lib/landing-content";
+import { HomeMessages, Locale } from "@/lib/i18n";
 import {
   ManuscriptCorners,
   RubElHizbMark,
@@ -21,23 +21,29 @@ type SubmitState =
   | { status: "idle" }
   | { status: "submitting" }
   | { status: "error"; message: string; fallbackUrl?: string }
-  | { status: "success"; mode: "supabase" | "pending_supabase" | "ignored"; fallbackUrl?: string };
+  | {
+      status: "success";
+      mode: "supabase" | "pending_supabase" | "ignored";
+      fallbackUrl?: string;
+    };
 
 export function FeedbackSection({
   locale,
+  messages: t,
   appVersion,
 }: {
   locale: Locale;
+  messages: HomeMessages["feedbackSection"];
   appVersion?: string;
 }) {
-  const t = landingCopy[locale].feedbackSection;
-
   const [category, setCategory] = useState<string>(t.categories[0].id);
   const [message, setMessage] = useState("");
   const [deviceInfo, setDeviceInfo] = useState("");
   const [contact, setContact] = useState("");
   const [website, setWebsite] = useState(""); // Honeypot anti-spam
-  const [submitState, setSubmitState] = useState<SubmitState>({ status: "idle" });
+  const [submitState, setSubmitState] = useState<SubmitState>({
+    status: "idle",
+  });
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -104,7 +110,10 @@ export function FeedbackSection({
   };
 
   return (
-    <section id="feedback" className="mx-auto max-w-4xl px-5 py-16 sm:px-8 sm:py-24">
+    <section
+      id="feedback"
+      className="scroll-mt-28 mx-auto max-w-4xl px-5 py-16 sm:px-8 sm:py-24"
+    >
       <SectionSanctuaryHeader
         centered
         eyebrow={t.eyebrow}
@@ -136,7 +145,7 @@ export function FeedbackSection({
                   href={submitState.fallbackUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`inline-flex h-12 items-center gap-2 rounded-2xl px-6 text-sm font-bold ${SANCTUARY_PRIMARY_CTA}`}
+                  className={`inline-flex h-12 items-center gap-2 rounded-2xl px-6 text-sm font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D8B467] ${SANCTUARY_PRIMARY_CTA}`}
                 >
                   <ExternalLink className="h-4 w-4 text-[#F2D184]" />
                   <span>{t.openGithubIssue}</span>
@@ -145,7 +154,7 @@ export function FeedbackSection({
               <button
                 type="button"
                 onClick={resetForm}
-                className={`inline-flex h-12 items-center rounded-2xl px-5 text-sm font-semibold ${SANCTUARY_SECONDARY_BTN}`}
+                className={`inline-flex h-12 items-center rounded-2xl px-5 text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D8B467] ${SANCTUARY_SECONDARY_BTN}`}
               >
                 {t.sendAnother}
               </button>
@@ -170,7 +179,7 @@ export function FeedbackSection({
                   key={cat.id}
                   type="button"
                   onClick={() => setCategory(cat.id)}
-                  className={`inline-flex min-h-11 items-center gap-1.5 rounded-xl border px-4 py-2 text-xs font-semibold transition-colors ${
+                  className={`inline-flex min-h-11 items-center gap-1.5 rounded-xl border px-4 py-2 text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D8B467] ${
                     category === cat.id
                       ? "border-[#D8B467]/50 bg-gradient-to-b from-[#216E5C] to-[#13473B] text-[#F6E2A8]"
                       : "border-[var(--sanctuary-border)] bg-[#07100D] text-[#92A49B] hover:border-[#D8B467]/40 hover:text-[#F2EFE9]"
@@ -199,7 +208,7 @@ export function FeedbackSection({
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 placeholder={t.messagePlaceholder}
-                className="w-full rounded-2xl border border-[var(--sanctuary-border)] bg-[#07100D] px-4 py-3 text-sm text-[#F2EFE9] placeholder:text-[#5F7068] focus:border-[#D8B467] focus:outline-none"
+                className="w-full rounded-2xl border border-[var(--sanctuary-border)] bg-[#07100D] px-4 py-3 text-base text-[#F2EFE9] placeholder:text-[#5F7068] focus:border-[#D8B467] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D8B467] sm:text-sm"
               />
             </div>
 
@@ -218,7 +227,7 @@ export function FeedbackSection({
                   value={deviceInfo}
                   onChange={(e) => setDeviceInfo(e.target.value)}
                   placeholder={t.devicePlaceholder}
-                  className="h-11 w-full rounded-xl border border-[var(--sanctuary-border)] bg-[#07100D] px-4 text-sm text-[#F2EFE9] placeholder:text-[#5F7068] focus:border-[#D8B467] focus:outline-none"
+                  className="h-11 w-full rounded-xl border border-[var(--sanctuary-border)] bg-[#07100D] px-4 text-base text-[#F2EFE9] placeholder:text-[#5F7068] focus:border-[#D8B467] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D8B467] sm:text-sm"
                 />
               </div>
               <div>
@@ -235,7 +244,7 @@ export function FeedbackSection({
                   value={contact}
                   onChange={(e) => setContact(e.target.value)}
                   placeholder={t.contactPlaceholder}
-                  className="h-11 w-full rounded-xl border border-[var(--sanctuary-border)] bg-[#07100D] px-4 text-sm text-[#F2EFE9] placeholder:text-[#5F7068] focus:border-[#D8B467] focus:outline-none"
+                  className="h-11 w-full rounded-xl border border-[var(--sanctuary-border)] bg-[#07100D] px-4 text-base text-[#F2EFE9] placeholder:text-[#5F7068] focus:border-[#D8B467] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D8B467] sm:text-sm"
                 />
               </div>
             </div>
@@ -262,7 +271,7 @@ export function FeedbackSection({
             <button
               type="submit"
               disabled={submitState.status === "submitting"}
-              className={`inline-flex h-13 w-full items-center justify-center gap-2 rounded-2xl text-sm font-bold disabled:cursor-not-allowed disabled:opacity-60 ${SANCTUARY_PRIMARY_CTA}`}
+              className={`inline-flex h-13 w-full items-center justify-center gap-2 rounded-2xl text-sm font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D8B467] disabled:cursor-not-allowed disabled:opacity-60 ${SANCTUARY_PRIMARY_CTA}`}
             >
               {submitState.status === "submitting" ? (
                 <>

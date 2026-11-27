@@ -1,0 +1,117 @@
+{
+  "seo": {
+    "title": "About Zad Al-Muslim — Open-Source Sadaqah Jariyah",
+    "description": "Learn about Zad Al-Muslim’s mission, authentic Islamic texts, offline astronomical prayer math, and native lockscreen Adhan engine with zero ads."
+  },
+  "headerSubtitle": "About Zad Al-Muslim",
+  "backHome": "Back to Home",
+  "eyebrow": "Open-Source Sadaqah Jariyah • Non-Commercial",
+  "title": "Why Was Zad Al-Muslim Built?",
+  "subtitle": "Zad Al-Muslim was crafted as a calm nocturnal worship sanctuary bringing together the Uthmani Quran, Azkar, offline prayer times, and reliable lockscreen Adhan — completely free of ads, tracking, and mid-prayer cutoffs.",
+  "badges": [
+    "Ongoing Charity (Waqf)",
+    "100% Open Source",
+    "Zero Ads Forever"
+  ],
+  "storySection": {
+    "eyebrow": "Mission & Vision",
+    "title": "Worship deserves software that respects your focus and privacy",
+    "paragraphs": [
+      "Many Muslims struggle with three recurring issues in typical prayer apps: intrusive full-screen ads right before prayer, background location tracking sold to ad brokers, and Adhan audio cutting off after two seconds when the screen locks.",
+      "Zad Al-Muslim solves this from the ground up: an open-source app dedicated purely as Sadaqah Jariyah, running worship features offline on your device and using native Kotlin/Swift alarm engines so Adhan completes reliably over the lockscreen."
+    ],
+    "waqfQuote": "﴿ وَتَزَوَّدُوا فَإِنَّ خَيْرَ الزَّادِ التَّقْوَىٰ ﴾",
+    "waqfSource": "Al-Baqarah: 197 — Inspiration behind the name 'Zad Al-Muslim'"
+  },
+  "pillarsSection": {
+    "eyebrow": "Core Principles",
+    "title": "Four non-negotiable engineering & ethical pillars",
+    "items": [
+      {
+        "metric": "01",
+        "title": "Zero Ads & Zero Trackers Forever",
+        "desc": "No ad networks, monetization SDKs, or behavioral analytics will ever be added to Zad Al-Muslim."
+      },
+      {
+        "metric": "02",
+        "title": "Offline-First Worship",
+        "desc": "The Holy Quran, Hadith collections, Azkar, astronomical prayer math, and Qibla compass all run locally on your device."
+      },
+      {
+        "metric": "03",
+        "title": "True Native Adhan Reliability",
+        "desc": "We decoupled Adhan playback and lockscreen overlays from Flutter using AlarmManager and a dedicated Foreground Service."
+      },
+      {
+        "metric": "04",
+        "title": "Open-Source Transparency",
+        "desc": "Both the mobile app and official landing site are open on GitHub for full security inspection and community contributions."
+      }
+    ]
+  },
+  "sourcesSection": {
+    "eyebrow": "Authentic Texts & Technical Stack",
+    "title": "Verified Islamic texts paired with dependable native systems",
+    "subtitle": "Every core feature relies on clear scholarly references and open infrastructure:",
+    "items": [
+      {
+        "id": "quran",
+        "title": "Uthmani Script Holy Quran",
+        "tag": "114 Surahs • 30 Juz",
+        "description": "Crisp Amiri typography tuned for nocturnal reading with local bookmark storage; Arabic Quranic text always remains authentic across all locales."
+      },
+      {
+        "id": "hadith",
+        "title": "Hadith & Hisn Al-Muslim Library",
+        "tag": "Verified Citations",
+        "description": "Authentic selections from Sahih Al-Bukhari, Sahih Muslim, Nawawi 40, and Riyad Al-Salihin alongside Morning & Evening Azkar with references."
+      },
+      {
+        "id": "prayers",
+        "title": "Astronomical Prayer Math & Qibla",
+        "tag": "On-Device Math",
+        "description": "Local astronomical calculations supporting major calculation methods (Umm Al-Qura, Egyptian Survey, MWL, etc.) paired with a haptic Qibla compass."
+      },
+      {
+        "id": "audio",
+        "title": "Curated Muezzin Audio",
+        "tag": "Offline Playback",
+        "description": "Bundled Makkah Sanctuary, Sheikh Abdulbasit, and Sheikh Al-Afasy Adhan recordings ready to play without internet connectivity."
+      },
+      {
+        "id": "mosques",
+        "title": "Nearby Mosques Finder",
+        "tag": "OpenStreetMap",
+        "description": "Uses free OpenStreetMap / Overpass map tiles strictly on-demand when you open the Nearby Mosques map, with no location history stored."
+      },
+      {
+        "id": "native",
+        "title": "Lockscreen & Alarm Engine",
+        "tag": "Kotlin + SwiftUI",
+        "description": "Native Android AlarmClock + Foreground MediaPlayback service, with SwiftUI Lockscreen & Time-Sensitive alert support prepared for iOS."
+      }
+    ]
+  },
+  "contributeSection": {
+    "eyebrow": "Join the Sadaqah Jariyah",
+    "title": "How can you contribute or help spread the benefit?",
+    "subtitle": "Guiding others to good shares in the reward — every contribution counts:",
+    "ways": [
+      {
+        "title": "Share With Family & Friends",
+        "desc": "Send this page to parents and loved ones looking for a clean, ad-free Adhan app that reliably rings on lockscreen."
+      },
+      {
+        "title": "Report Device Compatibility Issues",
+        "desc": "If you spot a timing quirk or battery-saver nuance on your phone model, send a quick note so we can improve support."
+      },
+      {
+        "title": "Contribute Code on GitHub",
+        "desc": "Pull requests for UI refinements, additional translations, and iOS/Android native enhancements are warmly welcomed."
+      }
+    ],
+    "downloadCta": "Download the App",
+    "githubCta": "Open GitHub Repository",
+    "feedbackCta": "Send Feedback"
+  }
+}

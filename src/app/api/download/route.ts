@@ -57,7 +57,10 @@ export async function GET(req: NextRequest) {
     ? rawArch
     : detectDeviceApkArchFromHeaders(req.headers).arch;
 
-  const latest = await getLatestReleaseInfo();
+  const [latest, agg] = await Promise.all([
+    getLatestReleaseInfo(),
+    requestedVersion ? getGitHubReleasesAggregate() : Promise.resolve(null),
+  ]);
   const version = requestedVersion || latest.version;
 
   let targetUrl = latest.downloadUrl;
@@ -85,8 +88,7 @@ export async function GET(req: NextRequest) {
         targetUrl = matched.url;
         fileName = matched.fileName;
       }
-    } else if (requestedVersion) {
-      const agg = await getGitHubReleasesAggregate();
+    } else if (requestedVersion && agg) {
       const matchingRelease = agg.releases.find(
         (r) => r.version.toLowerCase() === requestedVersion.toLowerCase()
       );
@@ -145,6 +147,8 @@ export async function GET(req: NextRequest) {
         console.error("[/api/download] insert failed:", insertError.message);
       } else {
         revalidatePath("/");
+        revalidatePath("/ar");
+        revalidatePath("/en");
         revalidatePath("/admin");
       }
     } catch (err) {

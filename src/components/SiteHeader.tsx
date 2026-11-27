@@ -1,36 +1,32 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Download, Globe, Menu, X } from "lucide-react";
-import { Locale, landingCopy } from "@/lib/landing-content";
+import {
+  buildLocalizedPath,
+  CommonMessages,
+  LOCALE_COOKIE_NAME,
+  Locale,
+  switchLocaleInPath,
+} from "@/lib/i18n";
 import { ManuscriptCorners, RubElHizbMark } from "./GeometricMotifs";
 
-interface NavbarProps {
+interface SiteHeaderProps {
   locale: Locale;
-  downloadUrl: string;
-  onDownloadClick?: () => void;
-  onToggleLocale: () => void;
+  messages: CommonMessages;
+  activePage: "home" | "about" | "guide" | "privacy";
 }
 
-const SECTION_IDS = [
-  "tour",
-  "features",
-  "lockscreen",
-  "reliability",
-  "timeline",
-  "feedback",
-] as const;
+export function SiteHeader({ locale, messages, activePage }: SiteHeaderProps) {
+  const pathname = usePathname();
+  const isHome = activePage === "home";
+  const isAr = locale === "ar";
+  const nextLocale: Locale = isAr ? "en" : "ar";
 
-export function Navbar({
-  locale,
-  downloadUrl,
-  onDownloadClick,
-  onToggleLocale,
-}: NavbarProps) {
-  const t = landingCopy[locale];
   const [scrolled, setScrolled] = useState(false);
-  const [activeId, setActiveId] = useState<string>("");
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -40,36 +36,38 @@ export function Navbar({
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  useEffect(() => {
-    const elements = SECTION_IDS.map((id) => document.getElementById(id)).filter(
-      (el): el is HTMLElement => el !== null
-    );
-    if (elements.length === 0) return;
+  const homePath = buildLocalizedPath(locale, "/");
+  const downloadHref = isHome ? "#download" : buildLocalizedPath(locale, "/#download");
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-        if (visible[0]?.target.id) {
-          setActiveId(visible[0].target.id);
-        }
-      },
-      { rootMargin: "-32% 0px -52% 0px", threshold: [0.1, 0.4] }
-    );
-
-    elements.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
-
+  // Top-level navigation strictly consists of real pages (Hick's & Jakob's Law)
   const navItems = [
-    { id: "tour", label: t.nav.tour },
-    { id: "features", label: t.nav.features },
-    { id: "lockscreen", label: t.nav.lockscreen },
-    { id: "reliability", label: t.nav.reliability },
-    { id: "timeline", label: t.nav.releases },
-    { id: "feedback", label: t.nav.feedback },
+    {
+      id: "home" as const,
+      href: homePath,
+      label: messages.nav.home,
+    },
+    {
+      id: "guide" as const,
+      href: buildLocalizedPath(locale, "/guide"),
+      label: messages.nav.guide,
+    },
+    {
+      id: "about" as const,
+      href: buildLocalizedPath(locale, "/about"),
+      label: messages.nav.about,
+    },
+    {
+      id: "privacy" as const,
+      href: buildLocalizedPath(locale, "/privacy"),
+      label: messages.nav.privacy,
+    },
   ];
+
+  const switchHref = switchLocaleInPath(pathname || homePath, nextLocale);
+
+  const persistLocaleCookie = () => {
+    document.cookie = `${LOCALE_COOKIE_NAME}=${nextLocale}; path=/; max-age=31536000; SameSite=Lax`;
+  };
 
   return (
     <header className="sticky top-0 z-40 bg-[#060E0B]/92 backdrop-blur-xl transition-all duration-300">
@@ -101,9 +99,9 @@ export function Navbar({
         }`}
       >
         {/* Illuminated Octagonal Medallion Crest + Calligraphic Brand */}
-        <a
-          href="#top"
-          className="group flex items-center gap-3.5 rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-[#D8B467]/60"
+        <Link
+          href={homePath}
+          className="group flex items-center gap-3.5 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D8B467]"
         >
           <div className="relative flex h-11 w-11 shrink-0 items-center justify-center">
             <span
@@ -113,7 +111,7 @@ export function Navbar({
             <div className="relative h-9 w-9 overflow-hidden rounded-xl border border-[#D8B467]/50 bg-[#0D1E18] p-0.5 shadow-[inset_0_1px_0_rgba(245,223,164,0.22)]">
               <Image
                 src="/images/app_logo.png"
-                alt={t.brand}
+                alt={messages.brand}
                 width={36}
                 height={36}
                 priority
@@ -123,21 +121,21 @@ export function Navbar({
           </div>
           <div>
             <span className="font-sacred block text-lg leading-tight font-bold tracking-normal text-[#F7F1E3] sm:text-[19px]">
-              {t.brand}
+              {messages.brand}
             </span>
             <span className="hidden text-[11px] text-[#8EA298] sm:block">
-              {t.tagline}
+              {messages.tagline}
             </span>
           </div>
-        </a>
+        </Link>
 
-        {/* Desktop Mihrab Manuscript Navigation Ribbon */}
+        {/* Desktop Unified Page Navigation Ribbon */}
         <nav
-          aria-label={t.brand}
+          aria-label={messages.brand}
           className="hidden items-center rounded-2xl border border-[#D8B467]/20 bg-[#0A1612]/90 px-2 py-1 shadow-[inset_0_1px_0_rgba(216,180,103,0.08)] lg:flex"
         >
           {navItems.map((item, idx) => {
-            const isActive = activeId === item.id;
+            const isCurrent = activePage === item.id;
             return (
               <div key={item.id} className="flex items-center">
                 {idx > 0 && (
@@ -146,52 +144,54 @@ export function Navbar({
                     className="mx-1 h-1 w-1 rotate-45 bg-[#D8B467]/35"
                   />
                 )}
-                <a
-                  href={`#${item.id}`}
-                  className={`flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold transition-all ${
-                    isActive
+                <Link
+                  href={item.href}
+                  aria-current={isCurrent ? "page" : undefined}
+                  className={`flex items-center gap-1.5 rounded-xl px-3.5 py-1.5 text-xs font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D8B467] ${
+                    isCurrent
                       ? "border border-[#D8B467]/40 bg-gradient-to-b from-[#1B5E4F]/75 to-[#124035]/75 text-[#F6E2A8]"
                       : "border border-transparent text-[#98ABA2] hover:bg-white/[0.03] hover:text-[#E5C67E]"
                   }`}
                 >
-                  {isActive && (
+                  {isCurrent && (
                     <RubElHizbMark className="h-2.5 w-2.5 shrink-0 text-[#E5C67E]" />
                   )}
                   <span>{item.label}</span>
-                </a>
+                </Link>
               </div>
             );
           })}
         </nav>
 
-        {/* Actions: Locale Toggle, Emerald-Gold APK Button & Mobile Drawer Toggle */}
+        {/* Actions: Locale Switcher, Download Section CTA & Mobile Drawer Toggle */}
         <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={onToggleLocale}
-            className="flex h-10 items-center gap-1.5 rounded-xl border border-[#D8B467]/25 bg-[#0B1813] px-3 text-xs font-semibold text-[#F2EFE9] transition-colors hover:border-[#D8B467]/55 hover:bg-[#10221C]"
+          <Link
+            href={switchHref}
+            hrefLang={nextLocale}
+            onClick={persistLocaleCookie}
+            aria-label={messages.nav.switchLocaleAria}
+            className="flex h-11 items-center gap-1.5 rounded-xl border border-[#D8B467]/25 bg-[#0B1813] px-3 text-xs font-semibold text-[#F2EFE9] transition-colors hover:border-[#D8B467]/55 hover:bg-[#10221C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D8B467]"
           >
             <Globe className="h-3.5 w-3.5 text-[#D8B467]" />
-            <span>{locale === "ar" ? "EN" : "عربي"}</span>
-          </button>
+            <span>{messages.nav.switchLocaleLabel}</span>
+          </Link>
 
-          <a
-            href={downloadUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={onDownloadClick}
-            className="hidden h-10 items-center gap-2 rounded-xl border border-[#D8B467]/45 bg-gradient-to-b from-[#216E5C] to-[#13473B] px-4 text-xs font-bold text-[#FBF7ED] shadow-[inset_0_1px_0_rgba(245,223,164,0.22)] transition-all hover:brightness-110 active:scale-[0.98] sm:inline-flex"
+          <Link
+            href={downloadHref}
+            className="hidden h-11 items-center gap-2 rounded-xl border border-[#D8B467]/45 bg-gradient-to-b from-[#216E5C] to-[#13473B] px-4 text-xs font-bold text-[#FBF7ED] shadow-[inset_0_1px_0_rgba(245,223,164,0.22)] transition-all hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D8B467] active:scale-[0.98] sm:inline-flex"
           >
             <Download className="h-3.5 w-3.5 text-[#F2D184]" />
-            <span>{t.nav.download}</span>
-          </a>
+            <span>{messages.nav.download}</span>
+          </Link>
 
           <button
             type="button"
             onClick={() => setMenuOpen((prev) => !prev)}
             aria-expanded={menuOpen}
-            aria-label={menuOpen ? t.nav.closeMenuLabel : t.nav.menuLabel}
-            className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#D8B467]/25 bg-[#0B1813] text-[#E5C67E] transition-colors hover:border-[#D8B467]/55 lg:hidden"
+            aria-label={
+              menuOpen ? messages.nav.closeMenuLabel : messages.nav.menuLabel
+            }
+            className="flex h-11 w-11 items-center justify-center rounded-xl border border-[#D8B467]/25 bg-[#0B1813] text-[#E5C67E] transition-colors hover:border-[#D8B467]/55 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D8B467] lg:hidden"
           >
             {menuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
           </button>
@@ -202,16 +202,20 @@ export function Navbar({
       {menuOpen && (
         <div className="relative border-t border-[#D8B467]/15 bg-[#08130F]/98 px-5 py-4 lg:hidden">
           <ManuscriptCorners color="rgba(216, 180, 103, 0.35)" />
-          <nav className="relative mx-auto flex max-w-md flex-col gap-1.5">
+          <nav
+            aria-label={messages.nav.menuLabel}
+            className="relative mx-auto flex max-w-md flex-col gap-1.5"
+          >
             {navItems.map((item) => {
-              const isActive = activeId === item.id;
+              const isCurrent = activePage === item.id;
               return (
-                <a
+                <Link
                   key={item.id}
-                  href={`#${item.id}`}
+                  href={item.href}
+                  aria-current={isCurrent ? "page" : undefined}
                   onClick={() => setMenuOpen(false)}
-                  className={`flex items-center justify-between rounded-xl px-3.5 py-2.5 text-sm font-semibold transition-colors ${
-                    isActive
+                  className={`flex min-h-11 items-center justify-between rounded-xl px-3.5 py-2.5 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D8B467] ${
+                    isCurrent
                       ? "border border-[#D8B467]/35 bg-[#1B5E4F]/45 text-[#F6E2A8]"
                       : "text-[#C5D2CC] hover:bg-white/[0.04] hover:text-[#E5C67E]"
                   }`}
@@ -219,25 +223,20 @@ export function Navbar({
                   <span>{item.label}</span>
                   <RubElHizbMark
                     className={`h-3 w-3 ${
-                      isActive ? "text-[#E5C67E]" : "text-[#D8B467]/35"
+                      isCurrent ? "text-[#E5C67E]" : "text-[#D8B467]/35"
                     }`}
                   />
-                </a>
+                </Link>
               );
             })}
-            <a
-              href={downloadUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => {
-                onDownloadClick?.();
-                setMenuOpen(false);
-              }}
-              className="mt-2 flex h-11 items-center justify-center gap-2 rounded-xl border border-[#D8B467]/45 bg-gradient-to-b from-[#216E5C] to-[#13473B] text-sm font-bold text-[#FBF7ED] shadow-[inset_0_1px_0_rgba(245,223,164,0.22)] sm:hidden"
+            <Link
+              href={downloadHref}
+              onClick={() => setMenuOpen(false)}
+              className="mt-2 flex h-11 items-center justify-center gap-2 rounded-xl border border-[#D8B467]/45 bg-gradient-to-b from-[#216E5C] to-[#13473B] text-sm font-bold text-[#FBF7ED] shadow-[inset_0_1px_0_rgba(245,223,164,0.22)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D8B467] sm:hidden"
             >
               <Download className="h-4 w-4 text-[#F2D184]" />
-              <span>{t.nav.download}</span>
-            </a>
+              <span>{messages.nav.download}</span>
+            </Link>
           </nav>
         </div>
       )}
