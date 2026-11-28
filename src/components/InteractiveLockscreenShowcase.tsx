@@ -242,6 +242,17 @@ export function InteractiveLockscreenShowcase({
                   </button>
                 ))}
               </div>
+              <p className="mt-2 text-[11px] font-medium text-white/60">
+                {t.audioSourceNote}{" "}
+                <a
+                  href="https://www.islamweb.net"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline decoration-[#E0B866]/50 underline-offset-2 hover:text-[#E0B866]"
+                >
+                  islamweb.net
+                </a>
+              </p>
 
               <div className="mt-5 w-full rounded-2xl border border-[#E0B866]/30 bg-white/5 text-start">
                 <div className="flex items-center justify-between border-b border-[#E0B866]/20 bg-[#E0B866]/10 px-4 py-2.5">

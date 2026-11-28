@@ -232,6 +232,7 @@
       "isha": "Isha Prayer"
     },
     "selectMuezzin": "Choose Muezzin to preview:",
+    "audioSourceNote": "Adhan audio source:",
     "playAdhan": "Play Adhan Preview",
     "stopAdhan": "Stop Adhan",
     "duaaHeader": "Supplication After Adhan",
